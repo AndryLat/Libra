@@ -92,9 +92,8 @@
             <th><a href="#">Время</a></th>
             <th><a href="#">Продолжительность</a></th>
             <th><a href="#">Интервьюеры</a></th>
-            <th>Уведомить</th>
-            <th>Править</th>
-            <th>Удалить</th>
+            <th>Действия</th>
+            
           </tr>
                   </thead>
                   <tbody>
@@ -107,18 +106,15 @@
       <td><c:out value="${d.interviewDuration}"/> минут </td>
       <td><c:out value="${d.listInterviewers}"/></td>
       <td>
-      <input type="submit" name="sentEmails" value="Уведомить">
-      <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
-      </td>
-      <td>
+           <a href="empty_link.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
+       <img  src="../resources/images/mail.png" width="25" height="25" title="Уведомить"/> 
+                        </a>   
           <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
-              править
-          </a>
-      </td>
-      <td>
+              <img  src="../resources/images/edit.png" width="25" height="25" title="Править"/> 
+           </a>
          <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
-             удалить
-            </a>
+             <img  src="../resources/images/delete.png" width="25" height="25" title="Удалить"/> 
+                        </a>
         </td>
     </tr>
         </c:forEach>

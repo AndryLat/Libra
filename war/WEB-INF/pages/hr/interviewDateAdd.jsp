@@ -58,8 +58,7 @@
     $("#time4").change(function() {
       if($.timePicker("#time3").getTime() > $.timePicker(this).getTime()) {
         $(this).css("border","1px solid red");
-        //$(this).attr("class","error");
-        //$(this).addClass("error"); 
+
       }
       else {
         $(this).removeClass("error");

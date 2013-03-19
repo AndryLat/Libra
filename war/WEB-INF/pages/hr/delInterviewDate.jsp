@@ -28,15 +28,15 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			<div class="span9">
+			<div class="span7">
 				<div class="hero-unit">
         <center>
-        <h2>Вы действительно хотите удалить дату интервью? </h2>
+        <h3>Вы действительно хотите удалить дату интервью? </h3>
         <br>
         <form method="post" action="deletedInterviewDate.html">
         <table border="1" cellspacing="0" cellpadding="4">
           <tr>
-            <th>№ даты</th>
+            <th>№</th>
             <th>Тип</th>
             <th>Дата</th>
             <th>Время</th>
@@ -63,8 +63,8 @@
             Записи об интервью: ${delInterview}<br>
             Отзывы интервьеров: ${delInterviewResults} <br>
             <br>
-            <input value="Назад" onclick="location.href='interviewDate.html'" type="button"/>
-            <input type="submit" value="Удалить" name="delete">
+            <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='interviewDate.html'" type="button"/>
+            <input type="submit" value="Удалить" name="delete" class="btn btn-large btn-danger" style="width:35x;height:30px;font-size:15px; line-height: 5px">
           </form>
         
         </center>

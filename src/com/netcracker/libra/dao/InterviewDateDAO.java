@@ -2,6 +2,7 @@ package com.netcracker.libra.dao;
 
 import com.netcracker.libra.model.InterviewDate;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 
 public interface InterviewDateDAO {
@@ -12,7 +13,7 @@ public interface InterviewDateDAO {
                                                    String finishDateAndTime, Integer duration);
     void deleteInterviewDateByAppId(Integer appId);
     void addExtraTimeByAppId(Integer appId, Integer minutes);
-    InterviewDate getInterviewDateById(Integer Id);
+    List<Map<String, Object>> getInterviewDateById(Integer Id);
     List <InterviewDate> getAllInterviewDates();
     void insertInterviewers(Integer userId);
     
