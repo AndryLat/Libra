@@ -30,11 +30,12 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			<div class="span9">
+			<div class="span6">
 				<div class="hero-unit">
         <center>
-        <h2>Редактирование языка</h2>
-        <h3>${msg}</h3>
+        <h3>Редактирование языка</h3>
+        </center>
+        <h4>${msg}</h4>
         <form method="POST" action="editedLang.html">
          <table border="1" class="bordered">
              <tr>
@@ -48,14 +49,13 @@
         <td>
             <input type="text" name="languageName" value="${l.languageName}"/></td>
         </c:forEach>
-        </table>
-         <input type="submit" name="submitLang" value="Изменить">
+        </table><br>
+        <center>
+         <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='showLanguages.html'" type="button"/>
+         <input type="submit" class="btn btn-large btn-warning" style="width:35x;height:30px;font-size:15px; line-height: 5px" name="submitLang" value="Изменить">
+        </center>
          </form>
-        <br>
-        <br>
-        <input value="Назад" onclick="location.href='showLanguages.html'" type="button"/>
-
-</center>
+        
                                 </div>
                         </div>
                 </div>

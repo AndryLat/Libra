@@ -18,7 +18,7 @@
        <jsp:include page="../resources.jsp" />
        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Find students</title> 
+        <title>Поиск студентов</title> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8">   
 </script>
 <script>
@@ -51,29 +51,43 @@ function getFact(){
 			</div>
 			<div class="span9">
 				<div class="hero-unit">
-    <center>
-       <h2>Список студентов</h2>   
         <form method="post" action="showStudentByEducation.html">
-       Университет:
-       <select onchange="getFact();" name="univ" id="univ">
-          <option value="0"> Все </option> 
-           <c:forEach items="${univers}" var="u">
-            <option value="${u.universityId}"> ${u.universityName}  
-                </option> 
-           </c:forEach>  
-       </select> 
-       <br>
-       Факультет:
-        <select onchange="getDept();" name="fact" id="fact">
+        <table border="0px">
+        <tr>   
+            <td>
+                Университет:
+            </td>
+            <td>
+                <select onchange="getFact();" name="univ" id="univ">
+                <option value="0"> Все </option> 
+                <c:forEach items="${univers}" var="u">
+                    <option value="${u.universityId}"> ${u.universityName}</option> 
+                </c:forEach>  
+                </select> 
+            </td>
+       </tr>
+       <tr>
+            <td>
+                Факультет:
+            </td>
+            <td>
+            <select onchange="getDept();" name="fact" id="fact">
              <option value="0"> Выберите университет </option> 
-        </select>
-       <br>
-       Кафедра: 
-        <select name="dept" id="dept">
-             <option value="0"> Выберите факультет </option> 
-        </select>
-       <br>
-       <br>       
+            </select>
+            </td>
+       </tr>
+       <tr>
+            <td>
+                Кафедра:
+            </td> 
+            <td> 
+                <select name="dept" id="dept">
+                <option value="0"> Выберите факультет </option> 
+                </select>
+            </td>
+       </tr>
+      </table>
+             
        <input type="submit" value="Поиск">
         </form>
           <form method="GET">
@@ -117,7 +131,6 @@ function getFact(){
   </tr>
     </c:forEach>
     </table>
-       </center>
                                 </div>
                         </div>
                 </div>

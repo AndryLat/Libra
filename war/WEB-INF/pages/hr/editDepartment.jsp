@@ -79,12 +79,10 @@
             </select>
         </td>       
         </table>
-         <input type="submit" name="submitdepartment" value="Изменить">
-         </form>
-        <br>
-        <br>
-        
-        <input value="Назад" onclick="location.href='showDepartments.html'" type="button"/>
+            <br>
+     <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='showDepartments.html'" type="button"/>
+     <input type="submit" class="btn btn-large btn-warning" style="width:35x;height:30px;font-size:15px; line-height: 5px" name="submitdepartment" value="Изменить">
+        </form>
     </center>
                                 </div>
                         </div>

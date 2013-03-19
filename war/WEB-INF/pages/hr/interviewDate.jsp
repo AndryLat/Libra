@@ -18,52 +18,31 @@
          <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление датами интервью</title>
-<script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript">   
-            </script>
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js">    
+          </script> 
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"> </script>
+            <link href="../resources/css/bootstrap.css" rel="stylesheet">
+            <link href="../resources/css/bootstrap-responsive.css" rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
+            <script type="text/javascript" src="../resources/js/sort.js"></script>
+            <link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
+	<script type="text/javascript" src="../resources/js/tcal.js"> </script>
+    <script type="text/javascript">
+   
+    $(document).ready(function() {
+        $("#interSearch").bind("change", function(){    
+        if ($("#interSearch").val()!=2) {
+            $("#justText").css("display","block");
+            $("#calc").css("display","none");
+        }
+        else {
+            $("#justText").css("display","none");
+            $("#calc").css("display","block");
+        }
+    });
+ });
 
-      <script type="text/javascript">
-			$(function() {
-				function sortTable($table, cellIndex, direction) {
-					var $rows = $table.find('tbody tr');
-					var data = [];
-					$rows.each(function() {
-						data.push({
-							cellText: $(this).find('td').eq(cellIndex).text(),
-							$row: $(this)
-						});
-					});
-
-					data.sort(function(a, b) {
-						if (a.cellText == b.cellText) {
-							return 0;
-						}
-						var sign = direction == "ASC" ? 1 : -1;
-						if(a.cellText == parseInt(a.cellText) && b.cellText == parseInt(b.cellText))
-                                                    return sign * ((parseInt(a.cellText) < parseInt(b.cellText)) ? -1 : 1);
-						return sign * ((a.cellText < b.cellText) ? -1 : 1);
-					});
-					
-					
-					$table.find('tbody').empty();
-					$(data).each(function() {
-						$table.find('tbody').append(this.$row);
-					});
-				}
-				
-				var $interviews = $('.bordered');
-				$interviews.find('thead th').each(function(cellIndex) {
-					$(this).on('click', function() {
-						var lastDirection = $(this).data('lastDirection') || "DESC";
-						var direction = lastDirection == "DESC" ? "ASC" : "DESC";
-						$(this).data('lastDirection', direction);
-					
-						sortTable($interviews, cellIndex, direction);
-					});
-				});
-			});
-		</script>
+</script>
     </head>
     <body>
         <div class="navmenu">
@@ -75,28 +54,35 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			<div class="span9">
-				<div class="hero-unit">
-
-                                    <center>
-            <br>
+                        <div class="span9">
+                            <div class="hero-unit" style="padding-bottom: 150px">
+<div class="pull-left">
             <a href="interviewDateAdd.html">Добавить новую дату интервью</a>
-            <br>
-            <br>
-            <h3>${msg}</h3>
-            <form name="myForm" action="showInterviewDateSearch.html" method="get">
-        <select name="interSearch">
+</div>
+        <div class="pull-right" style="margin-right: 100px">
+        <form name="myForm" action="showInterviewDateSearch.html" method="get">
+        <select name="interSearch" id="interSearch" >
             <option value="0">Все </option>
             <option value="1">№ даты</option>
             <option value="2">Дата</option>
             <option value="3">Интервьер</option>
         </select>
-        <input type="text" name ="textBox">
-        <input type="submit" value="Показать" name="search">
+        <div id="justText">
+         <input type="text" name ="textBox" style="width: 100px">
+        </div>
+        <div style="display: none;"  id="calc">
+          <input type="text" id="date" name="textBoxCalc" class="tcal" style="width: 100px" />
+        </div>
+            <input type="submit" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Показать" name="search" class="btn btn-large btn-primary" >
             </form>
-            <br>
-         <h2 align="center">Информация о рассписании собеседований</h2><br> 
-          <form method="GET">
+                                    </div>
+            
+                                </div>
+                        </div>
+                                <div class="span9">
+				<div class="hero-unit">
+                                    <h4>${msg}</h4>
+          <form  method="GET" >
               <table border="1" class="bordered">
                   <thead>
           <tr>
@@ -118,7 +104,7 @@
       <td><c:out value="${d.typeInterview}"/></td>
       <td><c:out value="${d.dateInter}"/></td>
       <td><c:out value="${d.timeInter}"/></td>
-      <td><c:out value="${d.interviewDuration}"/></td>
+      <td><c:out value="${d.interviewDuration}"/> минут </td>
       <td><c:out value="${d.listInterviewers}"/></td>
       <td>
       <input type="submit" name="sentEmails" value="Уведомить">
@@ -139,10 +125,10 @@
                   </tbody>
             </table>
           </form>
-                                    </center>
+                                  
          </div>
                         </div>
                 </div>
-        </div>
+                </div>
     </body>
 </html>

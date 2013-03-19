@@ -42,7 +42,6 @@
             <th>Время</th>
             <th>Продолжительность</th>
             <th>Интервьюеры</th>
-            <th>Править</th>
           </tr>
         <c:forEach items="${Model}" var="d">
         <tr>
@@ -54,13 +53,8 @@
         <td><c:out value="${d.typeInterview}"/></td>
         <td><c:out value="${d.dateInter}"/></td>
         <td><c:out value="${d.timeInter}"/></td>
-        <td><c:out value="${d.interviewDuration}"/></td>
+        <td><c:out value="${d.interviewDuration}"/> минут </td>
         <td><c:out value="${d.listInterviewers}"/></td>
-        <td>
-          <a href="editInterkviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
-              править
-          </a>
-        </td>
         </tr> 
         </c:forEach>
         </table>

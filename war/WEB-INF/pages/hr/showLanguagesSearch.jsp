@@ -21,47 +21,7 @@
         <title>Управление языками - Поиск</title>
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
 </script>
-        <script type="text/javascript">
-			$(function() {
-				function sortTable($table, cellIndex, direction) {
-					var $rows = $table.find('tbody tr');
-					var data = [];
-					$rows.each(function() {
-						data.push({
-							cellText: $(this).find('td').eq(cellIndex).text(),
-							$row: $(this)
-						});
-					});
-
-					data.sort(function(a, b) {
-						if (a.cellText == b.cellText) {
-							return 0;
-						}
-						var sign = direction == "ASC" ? 1 : -1;
-						if(a.cellText == parseInt(a.cellText) && b.cellText == parseInt(b.cellText))
-                                                    return sign * ((parseInt(a.cellText) < parseInt(b.cellText)) ? -1 : 1);
-						return sign * ((a.cellText < b.cellText) ? -1 : 1);
-					});
-					
-					
-					$table.find('tbody').empty();
-					$(data).each(function() {
-						$table.find('tbody').append(this.$row);
-					});
-				}
-				
-				var $interviews = $('.bordered');
-				$interviews.find('thead th').each(function(cellIndex) {
-					$(this).on('click', function() {
-						var lastDirection = $(this).data('lastDirection') || "DESC";
-						var direction = lastDirection == "DESC" ? "ASC" : "DESC";
-						$(this).data('lastDirection', direction);
-					
-						sortTable($interviews, cellIndex, direction);
-					});
-				});
-			});
-		</script>
+       <script type="text/javascript" src="../resources/js/sort.js"></script>
     </head>
     <body>
          <div class="navmenu">
@@ -74,29 +34,36 @@
 				<jsp:include page="../sidebar.jsp" />
 			</div>
 			<div class="span9">
-				<div class="hero-unit">
-        <center>
-            <a href="addLanguage.html?textBox=<c:out value='${textBoxString}'/>&langSearch=<c:out value='${langSearchInt}'/>">
-                Добавить новый язык
-            </a>
-        <br>
-        <br>
-            <h3>${msg}</h3>
+				<div class="hero-unit" style="padding-bottom: 150px">
+        <div class="pull-left">
+           <form name="Form" action="addLanguageAdded.html" method="get">
+                Введите название языка: <br> 
+                <input type="text" name ="langName"><br>
+                <input type="submit" class="btn btn-large btn-success" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Добавить" name="add">
+            </form>
+        </div>
+            <div class="pull-right" style="margin-right: 100px">
             <form name="myForm" action="showLanguagesSearch.html" method="get">
         <select name="langSearch">
             <option value="0" ${langSearchInt == '0' ? 'selected' : ''}>Все </option>
             <option value="1" ${langSearchInt == '1' ? 'selected' : ''}>№ языка </option>
             <option value="2" ${langSearchInt == '2' ? 'selected' : ''}>Язык</option>
-        </select>
-                <input type="text" name ="textBox" value="${textBoxString}">
-        <input type="submit" value="Показать" name="search">
+        </select><br>
+                <input type="text" name ="textBox" value="${textBoxString}"><br>
+        <input type="submit" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Показать" name="search"> </form>
             </form>
-        <br>
-        <br>
+            </div>
+                                </div>
+                        </div>
+                                    <div class="span9">
+				<div class="hero-unit">
+        <center>
+        <h3>${msg}</h3>
+        </center>
         <table border ="1" class="bordered">
             <thead>
                 <tr>
-                    <th><a href="#">№</a> </th>
+                    <th><a href="#">№ языка</a> </th>
                     <th><a href="#">Язык</a></th>
                     <th>Правка</th>
                     <th>Удалить</th>
@@ -121,7 +88,6 @@
                 </c:forEach>
             </tbody>
         </table>
-        </center>
                                 </div>
                         </div>
                 </div>

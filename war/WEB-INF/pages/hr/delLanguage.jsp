@@ -27,10 +27,10 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			<div class="span9">
+			<div class="span6">
 				<div class="hero-unit">
         <center>
-        <h2>Удаление языка</h2>
+        <h3>Удаление языка</h3>
         Вы действительно хотите удалить выбранный язык?
         <form  action="deletedLang.html" method="post">
         <table border ="1">
@@ -48,14 +48,13 @@
         </table>
             <br>
         <br>
-           <input value="Назад" onclick="location.href='showLanguages.html'" type="button"/> 
-           <input type="submit" value="Удалить" name="delete">
+           <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='showLanguages.html'" type="button"/> 
+           <input type="submit" class="btn btn-large btn-danger" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Удалить" name="delete">
         </form>
-        
-        </center>
-                                </div>
+                                        </div>
                         </div>
                 </div>
         </div>
+    </center>
     </body>
 </html>

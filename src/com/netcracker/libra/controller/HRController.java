@@ -49,6 +49,10 @@ public class HRController {
     public ModelAndView showStudentbyId(){
         List<Student> std=hr.listStudents();
         ModelAndView mav = new ModelAndView();
+        List<University> universities;
+        universities= hr.getAllUniversity();
+        mav.addObject("Model",std);
+        mav.addObject("univers",universities);
         mav.addObject("Model", std);
         mav.addObject("direction","asc");
         mav.addObject("orderBy","appId");
@@ -84,7 +88,6 @@ public class HRController {
     @RequestParam("fact") int facultyId,
     @RequestParam("dept") int departmentId){
         ModelAndView mav = new ModelAndView();
-       
         List<University> universities= hr.getAllUniversity();
         mav.addObject("univers",universities);
         List<Student> std=null;

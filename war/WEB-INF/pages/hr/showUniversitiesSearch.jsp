@@ -21,47 +21,7 @@
         <title>Управление университетами - Поиск</title>
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
 </script>
-        <script type="text/javascript">
-			$(function() {
-				function sortTable($table, cellIndex, direction) {
-					var $rows = $table.find('tbody tr');
-					var data = [];
-					$rows.each(function() {
-						data.push({
-							cellText: $(this).find('td').eq(cellIndex).text(),
-							$row: $(this)
-						});
-					});
-
-					data.sort(function(a, b) {
-						if (a.cellText == b.cellText) {
-							return 0;
-						}
-						var sign = direction == "ASC" ? 1 : -1;
-						if(a.cellText == parseInt(a.cellText) && b.cellText == parseInt(b.cellText))
-                                                    return sign * ((parseInt(a.cellText) < parseInt(b.cellText)) ? -1 : 1);
-						return sign * ((a.cellText < b.cellText) ? -1 : 1);
-					});
-					
-					
-					$table.find('tbody').empty();
-					$(data).each(function() {
-						$table.find('tbody').append(this.$row);
-					});
-				}
-				
-				var $interviews = $('.bordered');
-				$interviews.find('thead th').each(function(cellIndex) {
-					$(this).on('click', function() {
-						var lastDirection = $(this).data('lastDirection') || "DESC";
-						var direction = lastDirection == "DESC" ? "ASC" : "DESC";
-						$(this).data('lastDirection', direction);
-					
-						sortTable($interviews, cellIndex, direction);
-					});
-				});
-			});
-		</script>
+        <script type="text/javascript" src="../resources/js/sort.js"></script>
     </head>
     <body>
          <div class="navmenu">
@@ -74,30 +34,35 @@
 				<jsp:include page="../sidebar.jsp" />
 			</div>
 			<div class="span9">
-				<div class="hero-unit">
-        <center>
-            <a href="addUniversities.html?textBox=<c:out value='${textBoxString}'/>&univerSearch=<c:out value='${univerSearchInt}'/>">Добавить новый университет</a>
-        <br>
-        <br>
-            <h3>${msg}</h3>
+				<div class="hero-unit" style="padding-bottom: 150px">
+        <div class="pull-left">
+        <form name="Form" action="addUniversitiesAdded.html" method="get">
+                Введите название университета: <br>
+                <input type="text" name ="univerName"> <br>
+                <input type="submit" class="btn btn-large btn-success" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Добавить" name="add">
+            </form>
+        </div>                        
+         <div class="pull-right" style="margin-right: 100px">
+           
             <form name="myForm" action="showUniversitiesSearch.html" method="get">
         <select name="univerSearch">
             <option value="0" ${univerSearchInt == '0' ? 'selected' : ''}>Все </option>
             <option value="1" ${univerSearchInt == '1' ? 'selected' : ''}>№ университета </option>
             <option value="2" ${univerSearchInt == '2' ? 'selected' : ''}>Университет</option>
-        </select>
-                <input type="text" name ="textBox" value="${textBoxString}">
-        <input type="submit" value="Показать" name="search">
+        </select><br>
+                <input type="text" name ="textBox" value="${textBoxString}"><br>
+        <input type="submit" value="Показать" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" name="search">
             </form>
-        <br>
-        <br>
+         </div></div></div>
+        <div class="span9">
+				<div class="hero-unit">
+         <h4>${msg}</h4>
         <table border ="1" class="bordered">
             <thead>
                 <tr>
                     <th><a href="#">№ университета</a> </th>
                     <th><a href="#">Университет</a></th>
-                    <th>Правка</th>
-                    <th>Удалить</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -106,20 +71,17 @@
                     <td><c:out value="${u.universityId}"/></td>
                     <td><c:out value="${u.universityName}"/></td>
                     <td>
-                       <a href="editUniversity.html?universityId=<c:out value='${u.universityId}'/>">
-                           править
-                       </a>
-                    </td>
-                    <td>
-                       <a href= "delUniversity.html?universityId=<c:out value='${u.universityId}'/> ">
-                           удалить
-                       </a>
+                      <a href="editUniversity.html?universityId=<c:out value='${u.universityId}'/>">
+                            <img  src="../resources/images/edit.png" width="25" height="25" title="Править"/>
+                        </a>
+                        <a href= "delUniversity.html?universityId=<c:out value='${u.universityId}'/> ">
+                           <img  src="../resources/images/delete.png" width="25" height="25" title="Удалить"/>
+                        </a>
                     </td>
                 </tr>
                 </c:forEach>
             </tbody>
         </table>
-        </center>
                                 </div>
                         </div>
                 </div>

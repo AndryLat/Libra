@@ -21,6 +21,11 @@
         <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript">   
 </script>
+ <style type="text/css" media="all">@import "../resources/css/timePicker.css";</style>
+         
+        <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
+<link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
+	<script type="text/javascript" src="../resources/js/tcal.js"> </script>
 <script>
     $(document).ready(function() {
         $("#type").bind("change", function(){    
@@ -45,6 +50,34 @@
         }
        
  });
+ jQuery(function() {
+    $("#time3, #time4").timePicker();
+        
+    // Store time used by duration.
+    var oldTime = $.timePicker("#time3").getTime();
+    
+    // Keep the duration between the two inputs.
+    $("#time3").change(function() {
+      if ($("#time4").val()) { // Only update when second input has a value.
+        // Calculate duration.
+        var duration = ($.timePicker("#time4").getTime() - oldTime);
+        var time = $.timePicker("#time3").getTime();
+        // Calculate and update the time in the second input.
+        $.timePicker("#time4").setTime(new Date(new Date(time.getTime() + duration)));
+        oldTime = time;
+      }
+    });
+    // Validate.
+    $("#time4").change(function() {
+      if($.timePicker("#time3").getTime() > $.timePicker(this).getTime()) {
+        $(this).addClass("error");
+      }
+      else {
+        $(this).removeClass("error");
+      }
+    });
+    
+  });
 </script>
     </head>
     <body>
@@ -68,21 +101,28 @@
                   <td>Тип</td>
                   <td>Дата</td>
                   <td>Время</td>
-                  <td>Продолжительность</td>
-                 </tr>
+                  <td>Продолжительность (минуты)</td>
+             </tr>
+             <c:forEach items="${dates}" var="d">
         <td>
             <label for="interviewDateId">${d.interviewDateId}</label>
         <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
         </td>
         <td>
-            <select name="type" id="type" >
+            <select name="type" id="type" style="width: 90px">
             <option value="1" ${typeInt == '1' ? 'selected' : ''}> Hr </option>
             <option value="2" ${typeInt == '2' ? 'selected' : ''}> Tech </option>
             </select>
         </td>
-        <td><input type="text" name="dateInter" value="${d.dateInter}"/></td>
-        <td><input type="text" name="timeInter" value="${d.timeInter}"/></td>
-        <td><input type="text" name="interviewDuration" value="${d.interviewDuration}"/></td>
+        <td>
+            <input type="text" id="date" name="dateInter" class="tcal" value="${d.dateInter}" style="width: 100px" />
+        </td>
+        <td>
+             <input name="timeStart" type="text" id="time3" size="10"  value="${d.timeS}" style="width: 50px"/> :
+             <input name="timeFinish" type="text" id="time4" size="10"  value="${d.timeF}" style="width: 50px"/>
+        </td>
+        <td><input type="text" name="interviewDuration" style="width: 50px" value="${d.interviewDuration}"/></td>
+        </c:forEach>
         </table>
         <br>
         Выберите интервьюеров:
