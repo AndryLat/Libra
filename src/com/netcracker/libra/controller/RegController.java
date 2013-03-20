@@ -46,7 +46,7 @@ public class RegController {
 
 		if (result.hasErrors()) {
 			result.getFieldError().toString();
-			return "redirect:register.html";
+			return "redirect:/register.html";
 		} else {
 
 			form.setAppId(RegformService.getAppformId());

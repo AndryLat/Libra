@@ -33,8 +33,6 @@
 					<legend>Анкета кандидата</legend>
 				</div>
 				<div class="row-fluid">
-				
-				${regForm.languagesGrades}
 				<form:form action="submit.html" method="POST" commandName="regForm">
 					
 					<c:forEach items="${columns}" var="c">
