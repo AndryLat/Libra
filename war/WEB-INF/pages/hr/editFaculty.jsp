@@ -56,14 +56,11 @@
                 </c:forEach> 
             </select>
         </td>
-       
         </table>
-         <input type="submit" name="submitFaculty" value="Изменить">
+            <br>
+        <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='showFaculties.html'" type="button"/>
+         <input type="submit" class="btn btn-large btn-warning" style="width:35x;height:30px;font-size:15px; line-height: 5px" name="submitFaculty" value="Изменить">
          </form>
-        <br>
-        <br>
-        
-        <input value="Назад" onclick="location.href='showFaculties.html'" type="button"/>
         </center>
                                 </div>
                         </div>

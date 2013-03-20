@@ -38,28 +38,41 @@ public class InterviewDateController
      }
     
     @RequestMapping("hr/showInterviewDateSearch")
-    public ModelAndView interSearch(@RequestParam("textBox") String textBox,
+    public ModelAndView interSearch(org.springframework.web.context.request.WebRequest webRequest,
     @RequestParam("interSearch") int searchInt){
+        String textBoxCalc = webRequest.getParameter("textBoxCalc");
+        String textBoxText = webRequest.getParameter("textBox");
+        String textBox=null;
+        if ((!textBoxText.equals(""))&&(searchInt!=2)){
+            textBox=textBoxText;
+        }
+        if ((!textBoxCalc.equals(""))&&(searchInt==2)){
+            textBox=textBoxCalc;
+        }
         ModelAndView mav=new ModelAndView();
+        mav.addObject("interSearchInt", searchInt);
         List<InterviewDate> dates= null;
         if (searchInt==1){
-            
+            int n = Integer.parseInt(textBox);
+            dates=iDateJdbc.getAllInterviewDatesWithInterviewersById(n);
         }
         else {
             if(searchInt==2){
-            
+                dates=iDateJdbc.getAllInterviewDatesWithInterviewersByDate(textBox.replace('/', '.'));
             }
             else{
                 if(searchInt==3){
-            
+                    dates=iDateJdbc.getAllInterviewDatesWithInterviewersByInterviewers(textBox);
                 }
                 else {
-                    
+                    dates=iDateJdbc.getAllInterviewDatesWithInterviewers();
                 }
             }
         }
-        mav.addObject("textBox", textBox);
-        mav.addObject("searchInt", searchInt);
+       
+        mav.addObject("textBox" , textBox);
+        mav.addObject("dates", dates);
+        mav.setViewName("hr/showInterviewDateSearch");
         return mav;
     }
     
@@ -136,7 +149,8 @@ public class InterviewDateController
         else {
              typeInt=2;
         }
-        mav.addObject("d", iDateJdbc.getInterviewDateById(interviewDateId));
+        List<Map<String,Object>> dates = iDateJdbc.getInterviewDateById(interviewDateId);
+        mav.addObject("dates",dates );
         mav.addObject("uncheckedIntersHr",uncheckedIntersHr); 
         mav.addObject("uncheckedIntersTech",uncheckedIntersTech); 
         mav.addObject("checkedIntersHr", checkedIntersHr);

@@ -4,7 +4,7 @@
     Author     : Yuliya
 --%>
 
-<%@page contentType="text/html" pageEncoding="windows-1251"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
@@ -17,10 +17,15 @@
     <head>
         <jsp:include page="../resources.jsp" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Управление датами - правка</title>
+        <title>РЈРїСЂР°РІР»РµРЅРёРµ РґР°С‚Р°РјРё - РїСЂР°РІРєР°</title>
         <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript">   
 </script>
+ <style type="text/css" media="all">@import "../resources/css/timePicker.css";</style>
+         
+        <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
+<link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
+	<script type="text/javascript" src="../resources/js/tcal.js"> </script>
 <script>
     $(document).ready(function() {
         $("#type").bind("change", function(){    
@@ -45,6 +50,36 @@
         }
        
  });
+ jQuery(function() {
+    $("#time3, #time4").timePicker();
+        
+    // Store time used by duration.
+    var oldTime = $.timePicker("#time3").getTime();
+    
+    // Keep the duration between the two inputs.
+    $("#time3").change(function() {
+      if ($("#time4").val()) { // Only update when second input has a value.
+        // Calculate duration.
+        var duration = ($.timePicker("#time4").getTime() - oldTime);
+        var time = $.timePicker("#time3").getTime();
+        // Calculate and update the time in the second input.
+        $.timePicker("#time4").setTime(new Date(new Date(time.getTime() + duration)));
+        oldTime = time;
+      }
+    });
+    // Validate.
+    $("#time4").change(function() {
+      if($.timePicker("#time3").getTime() > $.timePicker(this).getTime()) {
+        $(this).css("border","1px solid red");
+
+      }
+      else {
+        $(this).removeClass("error");
+        $(this).css("border","");
+      }
+    });
+    
+  });
 </script>
     </head>
     <body>
@@ -57,66 +92,96 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			<div class="span9">
+			<div class="span7">
 				<div class="hero-unit">
-        <center>
-        <h2 align="center"> Правка даты интервью </h2>
+        <h3 align="center"> РџСЂР°РІРєР° РґР°С‚С‹ РёРЅС‚РµСЂРІСЊСЋ </h3>
         <form method="POST" action="doneDate.html">
          <table border="1" class="bordered">
              <tr>
-                 <td>№ Даты</td>
-                  <td>Тип</td>
-                  <td>Дата</td>
-                  <td>Время</td>
-                  <td>Продолжительность</td>
-                 </tr>
+                 <td>в„–</td>
+                  <td>РўРёРї</td>
+                  <td>Р”Р°С‚Р°</td>
+                  <td>Р’СЂРµРјСЏ</td>
+                  <td>РџСЂРѕРґРѕР»Р¶РёС‚РµР»СЊРЅРѕСЃС‚СЊ(РјРёРЅСѓС‚С‹)</td>
+             </tr>
+             <c:forEach items="${dates}" var="d">
         <td>
             <label for="interviewDateId">${d.interviewDateId}</label>
         <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
         </td>
         <td>
-            <select name="type" id="type" >
+            <select name="type" id="type" style="width: 90px">
             <option value="1" ${typeInt == '1' ? 'selected' : ''}> Hr </option>
             <option value="2" ${typeInt == '2' ? 'selected' : ''}> Tech </option>
             </select>
         </td>
-        <td><input type="text" name="dateInter" value="${d.dateInter}"/></td>
-        <td><input type="text" name="timeInter" value="${d.timeInter}"/></td>
-        <td><input type="text" name="interviewDuration" value="${d.interviewDuration}"/></td>
+        <td>
+            <input type="text" id="date" name="dateInter" class="tcal" value="${d.dateInter}" style="width: 100px" />
+        </td>
+        <td>
+             <input name="timeStart" type="text" id="time3" size="10"  value="${d.timeS}" style="width: 50px"/> :
+             <input name="timeFinish" type="text" id="time4" size="10"  value="${d.timeF}" style="width: 50px"/>
+        </td>
+        <td><input type="text" name="interviewDuration" style="width: 50px" value="${d.interviewDuration}"/></td>
+        </c:forEach>
         </table>
-        <br>
-        Выберите интервьюеров:
-        <br> 
-        
+       <div class="classForInters" style="text-decoration:underline;">
+        Р’С‹Р±РµСЂРёС‚Рµ РёРЅС‚РµСЂРІСЊСЋРµСЂРѕРІ:</div>
         <div id="hrDiv">
         <c:forEach items="${checkedIntersHr}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked> 
-           <label for="interviwers"> ${i.inters}</label> 
-            <br>
+            <table border="0">
+                <tr>
+                    <td>
+                        <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked>                     </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
         </c:forEach>
         <c:forEach items="${uncheckedIntersHr}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >
-            <label for="interviwers"> ${i.inters}</label>  
-            <br>
+            <table border="0">
+                <tr>
+                    <td>
+                         <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
+                    </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
         </c:forEach>
         </div>
-        
         <div style="display: none;"  id="techDiv">
        <c:forEach items="${checkedIntersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> checked>
-            <label for="interviwers"> ${i.inters}</label> 
-            <br>
+            <table border="0">
+                <tr>
+                    <td>
+                        <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked>                     </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
         </c:forEach>
         <c:forEach items="${uncheckedIntersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" value=<c:out value="${i.userid}"/> > 
-            <label for="interviwers"> ${i.inters}</label> 
-            <br>
+            <table border="0">
+                <tr>
+                    <td>
+                         <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
+                    </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
         </c:forEach>
         </div>
-        <input value="Назад" onclick="location.href='interviewDate.html'" type="button"/>
-        <input type="submit" name="submitDate" value="Изменить">
+            <center>
+        <input class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="РќР°Р·Р°Рґ" onclick="location.href='interviewDate.html'" type="button"/>
+        <input class="btn btn-large btn-warning" style="width:35x;height:30px;font-size:15px; line-height: 5px" type="submit" name="submitDate" value="РР·РјРµРЅРёС‚СЊ">
+            </center>
         </form>
-        </center>
                                 </div>
                         </div>
                 </div>

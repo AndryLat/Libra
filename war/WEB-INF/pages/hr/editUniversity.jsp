@@ -30,7 +30,7 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			<div class="span9">
+			<div class="span6">
 				<div class="hero-unit">
         <center>
         <h2>Редактирование университета</h2>
@@ -49,14 +49,12 @@
             <input type="text" name="universityName" value="${u.universityName}"/></td>
         </c:forEach>
         </table>
-         <input type="submit" name="submitUniversity" value="Изменить">
+            <br>
+         <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='showUniversities.html'" type="button"/>
+         <input type="submit" class="btn btn-large btn-warning" style="width:35x;height:30px;font-size:15px; line-height: 5px" name="submitUniversity" value="Изменить">
          </form>
-        <br>
-        <br>
-        <input value="Назад" onclick="location.href='showUniversities.html'" type="button"/>
-
 </center>
-                                </div>
+                         </div>
                         </div>
                 </div>
         </div>

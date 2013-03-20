@@ -16,11 +16,11 @@
 <!--<![endif]-->
     <head>
          <jsp:include page="../resources.jsp" />
+         <jsp:include page="../navbar.jsp" />
+         <jsp:include page="../sidebar.jsp" />
         <title>Управление датами интервью - добавление</title>
           <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js">    
-          </script>
-          
-         <style type="text/css" media="all">@import "../resources/css/timePicker.css";</style>
+          </script>    
          
         <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
       <script type="text/javascript">
@@ -57,83 +57,123 @@
     // Validate.
     $("#time4").change(function() {
       if($.timePicker("#time3").getTime() > $.timePicker(this).getTime()) {
-        $(this).addClass("error");
+        $(this).css("border","1px solid red");
+
       }
       else {
-          console.log("hell9!");
         $(this).removeClass("error");
+        $(this).css("border","");
       }
     });
     
+   $("#date").change(function() {
+       now= new Date();
+       console.log("hello");
+       if($.data("date").getDate()<now.getDate()){
+            
+            $(this).addClass("error"); 
+            console.log("error");
+      }
+      else {
+        $(this).removeClass("error");
+        console.log("not error");
+       }
+  }) 
   $("#time4").change(function() {
   if (($("#time4").val()) && (($("#time3").val())) && ($("#date").val())) {
       
   }
+  
 });
 });
 </script>
        <link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
+       <link rel="stylesheet" type="text/css" href="../resources/css/timePicker.css" />
 	<script type="text/javascript" src="../resources/js/tcal.js">   
         </script> 
     </head>
     <body>
         <div class="navmenu">
-		<jsp:include page="../navbar.jsp" />
+		
 	</div>
 
 	<div class="container-fluid">
 		<div class="row-fluid">
 		<div class="sidebar">
-				<jsp:include page="../sidebar.jsp" />
+		
 			</div>
-			<div class="span9">
+			<div class="span6">
 				<div class="hero-unit">
-                                    <center>
+        <center>
+        <h3>Добавление новой даты интервью</h3>
+        </center>
         
-        <h2>Добавить новую дату интервью</h2>
          <form name="Form" action="interviewDateAdded.html" method="get">
-       <br>
-         Тип:
-               <select name="type" id="type" style="width: 90px"  class="selectwidth">
-            <option value="1" > Hr </option>
-            <option value="2"> Tech </option>
-            </select> 
-         <br>
-               
-           <div>Дата:
-               <input type="text" id="date" name="begin" class="tcal" value=""  style="width: 100px" />
-           </div>
-	
+         <table border="0px">
+             <tr>
+                 <td> Тип:</td>  
+                 <td>
+                     <select name="type" id="type" style="width: 115px">
+                     <option value="1" > Hr </option>
+                     <option value="2"> Tech </option>
+                     </select> 
+                </td>
+             <tr>
+                 <td> 
+                     Дата:
+                 </td>
+                 <td> 
+                     <input type="text" id="date" name="begin" class="tcal" value=""  style="width: 100px" />
+                 </td>
+             </tr>
+	</table>
              <form name="Form" action="interviewDateAdded.html" method="get">
                  <input type="hidden" value='${type}' name="type"> 
                  <input type="hidden" value='${begin}' name="begin"> 
              Время начала и конца: 
-            <div>
+             <div class="myClass">
                 <input name="timeStart" type="text" id="time3" size="10" value="08:00" style="width: 50px"/> 
             - 
             <input name="end" type="text" id="time4" size="10" value="09:00" style="width: 50px"/>
             </div>
-               Продолжительность: 
-               <input type="text" name="duration" style="width: 50px" >  
+             
+               Продолжительность (минуты): 
+               <input type="text"  name="duration" style="width: 50px" > 
         <br> 
-        Выберите интервьюеров:</br> 
-        <div id="hrDiv">
+        <div class="classForInters" style="text-decoration:underline;">
+        Выберите интервьюеров:</div> 
+        <div id="hrDiv"> 
+            <table border="0">
         <c:forEach items="${Inters}" var="i">
-            <label for="<c:out value="${i.userid}"/>">${i.inters}
-                <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
-            </label><br>
+                <tr>
+                    <td>
+                        <input type="checkbox" style="margin: 0px;" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
+                    </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="<c:out value="${i.userid}"/>">${i.inters}</label>
+                    </td>
+               </tr>   
         </c:forEach>
+            </table>
         </div>
         <div style="display: none;"  id="techDiv">
-        <c:forEach items="${intersTech}" var="i">
-            <input type="checkbox" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> > 
-           <label for="<c:out value="${i.userid}"/>">${i.inters}  </label> </br>
+            <table border="0">
+        <c:forEach items="${intersTech}" var="i"> 
+            <tr>
+                    <td>
+                        <input type="checkbox" style="margin: 0px;" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
+                    </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="<c:out value="${i.userid}"/>">${i.inters}</label>
+                    </td>
+               </tr>   
         </c:forEach>
+            </table>
         </div>
             </br> 
-        <input type="submit" value="Добавить">
+        <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='interviewDate.html'" type="button"/>   
+        <input type="submit" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Добавить" class="btn btn-large btn-success" >    
     </form>                      
-      </center>
                                 </div>
                         </div>
                 </div>
