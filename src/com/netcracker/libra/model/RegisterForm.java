@@ -14,13 +14,30 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.netcracker.libra.util.security.ConfirmationCodeGenerator;
-
 public class RegisterForm {
 	
-	private Map<String, String> personal = new HashMap<>();
-	private Map<String, String> submittedValues = new HashMap<>();
+	private Map<String, String> map = new HashMap<>();
+	private Map<String, String> languagesGrades = new HashMap<>();
+	private String generatedCode;
+	private String enteredCode;
+	private String phoneNumber;
+	private Long userId;
+	private Long appId;
 	private MultipartFile photo;
+	private Long university;
+	private Long faculty;
+	private Long department;
+	private Integer course;
+	private Long graduated;
+
+	private int id;
+	private int id2;
+	private int id3;
+	private int grade;
+	private int grade2;
+	private int grade3;
+	private int templateId;
+
 	
 	@NotEmpty
 	@Length(max=20)
@@ -31,14 +48,14 @@ public class RegisterForm {
 	private String patronymic;
 
 	@NotEmpty
-	@Length(max=30)
+	@Length(min=2, max=30)
 	private String lastName;
 	
-
+	@NotEmpty
 	@Length(min=6, max=20)
 	private String password;
 	
-
+	@NotEmpty
 	@Length(min=6, max=20)
 	private String confirmedPassword;
 	
@@ -47,14 +64,60 @@ public class RegisterForm {
 	@Length(max=50)
 	private String email;
 	
-	private String enteredCode;
-	
 	public RegisterForm() {
 		
 	}
 	
 	public RegisterForm getRegisterForm() {
 		return new RegisterForm();
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId2() {
+		return id2;
+	}
+
+	public void setId2(int id2) {
+		this.id2 = id2;
+	}
+
+	public int getId3() {
+		return id3;
+	}
+
+	public void setId3(int id3) {
+		this.id3 = id3;
+	}
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
+
+	public int getGrade2() {
+		return grade2;
+	}
+
+	public void setGrade2(int grade2) {
+		this.grade2 = grade2;
+	}
+
+	public int getGrade3() {
+		return grade3;
+	}
+
+	public void setGrade3(int grade3) {
+		this.grade3 = grade3;
 	}
 
 	public String getName() {
@@ -95,7 +158,7 @@ public class RegisterForm {
 		this.email = email;
 	}
 	
-	@AssertTrue
+	@AssertTrue(message="{notequal}")
 	public boolean checkPassword() {
 		if (password == null) {
             return false;
@@ -104,31 +167,12 @@ public class RegisterForm {
        }
 	}
 
-	
-	public String generateConfirmationCode() {
-		return ConfirmationCodeGenerator.generateCode();
-	}
-
-	/**
-	 * @return the enteredCode
-	 */
 	public String getEnteredCode() {
 		return enteredCode;
 	}
 
-	/**
-	 * @param enteredCode the enteredCode to set
-	 */
 	public void setEnteredCode(String enteredCode) {
 		this.enteredCode = enteredCode;
-	}
-
-	public Map<String, String> getPersonal() {
-		return personal;
-	}
-
-	public void setPersonal(Map<String, String> personal) {
-		this.personal = personal;
 	}
 
 	public MultipartFile getPhoto() {
@@ -139,12 +183,100 @@ public class RegisterForm {
 		this.photo = photo;
 	}
 
-	public Map<String, String> getSubmittedValues() {
-		return submittedValues;
+	public Map<String, String> getMap() {
+		return map;
 	}
 
-	public void setSubmittedValues(Map<String, String> submittedValues) {
-		this.submittedValues = submittedValues;
+	public void setSubmittedMap(Map<String, String> submittedValues) {
+		this.map = submittedValues;
+	}
+
+	public Map<String, String> getLanguagesGrades() {
+		return languagesGrades;
+	}
+
+	public void setLanguages(Map<String, String> languagesGrades) {
+		this.languagesGrades = languagesGrades;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getAppId() {
+		return appId;
+	}
+
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
+
+	public String getGeneratedCode() {
+		return generatedCode;
+	}
+
+	public void setGeneratedCode(String generatedCode) {
+		this.generatedCode = generatedCode;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
+	public Long getUniversity() {
+		return university;
+	}
+
+	public void setUniversity(Long university) {
+		this.university = university;
+	}
+
+	public Long getFaculty() {
+		return faculty;
+	}
+
+	public void setFaculty(Long faculty) {
+		this.faculty = faculty;
+	}
+
+	public Long getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Long department) {
+		this.department = department;
+	}
+
+	public Integer getCourse() {
+		return course;
+	}
+
+	public void setCourse(Integer course) {
+		this.course = course;
+	}
+
+	public Long getGraduated() {
+		return graduated;
+	}
+
+	public void setGraduated(Long graduated) {
+		this.graduated = graduated;
+	}
+
+	public int getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(int templateId) {
+		this.templateId = templateId;
 	}
 	
 }

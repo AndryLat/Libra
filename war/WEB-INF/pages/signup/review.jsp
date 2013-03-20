@@ -7,25 +7,43 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
+
 <html class="no-js">
 <!--<![endif]-->
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Регистрация - шаг 2</title>
-<meta name="description" content="Libra">
-<link rel="stylesheet" href="<c:url value="resources/css/main.css"/>" />
-<link rel="stylesheet"
-	href="<c:url value="resources/css/bootstrap-responsive.min.css"/>" />
-<link rel="stylesheet"
-	href="<c:url value="resources/css/bootstrap.min.css"/>" />
-<link rel="stylesheet" href="<c:url value="resources/css/style.css"/>" />
+<jsp:include page="../resources.jsp" />
 
-<script src="<c:url value="resources/js/jquery-1.9.0.min.js" />"></script>
-<script
-	src="<c:url value="resources/js/modernizr-2.6.2-respond-1.1.0.min.js"/>"></script>
+<title>Вы успешно заполнили анкету</title>
 </head>
+
 <body>
-success
+	<div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+
+			<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+
+			<div class="span9">
+				<div id="legend">
+      					<legend>Подтверждение регистрации</legend>
+    			</div>
+				<div class="row-fluid span7">На ваш электронный адрес <b>${regForm.email}</b> был выслан проверочный код.<br> Для завершения процесса регистрации, пожалуйста, введите код из письма.<br><br></div>
+					<form:form commandName="regForm" method="POST" class="span7" action="verifyCode.html">
+						<div class="row-fluid well">
+							<label class="span3">Проверочный код:</label>
+								<form:input path="enteredCode" type="text" class="span3" />
+								<button class="btn btn-success pull-right span3" type="submit">Подтвердить</button>
+						</div>
+						</form:form>
+						
+				</div>
+
+			</div>
+		</div>
 </body>
 </html>

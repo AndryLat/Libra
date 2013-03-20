@@ -57,6 +57,12 @@
      <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
         <property name="resourceLoaderPath" value="WEB-INF/templates/" />        
     </bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+	</bean>
+
    	<!--  
      <bean id="PDFCreator" class="com.netcracker.libra.util.pdf.PDFCreatorTest">
          <property name="servletContext" ref="servletcontext"/>

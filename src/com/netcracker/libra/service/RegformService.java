@@ -1,15 +1,18 @@
 package com.netcracker.libra.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import com.netcracker.libra.dao.AppFormJDBC;
-import com.netcracker.libra.model.AppForm;
-import com.netcracker.libra.model.Fieldset;
+import com.netcracker.libra.dao.ColumnJDBC;
+import com.netcracker.libra.model.AppFormColumns;
+import com.netcracker.libra.model.RegisterForm;
 
 public class RegformService {
 	
 	private static AppFormJDBC jdbc = new AppFormJDBC();
+	private static ColumnJDBC cjdbc = new ColumnJDBC();
 	
 	private static Map<Integer, String> universities = jdbc.getAllUniversities();
 	private static Map<Integer, String> faculties = jdbc.getAllFaculties(); 
@@ -27,11 +30,28 @@ public class RegformService {
 		return departments;
 	}
 
-	public static AppForm showAppFormById(Integer userID) {
-		return jdbc.queryForAppForm(userID);
+	public static Long getAppformId() {
+		return jdbc.getAppformNextVal();
+	}
+
+	public static Long getUserId() {
+		return jdbc.getUserNextVal();
 	}
 	
-	public static List<Fieldset> getTemplatedBlocks() {
-		return jdbc.queryForActiveTemplate();
+	public static List<AppFormColumns> getActiveTemplate() {
+		return cjdbc.getAppFormColumnsForActiveTemplate();
 	}
+	
+	public static int getActiveTemplateId() {
+		return jdbc.queryForActiveTemplateId();
+	}
+	
+	public static Map getProgrammingLanguagesList() {
+		return jdbc.queryForProgrammingLanguages();
+	}
+	
+	public static void registerUser(RegisterForm form) throws SQLException {
+		jdbc.fillAppForm(form);
+	}
+
 }

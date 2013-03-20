@@ -14,6 +14,13 @@
 <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-fileupload.min.css"/>" />
 <script src="<c:url value="/resources/js/bootstrap-fileupload.min.js"/>"></script>
 	<title>Регистрация</title>
+	
+	<style>
+            .form-item { margin: 20px 0; }
+            .form-label { font-weight: bold; }
+            .form-error-field { background-color: #FFC; }
+            .form-error-message { font-weight: bold; color: #900; }
+        </style>
 </head>
 
 <body>
@@ -33,7 +40,7 @@
       					<legend>Регистрация в системе</legend>
     			</div>
     			
-		<form:form commandName="regForm" method="POST" enctype="multipart/form-data">
+		<form:form commandName="regForm" action="register/next.html" method="POST" enctype="multipart/form-data">
 
 			<div class="row-fluid">
 
@@ -53,89 +60,135 @@
 					</div>
 				</div>
 
-				<div class="span6">
+				<div class="span3">
+					
 					<div class="controls-group">
-						<label>Фамилия</label>
 						<div class="controls">
-							<input class="input-large" name="name" placeholder="Имя" type="text" required/>
+							<input class="input" name="lastName" placeholder="Фамилия" type="text" required/>
+						</div>
+					</div>
+										
+					<div class="controls-group">
+						<div class="controls">
+							<input class="input" name="name" placeholder="Имя" type="text" required/>
 						</div>
 					</div>
 					
 					<div class="controls-group">
-						<label>Имя</label>
 						<div class="controls">
-							<input class="input-large" name="lastName" placeholder="Фамилия" type="text" required/>
+							<input class="input" name="patronymic" placeholder="Отчество" type="text" required />
 						</div>
 					</div>
 					
 					<div class="controls-group">
-						<label>Отчество</label>
-						<div class="controls">
-							<input class="input-large" name="patronymic" placeholder="Отчество" type="text" required />
-						</div>
-					</div>
-					
-					<div class="controls-group">
-						<label>Номер телефона</label>
 						<div class="controls"> 
-							<input class="input-large" name="personal['phoneNumber${personal.value}']" placeholder="Номер телефона" type="text" required />
+							<input class="input" name="phoneNumber" placeholder="Номер телефона" type="text" required />
 						</div>
 					</div>
 				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="well span6">
-
-					<form:select class="dropdown" required="1" path="personal['university${personal.value}']">
+				
+				<div class="span3">
+					<form:select class="dropdown" required="1" path="university">
 						<option value="" disabled selected>Университет</option>
 						<form:options items="${uniList}" />
 					</form:select>
 					
-					<form:select class="dropdown" required="1" path="personal['faculty${personal.value}']">
+					<form:select class="dropdown" required="1" path="faculty">
 						<option value="" disabled selected>Факультет</option>
 						<form:options items="${facList}" />
 					</form:select>
 					
-					<form:select class="dropdown" required="1" path="personal['departmentid${personal.value}']">
+					<form:select class="dropdown" required="1" path="department">
 						<option value="" disabled selected>Кафедра</option>
 						<form:options items="${deptList}" />
 					</form:select>
 
 					<div class="controls controls-row">
-						<input class="input-small" name="personal['course${personal.value}']"
-							placeholder="Курс" type="number" min="0" max="5" /> 
-						<input class="input-small" name="personal['graduated${personal.value}']"
+						<input class="input-small" name="course"
+							placeholder="Курс" type="number" min="0" max="5" />
+						<input class="input-small" name="graduated"
 							placeholder="Год выпуска" type="number" min="2000" max="2020">
 					</div>
 				</div>
 			</div>
 			
 			<div class="row-fluid">
-				<div class="well span6" >
+				<div class="well span9">
+					<div class="alert alert-info"><b>Владение языками программированния</b></div>
+						<div class="span8">
+							<div class="row-fluid">
+								<label class="span6">Java</label>
+								<input type="number" min="0" max="5" class="span2" name="languagesGrades[1${languagesGrades.value}]">
+							</div>
+							<div class="row-fluid">
+								<label class="span6">C++</label>
+								<input type="number" min="0" max="5" class="span2"  name="languagesGrades[2${languagesGrades.value}]">
+							</div>
+							
+							<div class="row-fluid">
+								<div class="span6">
+									<form:select class="input-small" path="${id}">
+										<option value="" disabled selected>Другой...</option>
+											<c:forEach items="${languages}" var="l">
+												<option value="${l.key}">${l.value}</option>
+											</c:forEach>
+										<option value="0">(пусто)</option>
+									</form:select>
+								</div>
+								<input value="0" name="grade" type="number" min="0" max="5" class="span2">
+							</div>
+							<div class="row-fluid">
+								<div class="span6">
+									<form:select class="input-small" path="id2">
+										<option value="" disabled selected>Другой...</option>
+											<c:forEach items="${languages}" var="l">
+												<option value="${l.key}">${l.value}</option>
+											</c:forEach>
+										<option value="0">(пусто)</option>
+									</form:select>
+								</div>
+								<input value="0" name="grade2" type="number" min="0" max="5" class="span2">
+							</div>
+							<div class="row-fluid">
+								<div class="span6">
+									<form:select class="input-small" path="id3">
+										<option value="" disabled selected>Другой...</option>
+											<c:forEach items="${languages}" var="l">
+												<option value="${l.key}">${l.value}</option>
+											</c:forEach>
+										<option value="0">(пусто)</option>
+									</form:select>
+								</div>
+								<input value="0" name="grade3" type="number" min="0" max="5" class="span2">
+							</div>
+				</div>
+			</div>
+			</div>
+			<div class="row-fluid">
+				<div class="well span9" >
 					<div class="alert alert-info"><b>Данные для входа в систему.</b></div>
 			
 						<div class="control-group">
-							<label class="control-label" for="username">Электронная почта</label>
+							<label>Электронная почта</label>
 								<div class="controls">
-									<input type="email" id="username" name="email" placeholder=""
-										class="input-xlarge" required>
+									<input type="email" name="email" placeholder=""
+										class="input-large" required>
 								</div>
 						</div>
 			
 						<div class="control-group">
-							<label class="control-label" for="username">Введите пароль</label>
+							<label>Введите пароль</label>
 								<div class="controls">
-									<input type="password" id="username" name="password" placeholder=""
-										class="input-xlarge" required>
+									<input type="password" name="password" placeholder=""
+										class="input-large" required>
 								</div>
 						</div>
 						
 						<div class="control-group">
-							<label class="control-label" for="confirmedPassword">Подтвердите пароль</label>
+							<label>Подтвердите пароль</label>
 								<div class="controls">
-									<input type="password" id="username" name="username" placeholder=""
-										class="input-xlarge" required>
+									<input type="password" name="confirmedPassword" placeholder=""
+										class="input-large" required>
 								</div>
 						</div>
 						

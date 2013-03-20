@@ -198,6 +198,21 @@ public class ColumnJDBC
         List<AppFormColumns> appList=jdbcColumnObject.query(SQL, new AppFormColumnsRowMapper(),id);
         return appList;
     }
+    
+    //added 19.03, Konstantin
+    public List<AppFormColumns> getAppFormColumnsForActiveTemplate()
+    {
+
+        String SQL="select  c.columnId, c.name,  NVL(t.name,'show') typeName, NVL(t.DESCRIPTION,'show') DESCRIPTION, level " 
+                    +"from newColumns c "
+                    +" left join types t on t.typeId=c.typeId "
+                    +"where  c.templateId=(select templateid from template where active=1) " 
+                    +"START WITH  c.parentColumn is null " 		    
+                    +"CONNECT BY  prior  c.columnId =  c.ParentColumn "
+                    +"order siblings by c.OrderId ASC ";
+        List<AppFormColumns> appList=jdbcColumnObject.query(SQL, new AppFormColumnsRowMapper());
+        return appList;
+    }
  
     public void swop(int columnId1,int columnId2)
     {

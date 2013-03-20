@@ -9,9 +9,21 @@
 <title>Регистрационные данные</title>
 </head>
 <body>
-<c:forEach items="${appForm.personal}" var="t">
-key ${t.key} value ${t.value}<br>
-</c:forEach>
+${regForm.name}<br>
+${regForm.lastName}<br>
+${regForm.patronymic}<br><br>
+
+${regForm.email}<br>
+${regForm.phoneNumber}<br><br>
+
+${regForm.userId}<br>
+${regForm.appId}<br>
+${regForm.templateId}<br><br>
+
+${regForm.department}<br>
+${regForm.course}<br>
+${regForm.graduated}<br>
+
 
 </body>
 </html>
