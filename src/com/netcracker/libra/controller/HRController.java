@@ -425,7 +425,7 @@ public class HRController {
               }
               else {
                   //else if the interview have been assigned but the student didn't come, displayed the corresponding message
-                  wasAbsent += "Студент "+ firstName +" "+ lastName +" не явился на интервью\n";
+                  wasAbsent += "Студент "+ firstName +" "+ lastName +" не явился на интервью <br>";
               }
           }
 

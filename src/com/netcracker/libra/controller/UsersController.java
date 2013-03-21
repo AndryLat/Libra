@@ -8,12 +8,11 @@ import com.netcracker.libra.util.security.Security;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ListIterator;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,23 +35,24 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("admin")
 public class UsersController {
  
-    List <User> employees;  //outputting list of employees
-    String noResults;   //output value in no results case
+    List <User> employees;  // list of employees (HR, TECH, ADMIN)
+    String noResults;   //value in no results case
     String checked;     //selected value in the filter by employee's job title
     String jobTitle;    //job title of employee
     String selected;    //selected value in the sorting by first name/last name/email etc.
-    String text;        //the value entered in the text field
+    String text;        //value in the text field
     boolean order;      //value of ascending or descending order; true when ascending
+    int currentUserId;
     
     @Autowired
     UserPreferences user;   // contains ID and access level
     AdminJDBC jdbc = new AdminJDBC(); //works with date base
     
     /**
-     * Displays on the page all employees (HR, Tech.interviewer, Administrator)
+     * Displays on the page all employees (HR, TECH, ADMIN)
      */
     @RequestMapping("employees")
-    public ModelAndView showEmployees() {
+    public ModelAndView showAllEmployees() {
         
         ModelAndView mv = new ModelAndView();
         
@@ -61,35 +61,37 @@ public class UsersController {
             employees = jdbc.getAllEmployees();
             checked = "checkedAll";
             selected = "selectedAll";
+            currentUserId = user.UserId;
             
-            mv.setViewName("admin/employeesView2"); // !!!!!!!!!!!! employeesView2
+            mv.setViewName("admin/employees");
             mv.addObject("employees", employees);
             mv.addObject(checked, "checked");
             mv.addObject(selected, "selected");
+            mv.addObject("currentUserId", currentUserId);
             return mv;
         }
         else {
-         mv.setViewName("admin/messageView");
+         mv.setViewName("admin/message");
          mv.addObject("title", "Ошибка");
-         mv.addObject("message","<div class=\"alert\">Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор.</div>");
-         mv.addObject("link","<a href='/Libra/'>Назад</a>");
+         mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
+         mv.addObject("link","<a href='/Libra/' class=\"btn btn-large\"><i class=\"icon-arrow-left\"></i> Назад</a>"); 
          return mv;
         }
     }
     
     /**
      * Returns settings and employees who have been showed before
-     * Invokes when user cliks "Cancel"
+     * Invokes when user clicks "Cancel"
      */
     @RequestMapping("currentEmployees")
     public ModelAndView showCurrentEmployees() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/employeesView");
+        mv.setViewName("admin/employees");
         mv.addObject(checked, "checked");
         mv.addObject(selected, "selected");
         mv.addObject("text", text);
         mv.addObject("employees", employees);
-        mv.addObject("noResults", noResults);
+        mv.addObject("currentUserId", currentUserId);
         return mv;
     }
     
@@ -102,7 +104,7 @@ public class UsersController {
      * @param textValue the value entered in the text field
      * @param byWhat - the value of sorting (by first name/email etc.)
      */
-    @RequestMapping("sortedEmployees")
+    @RequestMapping("requiredEmployees")
     public ModelAndView showRequiredEmployees(
                 @RequestParam("role") int role,
                 @RequestParam("textValue") String textValue,
@@ -110,7 +112,7 @@ public class UsersController {
         
         text = textValue;
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/employeesView");
+        mv.setViewName("admin/employees");
         
         //defining the job title and radio buttons
         switch(role) {
@@ -135,7 +137,7 @@ public class UsersController {
             case "ALL":
                 if(role == 0) {
                         employees = jdbc.getAllEmployees();
-                        noResults = "Служащие не найдены <br/>";
+                        noResults = "Сотрудники не найдены <br/>";
                         selected = "selectedAll";
                         break;
                     }
@@ -149,7 +151,7 @@ public class UsersController {
             case "FULL_NAME":
                 if(role == 0) {
                         employees = jdbc.getAllEmployeesByFullName(textValue);
-                        noResults = "Служащий(-ие) с именем "+ textValue +" не найден(-ы)";
+                        noResults = "Сотрудники(-и) с именем "+ textValue +" не найден(-ы)";
                         selected = "selectedFull";
                         break;
                     }
@@ -163,7 +165,7 @@ public class UsersController {
             case "FIRST_NAME":
                 if(role == 0) {
                         employees = jdbc.getAllEmployeesByFirstName(textValue);
-                        noResults = "Служащий(-ие) с именем "+ textValue +" не найден(-ы)";
+                        noResults = "Сотрудники(-и) с именем "+ textValue +" не найден(-ы)";
                         selected = "selectedFirst";
                         break;
                     }
@@ -177,7 +179,7 @@ public class UsersController {
             case "LAST_NAME":
                 if(role == 0) {
                         employees = jdbc.getAllEmployeesByLastName(textValue);
-                        noResults = "Служащий(-ие) с фамилией "+ textValue +" не найден(-ы)";
+                        noResults = "Сотрудники(-и) с фамилией "+ textValue +" не найден(-ы)";
                         selected = "selectedLast";
                         break;
                     }
@@ -191,36 +193,38 @@ public class UsersController {
             case "EMAIL":
                 if(role == 0) {
                         employees = jdbc.getAllEmployeesByEmail(textValue);
-                        noResults = "Служащий(-ие) с эл.почтой "+ textValue +" не найден(-ы)";
+                        noResults = "Сотрудники с эл.почтой \""+ textValue +"\" не найден";
                         selected = "selectedEmail";
                         break;
                     }
                 else {
                         employees = jdbc.getAllEmployeesByEmailAndRole(textValue, role);
-                        noResults = jobTitle+"(-ы) с эл.почтой "+ textValue +" не найден(-ы)";
+                        noResults = jobTitle+"с эл.почтой \""+ textValue +"\" не найден";
                         selected = "selectedEmail";
                         break;
                     }
                 
         }
         mv.addObject("employees", employees);
-        mv.addObject("noResults", noResults);
+        mv.addObject("noResults", "<div class=\"alert alert-info\">" + noResults + "</div>");
         mv.addObject(selected, "selected");
+        mv.addObject("currentUserId", currentUserId);
         return mv;
     }
     
     /**
      * The sorting in ascending or descending order 
-     * by the job title, ID, first name, last name, email and password.
+     * by the job title, ID, first name, last name and email
      * 
      * @param orderBy the value of sorting (like by the "ID" or "FIRST_NAME")
      */
     @RequestMapping("sortEmployees")
-    public ModelAndView sortEmployees(@RequestParam("orderBy") String orderBy) {
+    public ModelAndView sortEmployeesByLink(@RequestParam("orderBy") String orderBy) {
         
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/employeesView");
-        mv.addObject("noResults", noResults);
+        mv.setViewName("admin/employees");
+        mv.addObject("currentUserId", currentUserId);
+        mv.addObject("noResults", "<div class=\"alert alert-info\">" + noResults + "</div>");
         mv.addObject(selected, "selected");
         mv.addObject(checked, "checked");
         mv.addObject("text", text);
@@ -228,27 +232,27 @@ public class UsersController {
         if(employees.size() > 1) {
             switch(orderBy) {
             case "ROLE":
-                Collections.sort(employees, new RoleComparator(order));
+                Collections.sort(employees, new UsersController.RoleComparator(order));
                 break;
                 
             case "ID":
-                Collections.sort(employees, new IdComparator(order));
+                Collections.sort(employees, new UsersController.IdComparator(order));
                 break;
                 
             case "FIRST_NAME":
-                Collections.sort(employees, new FirstNameComparator(order));
+                Collections.sort(employees, new UsersController.FirstNameComparator(order));
                 break;
                 
             case "LAST_NAME":
-                Collections.sort(employees, new LastNameComparator(order));
+                Collections.sort(employees, new UsersController.LastNameComparator(order));
                 break;
                 
             case "EMAIL":
-                Collections.sort(employees, new EmailComparator(order));
+                Collections.sort(employees, new UsersController.EmailComparator(order));
                 break;
             }
         }
-        
+        //switch to ASC or DESC order
         order = (order==true) ? false : true;
         mv.addObject("employees", employees);
         return mv;
@@ -258,10 +262,17 @@ public class UsersController {
      * Displays the page for edit the data of certain employee by his or her ID
      */
     @RequestMapping("editEmployee")
-    public ModelAndView editEmployee(@RequestParam("employeeId") int employeeId) {
+    public ModelAndView showEditEmployeeView(@RequestParam("employeeId") int employeeId) {
+        
+        User employee = jdbc.getEmployee(employeeId);
+        
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/editEmployeeView");
-        mv.addObject("emp", jdbc.getEmployee(employeeId));
+        mv.setViewName("admin/editEmployee");
+        mv.addObject("employeeId", employeeId);
+        mv.addObject("firstName", employee.getFirstName());
+        mv.addObject("lastName", employee.getLastName());
+        mv.addObject("email", employee.getEmail());
+        mv.addObject("roleId", employee.getRoleId());
         return mv;
     }
     
@@ -269,42 +280,196 @@ public class UsersController {
      * Changes the employee's data by his or her ID 
      * and displays the statement of changes
      */
-    @RequestMapping(value="doneEdit", method = RequestMethod.POST)
-    public ModelAndView updateEmployee (
+    @RequestMapping("doneEdit")
+    public ModelAndView editEmployee (
                         @RequestParam("roleId") int roleId,
                         @RequestParam("employeeId") int employeeId,
                         @RequestParam("firstName") String firstName, 
                         @RequestParam("lastName") String lastName,
                         @RequestParam("email") String email) {
+        
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/messageView");
-        //returns an empty string if the input value is ok (satisfies DB); otherwise - the message with the restriction
-        String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
-                        LengthService.checkEmailLength(email);
-
-        //checks the duplicate emails, true if there are
-        if(checkDublicateValues(email, employeeId, employees)){
-            String link= "<a href=\"editEmployee.html?employeeId="+ employeeId +"\">Назад</a>";
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message", "Адрес эл.почты должен быть уникальным");
-            mv.addObject("link", link);
-            return mv;
+        
+        String errorMessage = "";
+        String firstNameMark = "";
+        String lastNameMark = "";
+        String emailMark = "";
+        
+        //methods of LengthService class return an empty string if the input value satisfies DB; 
+        //otherwise - the message with the restriction
+        String firstNameError = LengthService.checkFirstNameLength(firstName);
+        String lastNameError = LengthService.checkLastNameLength(lastName);
+        String emailError = LengthService.checkEmailLength(email);
+        
+        if(!firstNameError.equals("")) {
+            firstNameMark = "error";
+            errorMessage = firstNameError;
         }
-        else if(message.equals("")) {
-            
-            jdbc.updateEmployee(employeeId, firstName, lastName, email, roleId);
-            User employee = jdbc.getEmployee(employeeId);
-            String link= "<a href=\"employees.html\">Список служащих</a>";
-            mv.addObject("title", "Готово");
-            mv.addObject("message", "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно изменен.");
-            mv.addObject("link", link);
+        if(!lastNameError.equals("")) {
+            lastNameMark = "error";
+            errorMessage += lastNameError;
+        }
+        if(!emailError.equals("")) {
+            emailMark = "error";
+            errorMessage += emailError;
+        }
+        //checks the duplicate emails, true if there are
+        if(jdbc.hasDuplicateEmailExceptThis(email, employeeId)){
+            emailMark = "error";
+            errorMessage += "Пожалуйста, введите другой эл.адрес. Пользователь с эл.адресом \""+email+"\" уже зарегистрирован";
+        }
+        if(!errorMessage.equals("")) {
+            mv.setViewName("admin/editEmployee");
+            mv.addObject("errorMessage", errorMessage);
+            mv.addObject("employeeId", employeeId);
+            mv.addObject("firstNameMark", firstNameMark);
+            mv.addObject("lastNameMark", lastNameMark);
+            mv.addObject("emailMark", emailMark);
+            mv.addObject("firstName", firstName);
+            mv.addObject("lastName", lastName);
+            mv.addObject("roleId", roleId);
+            mv.addObject("email", email);
             return mv;
         }
         else {
-            String link= "<a href=\"editEmployee.html?employeeId="+ employeeId +"\">Назад</a>";
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message", message);
-            mv.addObject("link", link);
+            jdbc.updateEmployee(employeeId, firstName, lastName, email, roleId);
+            
+            //update the employee's data in list
+            for (User emp : employees) {
+                if (emp.getUserId() == employeeId) {
+                    emp.setFirstName(firstName);
+                    emp.setLastName(lastName);
+                    emp.setEmail(email);
+                    emp.setRoleId(roleId);
+                }
+            }
+            
+            mv.setViewName("admin/employees");
+            mv.addObject("message", "Информация о сотруднике успешно изменена");
+            mv.addObject(checked, "checked");
+            mv.addObject(selected, "selected");
+            mv.addObject("text", text);
+            mv.addObject("employees", employees);
+            mv.addObject("currentUserId", currentUserId);
+            return mv;
+        }
+    }
+    
+    /**
+     * Displays the page with changing the password of employee
+     */
+    @RequestMapping("resetEmployeePassword")
+    public ModelAndView showResetEmployeePassword (@RequestParam("employeeId") int employeeId) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/resetEmployeePassword");
+        mv.addObject("id", employeeId);
+        mv.addObject(checked, "checked");
+        mv.addObject(selected, "selected");
+        mv.addObject("text", text);
+        mv.addObject("employees", employees);
+        mv.addObject("currentUserId", currentUserId);
+        return mv;
+    }
+    
+    /**
+     * Reset the password of employee, goes to the page with employees
+     * and displays the message of changing
+     */
+    @RequestMapping("doneResetEmployeePassword")
+    public ModelAndView resetEmployeePassword (@RequestParam("employeeId") int employeeId) {
+        
+        Random generator = new Random();
+        //6-digit random number
+        int randomNumber =  100000 + generator.nextInt(900000);
+        String randomString = String.valueOf(randomNumber);
+        String randomHashedPassword = Security.getMD5hash(randomString);
+        
+        jdbc.changePassword(randomHashedPassword, employeeId);
+        
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/employees");
+        mv.addObject(checked, "checked");
+        mv.addObject(selected, "selected");
+        mv.addObject("text", text);
+        mv.addObject("employees", employees);
+        mv.addObject("currentUserId", currentUserId);
+        mv.addObject("message", "Пароль сброшен");
+        return mv;
+    }
+    
+    /**
+     * Display the page with changing the password of current session administrator
+     */
+    @RequestMapping("changeOwnPassword")
+    public ModelAndView showChangeOwnPasswordView(@RequestParam("employeeId") int employeeId) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/changeOwnPassword");
+        mv.addObject("employeeId", employeeId);
+        return mv;
+    }
+    
+    /**
+     * Change the password of current session administrator
+     */
+    @RequestMapping("doneChangeOwnPassword")
+    public ModelAndView changeOwnPassword(@RequestParam("employeeId") int employeeId,
+                                              @RequestParam("currentPassword") String currentPassword,
+                                              @RequestParam("newPassword") String newPassword,
+                                              @RequestParam("repeatNewPassword") String repeatNewPassword
+                                              ) {
+        ModelAndView mv = new ModelAndView();
+        User employee = jdbc.getEmployee(employeeId);
+        String employeePassword = employee.getPassword();
+        
+        String errorMessage = "";
+        String currentPasswordMark = "";
+        String newPasswordMark = "";
+        String repeatNewPasswordMark = "";
+        
+        String currentHashedPass = Security.getMD5hash(currentPassword);
+        
+        if(!employeePassword.equals(currentHashedPass)) {
+            currentPasswordMark = "error";
+            errorMessage = "Неправильный текущий пароль<br>";
+        }
+        if(!newPassword.equals(repeatNewPassword)) {
+            repeatNewPasswordMark = "error";
+            errorMessage += "Новый пароль и его дубликат не совпадают<br>";
+        }
+        
+        int before = errorMessage.length();
+        //returns an empty string if the input value satisfies DB; otherwise - the message with the restriction
+        errorMessage += LengthService.checkPasswordLength(newPassword);
+        
+        int after = errorMessage.length();
+        
+        if(after > before) {
+            newPasswordMark = "error";
+        }
+        
+        if(errorMessage.equals("")) {
+            newPassword = Security.getMD5hash(newPassword);
+            jdbc.changePassword(newPassword, employeeId);
+            
+            mv.setViewName("admin/employees");
+            mv.addObject(checked, "checked");
+            mv.addObject(selected, "selected");
+            mv.addObject("text", text);
+            mv.addObject("employees", employees);
+            mv.addObject("currentUserId", currentUserId);
+            mv.addObject("message", "Пароль успешно изменен");
+            return mv;
+        }
+        else {
+            mv.setViewName("admin/changeOwnPassword");
+            mv.addObject("errorMessage", errorMessage);
+            mv.addObject("employeeId", employeeId);
+            mv.addObject("currentPassword", currentPassword);
+            mv.addObject("newPassword", newPassword);
+            mv.addObject("repeatNewPassword", repeatNewPassword);
+            mv.addObject("currentPasswordMark", currentPasswordMark);
+            mv.addObject("newPasswordMark", newPasswordMark);
+            mv.addObject("repeatNewPasswordMark", repeatNewPasswordMark);
             return mv;
         }
     }
@@ -314,49 +479,107 @@ public class UsersController {
      * and the ability to add the new one
      */
     @RequestMapping("addEmployee")
-    public ModelAndView addEmployeeView() {
+    public ModelAndView showAddEmployeeView() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/addEmployeeView");
+        mv.setViewName("admin/addEmployee");
+        mv.addObject("techSelected", "selected");
         return mv;
     }
     
     /**
-     * Adds a new employee and displays the statement of changes
+     * Add a new employee and displays the statement of changes
      */
-    @RequestMapping(value="doneAdd", method = RequestMethod.POST)
+    @RequestMapping("doneAdd")
     public ModelAndView addEmployee (
                         @RequestParam("roleId") int roleId,
                         @RequestParam("firstName") String firstName, 
                         @RequestParam("lastName") String lastName,
                         @RequestParam("email") String email, 
                         @RequestParam("password") String password) {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/messageView");
-        //returns an empty string if the input value satisfies DB; otherwise - the message with the restriction
-        String message = LengthService.checkFirstNameLength(firstName) + LengthService.checkLastNameLength(lastName) +
-                        LengthService.checkEmailLength(email) + LengthService.checkPasswordLength(password);
         
-        //checks the duplicate emails, true if there are
-        if(checkDublicateValues(email, employees)){
-            String link= "<a href=\"addEmployee.html\">Назад</a>";
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message", "<div class=\"alert\">Сотрудник с адресом эл.почты \""+email+"\" уже был загерестрирован.<br> Пожалуйста, введите другой эл.адрес</div>");
-            mv.addObject("link", link);
-            return mv;
+        ModelAndView mv = new ModelAndView();
+        
+        //values to select item in dropbox
+        String hrSelected = "";
+        String techSelected = "";
+        String adminSelected = "";
+        
+        switch(roleId) {
+            case 2: hrSelected = "selected";
+                    break;
+            case 3: techSelected = "selected";
+                    break;
+            case 4: adminSelected = "selected";
+                    break;
         }
-        if(message.equals("")) {
-            jdbc.addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
-            String link= "<a href=\"employees.html\">Список служащих</a>";
-            mv.addObject("title", "Готово");
-            mv.addObject("message", "Служащий "+ firstName +" "+ lastName +" успешно добавлен.");
-            mv.addObject("link", link);
+        
+        String errorMessage = "";
+        //values to highlight error window
+        String firstNameMark = "";
+        String lastNameMark = "";
+        String emailMark = "";
+        String passwordMark = "";
+        
+        //methods of LengthService class return an empty string 
+        //if the input value satisfies DB; 
+        //otherwise - display the message with the restriction
+        String firstNameError = LengthService.checkFirstNameLength(firstName);
+        String lastNameError = LengthService.checkLastNameLength(lastName);
+        String emailError = LengthService.checkEmailLength(email);
+        String passwordError = LengthService.checkPasswordLength(password);
+        
+        if(!firstNameError.equals("")) {
+            firstNameMark = "error";
+            errorMessage = firstNameError;
+        }
+        if(!lastNameError.equals("")) {
+            lastNameMark = "error";
+            errorMessage += lastNameError;
+        }
+        if(!emailError.equals("")) {
+            emailMark = "error";
+            errorMessage += emailError;
+        }
+        if(!passwordError.equals("")) {
+            passwordMark = "error";
+            errorMessage += passwordError;
+        }
+        //checks the duplicate emails, true if there are
+        if(jdbc.hasDuplicateEmail(email)){
+            emailMark = "error";
+            errorMessage += "Пожалуйста, введите другой эл. адрес. Пользователь с эл. адресом \""
+                                            + email + "\" уже зарегистрирован";
+        }
+        if(!errorMessage.equals("")) {
+            mv.setViewName("admin/addEmployee");
+            mv.addObject("errorMessage", errorMessage);
+            mv.addObject("hrSelected", hrSelected);
+            mv.addObject("techSelected", techSelected);
+            mv.addObject("adminSelected", adminSelected);
+            mv.addObject("firstNameMark", firstNameMark);
+            mv.addObject("lastNameMark", lastNameMark);
+            mv.addObject("emailMark", emailMark);
+            mv.addObject("passwordMark", passwordMark);
+            mv.addObject("roleId", roleId);
+            mv.addObject("firstName", firstName);
+            mv.addObject("lastName", lastName);
+            mv.addObject("email", email);
+            mv.addObject("password", password);
             return mv;
         }
         else {
-            String link= "<a href=\"addEmployee.html\">Назад</a>";
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message", "<div class=\"alert\">"+message+"</div>");
-            mv.addObject("link", link);
+            jdbc.addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
+            
+            User employee = jdbc.getEmployee(email);
+            employees.add(employee);
+            
+            mv.setViewName("admin/employees");
+            mv.addObject("message", "Сотрудник успешно добавлен");
+            mv.addObject(checked, "checked");
+            mv.addObject(selected, "selected");
+            mv.addObject("text", text);
+            mv.addObject("employees", employees);
+            mv.addObject("currentUserId", currentUserId);
             return mv;
         }
     }
@@ -364,81 +587,51 @@ public class UsersController {
     /**
      * Displays the page with confirmation about deleting the employee (Y/N)
      */
-    @RequestMapping("deleteSure")
-    public ModelAndView deleteSure(@RequestParam("employeeId") int employeeId) {
+    @RequestMapping("deleteEmployee")
+    public ModelAndView showDeleteEmployeeView(@RequestParam("employeeId") int employeeId) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/deleteSureView");
-        mv.addObject("emp", jdbc.getEmployee(employeeId));
-        return mv;
-    }
-    
-    /**
-     * Deleting of employee from all database tabels
-     * and displays the statement of changes
-     */
-    @RequestMapping(value="deleteEmployee", method = RequestMethod.GET)
-    public ModelAndView deleteEmployee (@RequestParam("employeeId") int employeeId) {
-        ModelAndView mv = new ModelAndView();
-        User employee = jdbc.getEmployee(employeeId);
-        //deleting of employee from all database tabels
-        jdbc.deleteEmployee(employeeId);
-        
-        String message = "Служащий "+ employee.getFirstName() +" "+ employee.getLastName() +" успешно удален.";
-        String link= "<a href=\"employees.html\">Список служащих</a>";
-        mv.setViewName("admin/messageView");
-        mv.addObject("title", "Готово");
-        mv.addObject("message", message);
-        mv.addObject("link", link);
-        return mv;
-    }
-    
-    /**
-     * Displays the page with changing the password of employee
-     */
-    @RequestMapping("changeEmployeePassword")
-    public ModelAndView changeEmployeePassword (@RequestParam("employeeId") int employeeId) {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/changeEmployeePasswordView");
+        mv.setViewName("admin/delete");
         mv.addObject("id", employeeId);
         mv.addObject(checked, "checked");
         mv.addObject(selected, "selected");
         mv.addObject("text", text);
         mv.addObject("employees", employees);
+        mv.addObject("currentUserId", currentUserId);
         return mv;
     }
     
     /**
-     * Changes the password of employee, goes to the page with employees
-     * and displays the message of changing
+     * Deleting of employee from all database tables
+     * and displays the statement of changes
      */
-    @RequestMapping("changedEmployeePassword")
-    public ModelAndView changedEmployeePassword (@RequestParam("employeeId") int employeeId,
-                                                 @RequestParam("passwordValue") String passwordValue) {
+    @RequestMapping("doneDelete")
+    public ModelAndView deleteEmployee (@RequestParam("employeeId") int employeeId) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/employeesView");
+        //deleting of employee from all database tabels
+        jdbc.deleteEmployee(employeeId);
+        
+        //delete employee from list
+        for(ListIterator <User> i = employees.listIterator(); i.hasNext(); ) {
+            User emp = i.next();
+            if(emp.getUserId() == employeeId) {
+                i.remove();
+            }
+        }
+        
+        mv.setViewName("admin/employees");
+        mv.addObject("message", "Сотрудник успешно удален");
         mv.addObject(checked, "checked");
         mv.addObject(selected, "selected");
         mv.addObject("text", text);
         mv.addObject("employees", employees);
-        
-        //returns an empty string if the input value satisfies DB; otherwise - the message with the restriction
-        String message = LengthService.checkPasswordLength(passwordValue);
-        
-        if(message.equals("")) {
-            String password = Security.getMD5hash(passwordValue);
-            jdbc.changePassword(password, employeeId);
-            mv.addObject("message", "Пароль был изменен");
-        }
-        else {
-            mv.addObject("message", message);
-        }
-        
+        mv.addObject("currentUserId", currentUserId);
         return mv;
     }
-    
+
     /**
-     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
-     * in ascending or descending order by the ID (look the sortEmployees method in UsersController class).
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order 
+     * by the ID (look the sortEmployeesByLink method in UsersController class).
      */
     public static class IdComparator implements Comparator <User> {
         private boolean asc; // true - sorts in ascending order, fasle - descending
@@ -459,8 +652,9 @@ public class UsersController {
     }
     
     /**
-     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
-     * in ascending or descending order by the first name (look the sortEmployees method in UsersController class).
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order 
+     * by the first name (look the sortEmployeesByLink method in UsersController class).
      */
     public static class FirstNameComparator implements Comparator <User> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
@@ -475,8 +669,9 @@ public class UsersController {
     }
     
     /**
-     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
-     * in ascending or descending order by the last name (look the sortEmployees method in UsersController class).
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order 
+     * by the last name (look the sortEmployeesByLink method in UsersController class).
      */
     public static class LastNameComparator implements Comparator <User> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
@@ -491,8 +686,9 @@ public class UsersController {
     }
     
     /**
-     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
-     * in ascending or descending order by the email (look the sortEmployees method in UsersController class).
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order 
+     * by the email (look the sortEmployeesByLink method in UsersController class).
      */
     public static class EmailComparator implements Comparator <User> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
@@ -507,8 +703,9 @@ public class UsersController {
     }
     
     /**
-     * Comparator has been created to be passed to a method Collections.sort to sort of objects list
-     * in ascending or descending order by the role (look the sortEmployees method in UsersController class).
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order 
+     * by the role (look the sortEmployeesByLink method in UsersController class).
      */
     public static class RoleComparator implements Comparator <User> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
@@ -528,43 +725,45 @@ public class UsersController {
         }
     }
     
-    /**
-     * Checks for duplicates of emails by employee's ID
-     * Returns true if there are duplicates, false - otherwise
-     */
-    public boolean checkDublicateValues(String email, Integer employeeId, List <User> users) {
+/*
+    
+     //* Checks for duplicates of emails by user's ID in User list
+     //* Returns true if there are duplicates, false - otherwise
+    public boolean checkDublicateValues(String email, int employeeId) {
         
-        List <User> list = users;
-        Set set = new TreeSet();
-        //add the changed email first
-        set.add(email);
         boolean dublicate = false;
-        //check all emails except for the old employee's email
-        for(User user : list) {
-            if(user.getUserId()!= employeeId) {
-                if(!set.add(user.getEmail())) {
+        List <String> list = jdbc.getAllUsersEmailsExceptThis(employeeId);
+        Set set = new TreeSet();
+        
+        set.add(email);
+        
+        for(String e : list) {
+            if(!set.add(e)) {
                 dublicate = true;
-                }
             }
         }
         return dublicate;
     }
     
-    public boolean checkDublicateValues(String email, List <User> users) {
+    //* Checks for duplicates of emails in User list
+    //* Returns true if there are duplicates, false - otherwise
+    public boolean checkDublicateValues(String email) {
         
-        List <User> list = users;
-        Set set = new TreeSet();
-        //add the changed email first
-        set.add(email);
         boolean dublicate = false;
-        //check all emails except for the old employee's email
-        for(User user : list) {
-            if(!set.add(user.getEmail())) {
+        List <String> usersEmails = jdbc.getAllUsersEmails();
+        Set set = new TreeSet();
+        
+        set.add(email);
+        
+        System.out.println("checkDublicateValues(String email)");
+        for(String e : usersEmails) {
+            System.out.println(e);
+            if(!set.add(e)) {
                 dublicate = true;
             }
-            
         }
         return dublicate;
     }
+*/
     
 }
