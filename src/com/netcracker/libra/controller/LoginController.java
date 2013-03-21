@@ -78,7 +78,12 @@ public class LoginController {
        if(userPreferences.accessLevel!=-1)
        {
             ModelAndView mav=new ModelAndView();
-            if(password1.equals(password2)&&(password1.length()>=6&&password1.length()<=20)&&(StudentJDBC.exists(userPreferences.UserId, Security.getMD5hash(aldPassword))>0))
+            String er="";
+            if(password1.length()>=6)
+                er+="<p>Длина пароля должна быть больше 6 символов</p>";
+            if(password1.length()>=6)
+                er+="<p>Длина пароля должна быть меньше 20 символов</p>";
+            if(password1.equals(password2)&&(er.equals(""))&&(StudentJDBC.exists(userPreferences.UserId, Security.getMD5hash(aldPassword))>0))
             {
                 StudentJDBC.updatePassword(userPreferences.UserId, Security.getMD5hash(password1));
                 mav.addObject("link", "<a href='/Libra/'>Вернуться назад</a>");
