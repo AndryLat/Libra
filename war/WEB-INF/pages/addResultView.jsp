@@ -3,6 +3,8 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% pageContext.setAttribute("newLine", "\n"); %> 
 <!DOCTYPE html>
 <html>
     <head>
@@ -53,7 +55,10 @@
                 </div>
             
             <p>Комментарий: </p>
-                <div class="nya<c:out value='${ir.getUserId()}'/>">${ir.getComments()}</div>
+                <div class="nya<c:out value='${ir.getUserId()}'/>">
+                  <%--  ${ir.getComments()}    --%> 
+                    ${fn:replace(ir.getComments(), newLine, "</br>")}
+                </div>
                 <div class="nya<c:out value='${ir.getUserId()}'/>" style="display:none">
                     <c:if test="${userId==ir.getUserId()}">
                         <textarea name="comment">${ir.getComments()}</textarea>

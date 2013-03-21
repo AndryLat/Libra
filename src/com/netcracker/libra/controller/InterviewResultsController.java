@@ -36,6 +36,8 @@ public class InterviewResultsController
             {
                 return message("<a href='/Libra/'>Вернуться назад</a>","Такого интервью нету","Ошибка");
             }
+            String s="";
+                    s.replace("", "");
             this.InterviewId=InterviewId;
             ModelAndView mav = new ModelAndView();
             mav.setViewName("addResultView");       
