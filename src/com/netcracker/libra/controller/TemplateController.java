@@ -8,11 +8,8 @@ import com.netcracker.libra.dao.ColumnsJDBC;
 import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.model.Template;
 import com.netcracker.libra.dao.TemplateJDBC;
-import com.netcracker.libra.dao.TopicJDBC;
 import com.netcracker.libra.dao.TypeJDBC;
 import com.netcracker.libra.dao.UserPreferences;
-import com.netcracker.libra.model.AppFormTopics;
-import com.netcracker.libra.model.ColumnFieldsModel;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.netcracker.libra.service.TemplateService;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.netcracker.libra.model.InfoForDelete;
-import com.netcracker.libra.model.OtherField;
-import com.netcracker.libra.model.Type;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 /**
  *
  * @author Sashenka
@@ -37,7 +27,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class TemplateController
 {    
     TemplateJDBC templateJDBC=new TemplateJDBC();
-    TopicJDBC topicJDBC = new TopicJDBC();
     
     @Autowired
     UserPreferences userPreferences;
@@ -58,7 +47,7 @@ public class TemplateController
                  return message("template.html", message, "Ошибка");
             }
             Template lastTemplate=templateJDBC.getTemplate(templateJDBC.add(name));
-            return showTemplate();
+            return new ModelAndView("redirect:showTemplates.html");
         } 
         else
         {
@@ -76,7 +65,7 @@ public class TemplateController
         if(userPreferences.accessLevel==1)
         {
             templateJDBC.setActive(activeTemplate);
-            return showTemplate();
+            return new ModelAndView("redirect:showTemplates.html");
         } 
         else
         {
@@ -128,7 +117,7 @@ public class TemplateController
                 return message("<a href='showTemplates.html'>Посмотреть все типы</a>", "Такого шаблона нету", "Ошибка"); 
             }
             templateJDBC.update(selTemplate, name);
-            return showTemplate();
+            return new ModelAndView("redirect:showTemplates.html");
         } 
          else
         {
@@ -141,16 +130,27 @@ public class TemplateController
     public String delTemplate(ModelMap model,
     @RequestParam(value="templates[]",required=false ) int[] delete)  
     {
-        List<InfoForDelete> info=templateJDBC.getInfoForDelete(delete);
-        int infoSize=info.size();
-        model.addAttribute("delete", delete);
-        model.addAttribute("info", info);
-        model.addAttribute("infoSize",infoSize);
-        model.addAttribute("title","Удалить анкеты");
-        model.addAttribute("h1","Вы действительно хотите удалить этот шаблон?");
-        model.addAttribute("submit","delSubmitTemplate");
-        model.addAttribute("location","delSubmitTemplate.html");
-        return "delInfoView";
+        if(delete==null)
+        {
+            return "redirect:showTemplates.html";
+        }
+        if(userPreferences.accessLevel==1)
+        {
+            List<InfoForDelete> info=templateJDBC.getInfoForDelete(delete);
+            int infoSize=info.size();
+            model.addAttribute("delete", delete);
+            model.addAttribute("info", info);
+            model.addAttribute("infoSize",infoSize);
+            model.addAttribute("title","Удалить анкеты");
+            model.addAttribute("h1","Вы действительно хотите удалить этот шаблон?");
+            model.addAttribute("submit","delSubmitTemplate");
+            model.addAttribute("location","showTemplates.html");
+            return "delInfoView";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     /**
      * Метод, который передает в вид информацию о шаблоне(для предварительного просмотра),
@@ -195,7 +195,6 @@ public class TemplateController
      @RequestMapping(value="delSubmitTemplate", method= RequestMethod.POST)
     public ModelAndView delSubmitTemplate(@RequestParam("delete[]") int[] delete)
     {
-        ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
         {
             for(int i=0;i<delete.length;i++)
@@ -206,7 +205,7 @@ public class TemplateController
                 }
                 templateJDBC.delete(delete[i]);
             }
-            return showTemplate();
+            return new ModelAndView("redirect:showTemplates.html");
         } 
          else
         {
@@ -228,7 +227,7 @@ public class TemplateController
          mav.setViewName("appFormView");
          return mav;
      }*/
-     @RequestMapping(value="appForm", method= RequestMethod.GET)
+    /* @RequestMapping(value="appForm", method= RequestMethod.GET)
     public ModelAndView showTemplateById(@RequestParam("template") int template)
     {            
         ModelAndView mav = new ModelAndView();
@@ -276,7 +275,7 @@ public class TemplateController
         }
         return message("<a href='/Libra/'>Вернуться назад</a>","Вы заполнили анкету","Успех");
     }
-
+*/
      public ModelAndView message(String link,String message,String title)
      {
          ModelAndView mav=new ModelAndView();

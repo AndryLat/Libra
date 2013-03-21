@@ -272,23 +272,25 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
         return interviewers;
     }
-    public List<InterviewDateInfo> getFreePlaces()
+    public List<InterviewDateInfo> getFreePlaces(int role)
     {
         String SQL="select ilist.interviewDateId, "+
                 "TO_CHAR(idate.datefinish,'dd.mm.yyyy') day, "+
                 "TO_CHAR(idate.datestart,'hh24:mi')||'-'||TO_CHAR(idate.datefinish,'hh24:mi') hTime, "+
                 "Count(*)*(idate.datefinish-idate.datestart)*24*60/idate.InterviewDuration -NVL(i.c,0) freePlaces, "+
                 "sign(idate.datefinish-(SYSDATE+(select TIMEZONEDIFFERENCE from libraconfigs)/24)) correct "+
-								 "from InterviewerList ilist join InterviewDate idate "+
-										"on  idate.interviewDateId=ilist.interviewdateId "+	
-								"left join "+ 
+		"from InterviewerList ilist join InterviewDate idate "+
+		"on  idate.interviewDateId=ilist.interviewdateId "+	
+		"left join "+ 
                 "(select interviewDateId, Count(*) c "+
                 "from interview "+
-                "where status=1 "+ 
-                "group by interviewDateId ) i on i.interviewDateId=idate.interviewDateId "+
+                "where status=1  "+ 
+                "group by interviewDateId ) i on i.interviewDateId=idate.interviewDateId "
+                + " join users u on u.UserId=ilist.userId  "
+                + " join roles r on (r.roleId=u.roleId and r.AccessLevel=?)"+
                                         "GROUP by i.c,ilist.interviewDateId,idate.datestart,idate.datefinish,idate.InterviewDuration "+
 					"order by idate.datestart ";
-        return jdbcTemplateObject.query(SQL, new InterviewDateInfoRowMapper());
+        return jdbcTemplateObject.query(SQL, new InterviewDateInfoRowMapper(),role);
     }
     
     public int exists(int interviewId)

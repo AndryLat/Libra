@@ -9,9 +9,20 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${title}</title>
+        <jsp:include page="resources.jsp" />
     </head>
     <body>
-        <h1>${h1}</h1>
+        <div class="navmenu">
+		<jsp:include page="navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="sidebar">
+				<jsp:include page="sidebar.jsp" />
+			</div>
+			<div class="span8">
+				<h1>${h1}</h1>
         <c:if test="${infoSize == 0  }">
             <p>Смело удаляйте! </p>
         </c:if>
@@ -43,5 +54,9 @@
         <input type="submit" value="удалить"/>    
         <input value="НЕТ" onclick="location.href='${location}'" type="button"/>
         </form>
+			</div>
+		</div>
+	</div>
+        
     </body>
 </html>

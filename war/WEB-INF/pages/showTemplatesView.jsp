@@ -27,7 +27,7 @@
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span3">
+			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
  <div class="well-template span8"> 
@@ -70,24 +70,8 @@
         
 
         <!--<table border="1" cellspacing="0" cellpadding="4">-->
-        
-                <script  type="text/javascript">
-  <!-- 
-$(function () {
-     $("#selall").click(function  () {
-         if  (!$("#selall").is(":checked")){
-              $(".checkbox").removeAttr("checked");
-        }
-        else{
-             $(".checkbox").attr("checked","checked");
-       }
-
-     });
-});
-
-//-->
-</script>
-        <form class="well-template span8" action="delTemplate.html" method="POST">
+        <div class="well-template span8">
+      <%--  <form class="well-template span8" action="delTemplate.html" method="POST">--%>
         
         <table  class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
         <caption>Информация о существующих шаблонах</caption>
@@ -96,9 +80,9 @@ $(function () {
             <th>
                 <%--<input type="image"  src="resources/images/del.png" width="25" height="25" title="Удалить" onclick="submitDelete()"/>
 --%>
- <input type="image"  src="resources/images/del.png" width="25" height="25" title="Удалить" onclick="submitDelete('delTemplate.html','input:checkbox[name^=template]')"/>
-               
-</br><input type="checkbox"  id="selall" value="1"  class="checkbox">
+ <a href="#" onclick="submitDelete('delTemplate.html',':checkbox[name^=template]')"><img src="resources/images/del.png" width="25" height="25" title="Удалить" /></a>
+        
+</br><input id="one" type="checkbox" name="one" value="all" onclick="cbToggle();" />
             </th><th>№</th>
             <th>Название</th>
             <th>Статус</th>
@@ -120,7 +104,7 @@ $(function () {
                 <%--
                     <a href=""><img src="resources\images\del2.png"  width="25" height="25" border="0" title="нельзя удалить активный шаблон"/></a>
                 --%>
-                <input type="checkbox"  disabled/>
+                <input type="checkbox"   disabled/>
                     
                 </c:if>
             </td>
@@ -147,13 +131,13 @@ $(function () {
                 </c:if>
             </td>
             <td class="checkbox-shift">
-                <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${t.getTemplateId()}'/>');"><img src="resources/images/edit.png" width="25" height="25" title="внести изменения"/></a>                        
+                <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${t.getTemplateId()}'/>');"><img class="_img-size" src="resources/images/edit.png"  title="внести изменения"/></a>                        
             <%--
 <input type="image"  src="resources/images/edit.png" width="25" height="25" title="внести изменения" onclick="location.href='showTemplates.html'"/>
             --%>
 
-                <a href="showColumn.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img  src="resources/images/columns.png" width="25" height="25" title="редактировать колонки"/></a>
-               <a href="showAppForm.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img  src="resources/images/show.png" width="25" height="25" title="просмотреть шаблон"/></a>
+                <a href="showColumn.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img class="_img-size" src="resources/images/columns.png"  title="редактировать колонки"/></a>
+               <a href="showAppForm.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img class="_img-size" src="resources/images/show.png"  title="просмотреть шаблон"/></a>
             
             </td>
             </form>
@@ -163,10 +147,10 @@ $(function () {
         </c:forEach>
         </tbody>
         </table>
-   </form>
+  <%-- </form>--%>
 		</div>
 	</div>
-        
+        </div>  
     </body>
 </html>
 
