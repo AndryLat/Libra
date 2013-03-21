@@ -10,10 +10,13 @@
 <!--<![endif]-->
 <head>
 	<jsp:include page="../resources.jsp" />
-	<title>ADD</title>
-        <style type="text/css">
-        body {text-align: center;}
-        </style>
+	<title>Добавить сотрудника</title>
+        <script>
+            function closeMessage()
+            {
+                document.getElementById("alertMessage").innerHTML="";
+            }
+        </script>
 </head>
 
 <body>
@@ -29,37 +32,48 @@
                             
                             <form class="form-horizontal" action="doneAdd.html" method="POST">
                                 
+                                
+                                <c:if test='${!errorMessage.equals("") && errorMessage != null}'>
+                                    <span id="alertMessage">
+                                    <div class="alert alert-error" align="center">
+                                        <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                                        ${errorMessage}
+                                    </div>
+                                    </span>
+                                </c:if>
+                                
+                                
                                 <div class="control-group">
                                     <div class="controls">
                                     <select name="roleId">
-                                        <option value="2">HR</option>
-                                        <option selected value="3">TECH</option>
-                                        <option value="4">ADMIN</option>
+                                        <option ${hrSelected} value="2">HR</option>
+                                        <option ${techSelected} value="3">TECH</option>
+                                        <option ${adminSelected} value="4">ADMIN</option>
                                     </select>
                                     </div>
                                 </div>
                                 
-                                <div class="control-group">
+                                <div class="control-group ${firstNameMark}">
                                     <div class="controls">
-                                        <input type="text" name="firstName" placeholder="Имя">
+                                        <input type="text" name="firstName" placeholder="Имя" value="${firstName}">
                                     </div>
                                 </div>
                                 
-                                <div class="control-group">
+                                <div class="control-group ${lastNameMark}">
                                     <div class="controls">
-                                        <input type="text" name="lastName" placeholder="Фамилия">
+                                        <input type="text" name="lastName" placeholder="Фамилия" value="${lastName}">
                                     </div>
                                 </div>
                                 
-                                <div class="control-group">
+                                <div class="control-group ${emailMark}">
                                     <div class="controls">
-                                        <input type="text" name="email" placeholder="Эл. почта">
+                                        <input type="text" name="email" placeholder="Эл. почта" value="${email}">
                                     </div>
                                 </div>
                                 
-                                <div class="control-group">
+                                <div class="control-group ${passwordMark}">
                                     <div class="controls">
-                                        <input type="password" name="password" placeholder="Пароль">
+                                        <input type="password" name="password" placeholder="Пароль" value="${password}">
                                     </div>
                                 </div>
                                 
@@ -69,7 +83,7 @@
                                         <button type=button class="btn" onClick="parent.location='currentEmployees.html'">Cancel</button>
                                     </div>
                                 </div>
-                                
+                                    
                             </form>
                             
                             
