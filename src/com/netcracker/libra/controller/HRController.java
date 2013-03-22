@@ -454,15 +454,7 @@ public class HRController {
           Date current = new Date();
           return current.before(sqlDate);
       }
-      
-      @RequestMapping("hr/confirmEditing")
-      public ModelAndView showconfirmEditing() {
-          ModelAndView mv = new ModelAndView();
-          
-          
-          
-          return mv;
-      }
+
 
       
       
