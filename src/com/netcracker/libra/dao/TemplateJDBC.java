@@ -59,6 +59,11 @@ public class TemplateJDBC implements TemplateDAO
         String sqlSeq = "select Template_seq.NEXTVAL as Id from dual";
         return jdbcTemplateObject.queryForInt(sqlSeq);
     }
+    public int count()
+    {
+        String SQL ="select count(*) from Template";
+        return jdbcTemplateObject.update(SQL);
+    }
     /**
      * Adds a new template
      * @param name the name of tamplate
@@ -66,8 +71,16 @@ public class TemplateJDBC implements TemplateDAO
     public int add(String name) 
     {
         int i=getCurVal();
-        String SQL ="INSERT INTO Template VALUES(?,?,0)";
-        jdbcTemplateObject.update(SQL,i,name);
+        if(count()>0)
+        {    
+            String SQL ="INSERT INTO Template VALUES(?,?,0)";
+            jdbcTemplateObject.update(SQL,i,name);
+        }
+        else
+        {
+            String SQL ="INSERT INTO Template VALUES(?,?,1)";
+            jdbcTemplateObject.update(SQL,i,name);
+        }
         return i;
     }
     
@@ -105,10 +118,14 @@ public class TemplateJDBC implements TemplateDAO
     
     public void setActive(int id)
     {
-        String SQL1="update Template set active=0";
-        jdbcTemplateObject.update(SQL1);
-        String SQL2="update Template set active=1 where TemplateId=?";
-        jdbcTemplateObject.update(SQL2,id);   
+        String SQL="MERGE INTO Template t1 "+
+                    "USING Template t2 "+
+                    "ON (t1.templateId!=t2.TemplateId) "+
+                    "WHEN MATCHED THEN UPDATE "+
+                    "SET t1.active=t2.active "+
+                    "WHERE (t1.templateId=? AND (t2.active=1 and t2.templateId!=?))"
+                + "OR (t2.templateId=? AND (t1.active=1 and t1.templateId!=?))";
+        jdbcTemplateObject.update(SQL,id,id,id,id);   
     }
     
     public int existTemplate(int id)

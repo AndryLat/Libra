@@ -4,6 +4,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<% pageContext.setAttribute("showSwop", false); %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -67,6 +68,8 @@
         </thead>
         <tbody>  
             <c:forEach items="${columns}" var="c">
+                <c:set var="showSwop" value="${false}"/>
+            
             <tr>
                 <td class="checkbox-shift">
                <input  type="checkbox" class="checkbox" name="delete[]" value="<c:out value='${c.getColumnId()}'/>"/>        
@@ -74,17 +77,31 @@
                 <td>${c.getNumbers()}</td>
                 <td>${c.getName()}</td>
                 <td> 
+                    <c:forEach items="${columns}" var="list">  
+                        <c:if test="${(c.getParentColumn()==list.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}" >
+                            <c:set var="showSwop" value="${true}"/>
+                            
+                        </c:if>
+                     </c:forEach>
+                    <c:if test="${showSwop==true}">
                     <form action="changeColumn.html" method="POST">
                         <input name="column1" type="hidden" value="${c.getColumnId()}">
+                      
+                      
                 <select class="select-change" name="column2" size="1">
                 <c:forEach items="${columns}" var="list">  
-                    <c:if test="${(list.getParentColumn()==c.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}">
+                <c:if test="${(list.getParentColumn()==c.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}">
                         <option value="${list.getColumnId()}">${list.getName()}</option>
                 </c:if>
                 </c:forEach>
                 </select>  
+               
                     <input class="btn btn-primary pull-right"  type="submit" value="OK"/>
                     </form>
+                         </c:if>
+                    <c:if test="${showSwop==false}">
+                        Ее не с кем менять
+                    </c:if>
                 </td>
                 <td>
                     <c:if test="${c.getTypeId()!=0}">

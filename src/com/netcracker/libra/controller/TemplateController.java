@@ -4,7 +4,6 @@
  */
 package com.netcracker.libra.controller;
 
-import com.netcracker.libra.dao.ColumnsJDBC;
 import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.model.Template;
 import com.netcracker.libra.dao.TemplateJDBC;
@@ -212,7 +211,7 @@ public class TemplateController
             return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
-     ColumnsJDBC columnsJDBS=new ColumnsJDBC();
+    // ColumnsJDBC columnsJDBS=new ColumnsJDBC();
      TypeJDBC typeJDBC=new TypeJDBC();
      /*@RequestMapping(value="appForm", method= RequestMethod.GET)
      public ModelAndView showTemplateById(@RequestParam("template") int template)

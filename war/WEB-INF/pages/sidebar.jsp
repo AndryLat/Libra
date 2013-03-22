@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 	<div class="well span3">
 	<ul class="nav  nav-pills nav-stacked">
+                <li class="nav-header">Все</li>
+		<li><a href="editLogin.html">Изменить пароль</a></li>
 		<li class="nav-header">Управление шаблонами</li>
 		<li><a href="showTemplates.html">Шаблоны</a></li>
                 <li><a href="addType.html">Добавить тип</a></li>

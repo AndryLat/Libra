@@ -5,7 +5,6 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.ColumnJDBC;
-import com.netcracker.libra.dao.ColumnsJDBC;
 import com.netcracker.libra.dao.TemplateJDBC;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -242,7 +241,7 @@ public class ColumnController
     }
     
     //submitForm
-         ColumnsJDBC columnsJDBS=new ColumnsJDBC();
+/*
     @RequestMapping(value="submitForm",method = RequestMethod.POST)
     public String submitForm(ModelMap model,
     @ModelAttribute("columnFields") ColumnFieldsModel columnFields)  
@@ -266,5 +265,5 @@ public class ColumnController
             }
         }
         return "appFormView";
-    }  
+    }  */
 }
