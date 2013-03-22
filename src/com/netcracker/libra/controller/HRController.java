@@ -455,13 +455,16 @@ public class HRController {
           return current.before(sqlDate);
       }
       
-      /**
-       * @return true if the interview was conducted
-       */
-      public boolean wasInterviewed(List <InterviewResults> interviewResults) {
-          System.out.println("- wasInterviewed method started");
-          return interviewResults.isEmpty() ? false : true;
+      @RequestMapping("hr/confirmEditing")
+      public ModelAndView showconfirmEditing() {
+          ModelAndView mv = new ModelAndView();
+          
+          
+          
+          return mv;
       }
+
+      
       
 
      

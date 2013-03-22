@@ -5,6 +5,7 @@ import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.service.LengthService;
 import com.netcracker.libra.util.security.Security;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -74,7 +75,7 @@ public class UsersController {
          mv.setViewName("admin/message");
          mv.addObject("title", "Ошибка");
          mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-         mv.addObject("link","<a href='/Libra/' class=\"btn btn-large\"><i class=\"icon-arrow-left\"></i> Назад</a>"); 
+         mv.addObject("link","<a href='/Libra/' class=\"btn btn-large\"><img  src=\"../resources/images/admin/glyphicons_210_left_arrow.png\" width=\"15\" height=\"15\"/> Назад </a>"); 
          return mv;
         }
     }
@@ -568,10 +569,29 @@ public class UsersController {
             return mv;
         }
         else {
+            
+            //                                                           --------------------- NULL POINTER EXCEPTION
+            System.out.println(" - - -");
+            java.util.Date date1 = Calendar.getInstance().getTime();
+            System.out.println("Time before jdbc.addEmployee: " + date1.getTime());
             jdbc.addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
             
+            java.util.Date date2 = Calendar.getInstance().getTime();
+            System.out.println("Time before jdbc.getEmployee: " + date2.getTime());
             User employee = jdbc.getEmployee(email);
+            
+            java.util.Date date3 = Calendar.getInstance().getTime();
+            System.out.println("Time before employees.add: " + date3.getTime());
+            try {
+                Thread.sleep(200);
+            }
+            catch (InterruptedException e) {
+                System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+            }
             employees.add(employee);
+            
+            java.util.Date date4 = Calendar.getInstance().getTime();
+            System.out.println("Time After employees.add: " + date4.getTime());
             
             mv.setViewName("admin/employees");
             mv.addObject("message", "Сотрудник успешно добавлен");

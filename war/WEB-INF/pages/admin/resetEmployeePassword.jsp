@@ -56,7 +56,7 @@
                      </div>
                  </td>
              </c:if>
-             <td align="right"><a href="addEmployee.html" class="btn"><i class="icon-plus"></i> Добавить нового сотрудника</a></td>
+             <td align="right"><a href="addEmployee.html" class="btn"><img  src="../resources/images/admin/glyphicons_006_user_add.png" width="20" height="20" title="Добавить нового сотрудника"/></a></td>
          </tr>
         </table>
         <br>
@@ -80,7 +80,7 @@
                 </select>
              </td>
              <td><input type="text" placeholder="Введите значение" name="textValue" value="${text}"></td>
-             <td><button class="btn btn-primary"><i class="icon-white icon-search"></i> Поиск</button></td>
+             <td><button class="btn btn-primary"><img  src="../resources/images/admin/search-icon-white-one-hi.png" width="15" height="15"/> Поиск &nbsp;</button></td>
         </tr>
         </div>
         </form>
@@ -113,20 +113,20 @@
                     
                     <c:if test="${id != emp.getUserId()}">
                         <c:if test="${currentUserId != emp.getUserId()}">
-                        <td><a href="resetEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><i class="icon-refresh" title="Сбросить пароль"></i>icon-refresh</a></td>
+                        <td><a href="resetEmployeePassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img  src="../resources/images/admin/glyphicons_081_refresh.png" width="15" height="15" title="Сбросить пароль"/></a></td>
                         </c:if>
                         <c:if test="${currentUserId == emp.getUserId()}">
-                        <td><a href="changeOwnPassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><i class="icon-pencil" title="Изменить пароль"></i>icon-pencil</a></td>
+                        <td><a href="changeOwnPassword.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img  src="../resources/images/admin/glyphicons_044_keys.png" width="15" height="15" title="Изменить пароль"/></a></td>
                         </c:if>
                     </c:if>
                     <c:if test="${id == emp.getUserId()}">
                         <form action="doneResetEmployeePassword.html" method="POST">
-                            <td><div class="alert alert-error">Точно?</div><button type="submit" class="btn btn-primary btn-small">Yes</button><button type=button class="btn btn-small" onClick="parent.location='currentEmployees.html'">No</button></div></td>
+                            <td><div class="alert alert-error" align="right">Сбросить пароль?</div><button type="submit" class="btn btn-primary btn-small">Да</button> <button type=button class="btn btn-small" onClick="parent.location='currentEmployees.html'">Нет</button></div></td>
                             <input type="hidden" name="employeeId" value="${emp.getUserId()}">
                         </form>
                     </c:if>
-                    <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><i class="icon-wrench" title="Редактировать"></i>icon-wrench</a></td>
-                    <td><a href="deleteEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><i class="icon-remove" title="Удалить"></i>icon-remove</a></td>
+                    <td><a href="editEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img  src="../resources/images/admin/glyphicons_137_cogwheels.png" width="20" height="20" title="Редактировать"/></a></td>
+                    <td><a href="deleteEmployee.html?employeeId=<c:out value='${emp.getUserId()}'/>"><img  src="../resources/images/admin/glyphicons_007_user_remove.png" width="17" height="17" title="Удалить"/></a></td>
                 </tr>
         </c:forEach>
         </table>

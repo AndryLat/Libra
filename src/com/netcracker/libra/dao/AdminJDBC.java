@@ -94,9 +94,15 @@ public class AdminJDBC implements AdminDAO {
             
             if(!fullName.isEmpty()) {
                 String [] names = fullName.split(" ");
-                String firstName = names[0];
-                String lastName = names[1];
-            
+                String firstName = "";
+                String lastName = "";
+                try {
+                    firstName = names[0];
+                    lastName = names[1];
+                }
+                catch (ArrayIndexOutOfBoundsException e) {
+                    //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                }
                 String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND firstName LIKE ? AND lastName LIKE ?";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%"};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
@@ -120,9 +126,15 @@ public class AdminJDBC implements AdminDAO {
             
             if(!fullName.isEmpty()) {
                 String [] names = fullName.split(" ");
-                String firstName = names[0];
-                String lastName = names[1];
-            
+                String firstName = "";
+                String lastName = "";
+                try {
+                    firstName = names[0];
+                    lastName = names[1];
+                }
+                catch (ArrayIndexOutOfBoundsException e) {
+                    //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                }
                 String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE firstName LIKE ? AND lastName LIKE ? AND RoleId = ?";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%", role};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
