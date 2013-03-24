@@ -4,6 +4,7 @@ import com.netcracker.libra.model.User;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -56,6 +57,16 @@ public class AdminJDBC implements AdminDAO {
         }
         
         /**
+         * Returns an employee by email
+         */
+        public User getEmployee(String email) {
+            String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE email = ?";
+            User employee = jdbcTemplateObject.queryForObject(SQL, 
+                        new Object[]{email}, new UserRowMapper());
+            return employee;
+        }
+        
+        /**
          * Returns a List of all employees
          */
         public List <User> getAllEmployees() {
@@ -83,9 +94,15 @@ public class AdminJDBC implements AdminDAO {
             
             if(!fullName.isEmpty()) {
                 String [] names = fullName.split(" ");
-                String firstName = names[0];
-                String lastName = names[1];
-            
+                String firstName = "";
+                String lastName = "";
+                try {
+                    firstName = names[0];
+                    lastName = names[1];
+                }
+                catch (ArrayIndexOutOfBoundsException e) {
+                    //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                }
                 String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND firstName LIKE ? AND lastName LIKE ?";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%"};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
@@ -109,9 +126,15 @@ public class AdminJDBC implements AdminDAO {
             
             if(!fullName.isEmpty()) {
                 String [] names = fullName.split(" ");
-                String firstName = names[0];
-                String lastName = names[1];
-            
+                String firstName = "";
+                String lastName = "";
+                try {
+                    firstName = names[0];
+                    lastName = names[1];
+                }
+                catch (ArrayIndexOutOfBoundsException e) {
+                    //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                }
                 String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE firstName LIKE ? AND lastName LIKE ? AND RoleId = ?";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%", role};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
@@ -274,6 +297,42 @@ public class AdminJDBC implements AdminDAO {
         public void deleteEmployee(Integer employeeId) {
             String SQL = "DELETE FROM Users WHERE UserId = ?";
             jdbcTemplateObject.update(SQL, employeeId);
+        }
+        
+        /**
+         * Check a duplicate for the email except the email of one employee
+         * Return true if there is duplicate for email
+         */
+        public boolean hasDuplicateEmailExceptThis(String email, Integer employeeId) {
+            String resultEmail = ""; //
+            String SQL = "SELECT DISTINCT(email) FROM Users WHERE email = ? AND userId <> ?";
+            try {
+                resultEmail = jdbcTemplateObject.queryForObject(SQL, new Object[] {email, employeeId}, String.class);
+            }
+            catch (EmptyResultDataAccessException e) {
+                //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+            }
+            finally {
+                return resultEmail.equals("") ? false : true;
+            }
+        }
+        
+        /**
+         * Check a duplicate for the email
+         * Return true if there is a duplicate for email
+         */
+        public boolean hasDuplicateEmail(String email) {
+            String resultEmail = "";
+            String SQL = "SELECT DISTINCT(email) FROM Users WHERE email = ?";
+            try {
+                resultEmail = jdbcTemplateObject.queryForObject(SQL, new Object[] {email}, String.class);
+            }
+            catch (EmptyResultDataAccessException e) {
+                //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+            }
+            finally {
+                return resultEmail.equals("") ? false : true;
+            }
         }
 
 }

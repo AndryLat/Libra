@@ -425,7 +425,7 @@ public class HRController {
               }
               else {
                   //else if the interview have been assigned but the student didn't come, displayed the corresponding message
-                  wasAbsent += "Студент "+ firstName +" "+ lastName +" не явился на интервью\n";
+                  wasAbsent += "Студент "+ firstName +" "+ lastName +" не явился на интервью <br>";
               }
           }
 
@@ -454,14 +454,9 @@ public class HRController {
           Date current = new Date();
           return current.before(sqlDate);
       }
+
+
       
-      /**
-       * @return true if the interview was conducted
-       */
-      public boolean wasInterviewed(List <InterviewResults> interviewResults) {
-          System.out.println("- wasInterviewed method started");
-          return interviewResults.isEmpty() ? false : true;
-      }
       
 
      

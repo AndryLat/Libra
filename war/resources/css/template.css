@@ -43,5 +43,40 @@ root {
 
 .span-table
 {
-    width: 400px;
+    width: 390px;
+}
+
+ .align-center
+{
+    text-align: center;
+}
+.table-font
+{
+    font-size: 10pt;
+}
+
+.width100
+{
+    width: 100%;
+}
+
+._img-size
+{
+    width: 25px;
+    height: 25px;
+}
+
+.select-change
+{
+    width: 290px;
+}
+.shift-table
+{
+    margin-left: 50px;
+}
+.shift-div-right
+{
+    padding-left: 60px;
+    width: 500px;
+    margin-left: 100px;
 }

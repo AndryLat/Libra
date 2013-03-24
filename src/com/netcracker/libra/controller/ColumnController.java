@@ -5,7 +5,7 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.ColumnJDBC;
-import com.netcracker.libra.dao.ColumnsJDBC;
+import com.netcracker.libra.dao.TemplateJDBC;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +15,7 @@ import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.ColumnFieldsModel;
 import com.netcracker.libra.model.InfoForDelete;
+import com.netcracker.libra.service.TemplateService;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,9 @@ public class ColumnController
     {
         return "index2";
     }
+    
     TypeJDBC typeJDBC=new TypeJDBC();
+    TemplateJDBC templateJDBC=new TemplateJDBC();
     ColumnJDBC columnJDBC=new ColumnJDBC();
     @Autowired
     UserPreferences userPreferences;
@@ -44,41 +47,80 @@ public class ColumnController
     public String showColumns(ModelMap model,
     @RequestParam int templateId)  
     {
-        this.templateId=templateId;
-        model.addAttribute("types", typeJDBC.getAllInfo());
-        model.addAttribute("templateId", templateId);    
-        model.addAttribute("columns", columnJDBC.getColumnsInfo(templateId));
-        return "ShowNewColumnsView";
+        if(userPreferences.accessLevel==1)
+        {
+            this.templateId=templateId;
+            model.addAttribute("types", typeJDBC.getAllInfo());
+            model.addAttribute("templateId", templateId);    
+            model.addAttribute("columns", columnJDBC.getColumnsInfo(templateId));
+            return "ShowNewColumnsView";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
-    @RequestMapping(value="changeOrder",method = RequestMethod.POST)
-    public String changeOrder(ModelMap model,
-    @RequestParam(required=true,value="column1") int column1,
-    @RequestParam(required=true,value="column2") int column2)  
-    {
-        
-        return "redirect:showColumn.html?templateId="+templateId;
-    }
+
     @RequestMapping(value="SubmitColumn",method = RequestMethod.POST)
     public String addColumn(ModelMap model,
     @RequestParam("name") String name,
     @RequestParam("selType") int selType,
-    @RequestParam("parentColumn") int parentColumn,
-    @RequestParam("templateId") int templateId)  
+    @RequestParam("parentColumn") int parentColumn)  
     {
-        columnJDBC.add(templateId, name, selType, parentColumn);
-        return "redirect:showColumn.html?templateId="+templateId;
+        if(userPreferences.accessLevel==1)
+        {
+            String message=TemplateService.checkColumn(name);
+            if(typeJDBC.existType(selType)==0)
+            {
+                message+="<p>Такого типа не существует</p>";
+            }
+            if(columnJDBC.existColumn(parentColumn)==0)
+            {
+                message+="<p>Такой колонки не существует</p>";
+            }
+            if(!message.equals(""))
+            {
+                model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+                model.addAttribute("message", message);
+                model.addAttribute("title", "Ошибка");
+            }
+            columnJDBC.add(templateId, name, selType, parentColumn);
+            return "redirect:showColumn.html?templateId="+templateId;
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
     @RequestMapping(value="editColumn",method = RequestMethod.GET)
     public String editColumn(ModelMap model,
     @RequestParam("columnId") int columnId)  
     {
-        model.addAttribute("columnId", columnId);
-        model.addAttribute("columns", columnJDBC.getColumns(templateId));
-        model.addAttribute("types", typeJDBC.getAllInfo());
-        model.addAttribute("current",columnJDBC.getColumnInfo(columnId));
-        return "editNewColumnView";
+        if(userPreferences.accessLevel==1)
+        {
+            String message="";
+            if(columnJDBC.existColumn(columnId)==0)
+            {
+                message+="<p>Такой колонки не существует</p>";
+            }
+            if(!message.equals(""))
+            {
+                model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+                model.addAttribute("message", message);
+                model.addAttribute("title", "Ошибка");
+            }
+            model.addAttribute("columnId", columnId);
+            model.addAttribute("columns", columnJDBC.getColumns(templateId));
+            model.addAttribute("types", typeJDBC.getAllInfo());
+            model.addAttribute("current",columnJDBC.getColumnInfo(columnId));
+            return "editNewColumnView";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
     @RequestMapping(value="editSubmitColumn",method = RequestMethod.POST)
@@ -88,36 +130,104 @@ public class ColumnController
     @RequestParam("parentColumn") int parentColumn,
     @RequestParam("columnId") int columnId)  
     {
-        columnJDBC.update(name, selType, parentColumn, columnId);
-        return "redirect:showColumn.html?templateId="+templateId;
+        if(userPreferences.accessLevel==1)
+        {
+            String message=TemplateService.checkColumn(name);
+            if(typeJDBC.existType(selType)==0)
+            {
+                message+="<p>Такого типа не существует</p>";
+            }
+            if(columnJDBC.existColumn(parentColumn)==0)
+            {
+                message+="<p>Такой колонки не существует</p>";
+            }
+            if(!message.equals(""))
+            {
+                model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+                model.addAttribute("message", message);
+                model.addAttribute("title", "Ошибка");
+            }
+            columnJDBC.update(name, selType, parentColumn, columnId);
+            return "redirect:showColumn.html?templateId="+templateId;
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
     @RequestMapping(value="delColumns",method = RequestMethod.POST)
     public String delColumns(ModelMap model,
-    @RequestParam("delete[]") int[] delete)  
+    @RequestParam(value="delete[]",required=false) int[] delete)  
     {
-        List<InfoForDelete> info=columnJDBC.getInfoForDelete(delete);
-        int infoSize=info.size();
-        model.addAttribute("delete", delete);
-        model.addAttribute("info", info);
-        model.addAttribute("infoSize",infoSize);
-        model.addAttribute("title","Удалить колонки");
-        model.addAttribute("h1","Вы действительно хотите удалить эти колонки?");
-        model.addAttribute("submit","delSubmitColumns");
-        model.addAttribute("location","addColumn.html?templateId="+templateId);
-        return "delInfoView";
+        if(delete==null)
+        {
+            return "redirect:showColumn.html?templateId="+templateId;
+        }
+        if(userPreferences.accessLevel==1)
+        {
+            List<InfoForDelete> info=columnJDBC.getInfoForDelete(delete);
+            int infoSize=info.size();
+            model.addAttribute("delete", delete);
+            model.addAttribute("info", info);
+            model.addAttribute("infoSize",infoSize);
+            model.addAttribute("title","Удалить колонки");
+            model.addAttribute("h1","Вы действительно хотите удалить эти колонки?");
+            model.addAttribute("submit","delSubmitColumns");
+            model.addAttribute("location","showColumn.html?templateId="+templateId);
+            return "delInfoView";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
     @RequestMapping(value="delSubmitColumns",method = RequestMethod.POST)
     public String delSubmiteColumns(ModelMap model,
     @RequestParam("delete[]") int[] delete)  
     {
-        for(int i=0;i<delete.length;i++)
+        if(userPreferences.accessLevel==1)
         {
-            columnJDBC.delete(delete[i]);
+            for(int i=0;i<delete.length;i++)
+            {
+                columnJDBC.delete(delete[i]);
+            }
+            return "redirect:showColumn.html?templateId="+templateId;
         }
-        return "redirect:showColumn.html?templateId="+templateId;
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
+    
+    @RequestMapping(value="changeColumn",method = RequestMethod.POST)
+    public String ChangeColumn(ModelMap model,
+    @RequestParam("column1") int column1,
+    @RequestParam("column2") int column2)  
+    {
+        if(userPreferences.accessLevel==1)
+        {
+            String message="";
+            
+            if((columnJDBC.existColumn(column1)==0)||(columnJDBC.existColumn(column2)==0))
+            {
+                message+="<p>Одной из колонок не существует колонки не существует</p>";
+            }
+            if(!message.equals(""))
+            {
+                model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+                model.addAttribute("message", message);
+                model.addAttribute("title", "Ошибка");
+            }
+            columnJDBC.swop(column1, column2);
+            return "redirect:showColumn.html?templateId="+templateId;
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
+   }
     
     @RequestMapping(value="showAppForm",method = RequestMethod.GET)
     public String showAppForm(ModelMap model,
@@ -131,7 +241,7 @@ public class ColumnController
     }
     
     //submitForm
-         ColumnsJDBC columnsJDBS=new ColumnsJDBC();
+/*
     @RequestMapping(value="submitForm",method = RequestMethod.POST)
     public String submitForm(ModelMap model,
     @ModelAttribute("columnFields") ColumnFieldsModel columnFields)  
@@ -155,15 +265,5 @@ public class ColumnController
             }
         }
         return "appFormView";
-    }
-    
-    @RequestMapping(value="changeColumn",method = RequestMethod.POST)
-    public String ChangeColumn(ModelMap model,
-    @RequestParam("column1") int column1,
-    @RequestParam("column2") int column2)  
-    {
-        columnJDBC.swop(column1, column2);
-        //model.addAttribute("columns", columnJDBC.getBrothers(column,parentColumn));
-          return "redirect:showColumn.html?templateId="+templateId;
-   }
+    }  */
 }

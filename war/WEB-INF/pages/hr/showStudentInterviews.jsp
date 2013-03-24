@@ -1,37 +1,59 @@
 <%-- 
     Author     : Alexander Lebed
 --%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Интервью</title>
-        <style type="text/css">
-        body { text-align: center}
-        table {margin: 0px auto;}
-        </style>
-    </head>
-    <body>
-        
-        <% int i = 1; %>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+
+<html class="no-js">
+<!--<![endif]-->
+<head>
+	<jsp:include page="../resources.jsp" />
+	<link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
+	<title>Интервью</title>
+</head>
+
+<body>
+	<div class="navmenu">
+		<jsp:include page="../navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+		
+			<div class="sidebar">
+				<jsp:include page="../sidebar.jsp" />
+			</div>
+			
+			<div class="span9">
+                            
+                <table width="100%">
+                    <tr>
+                        <td align="left">${view == 0 ? '<a href="showStudentbyIdView.html" class="btn"><img  src="../resources/images/admin/glyphicons_210_left_arrow.png" width="12" height="12"/> Назад </a>' : '<a href="showStudentByEducation.html" class="btn"><img  src="../resources/images/admin/glyphicons_210_left_arrow.png" width="12" height="12"/> Назад </a>'}</td>
+                    </tr>
+                </table>
+                <br>
+			
+		<% int i = 1; %>
         
         <c:if test='${notAssigned != ""}'>
-            Собеседование №<%= i++ %>. ${notAssigned} <hr><br>
+            <div class="alert alert-info">Собеседование №<%= i++ %>. ${notAssigned} </div><hr><br>
         </c:if>
            
         <c:if test="${!dateAndInterviewerList.isEmpty()}">
             
-            <table border="1" cellspacing="0" cellpadding="4">
-            <caption> Собеседование №<%= i++ %>. Информация о предстоящем собеседовании</caption>
+            <table class="bordered">
+                <caption> <div class="alert alert-info">Собеседование №<%= i++ %>. Информация о предстоящем собеседовании </div></caption>
             <tr>
-                <td>№ Анкеты</td>
-                <td>Дата</th>
-                <td>Время</td>
-                <td>Имя интервьюера</td>
-                <td>Должность интервьюера</td>
+                <th>№ Анкеты</th>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Имя интервьюера</th>
+                <th>Должность интервьюера</th>
             </tr>
             <c:forEach items="${dateAndInterviewerList}" var="date">
                 <tr>
@@ -47,16 +69,16 @@
         </c:if>
             
         <c:if test="${!dateAndInterviewerResultsList.isEmpty()}">
-            <table border="1" cellspacing="0" cellpadding="4">
-            <caption> Собеседование №<%= i++ %>. Информация о пройденном собеседовании</caption>
+            <table class="bordered">
+            <caption> <div class="alert alert-info">Собеседование №<%= i++ %>. Информация о пройденном собеседовании </div></caption>
             <tr>
-                <td>№ анкеты</td>
-                <td>Дата</th>
-                <td>Время</td>
-                <td>Имя интервьюера</td>
-                <td>Должность интервьюера</td>
-                <td>Оценка интервьюера</td>
-                <td>Комментарий интервьюера</td>
+                <th>№ анкеты</th>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Имя интервьюера</th>
+                <th>Должность интервьюера</th>
+                <th>Оценка интервьюера</th>
+                <th>Комментарий интервьюера</th>
             </tr>
             
             <c:forEach items="${dateAndInterviewerResultsList}" var="result">
@@ -75,9 +97,11 @@
         </c:if>
             
         <c:if test='${wasAbsent != ""}'>
-           Собеседование №<%= i++ %>. ${wasAbsent} <br>
-        </c:if>
-            
-            <br>${view == 0 ? '<a href="showStudentbyIdView.html">Назад</a>' : '<a href="showStudentByEducation.html">Назад</a>'}
-    </body>
+            <div class="alert alert-info" align="center">Собеседование №<%= i++ %>. ${wasAbsent} </div> <br>
+        </c:if>	
+			
+			</div>
+		</div>
+	</div>
+</body>
 </html>
