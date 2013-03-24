@@ -158,11 +158,12 @@ public class RegisterForm {
 		this.email = email;
 	}
 	
-	@AssertTrue(message="{notequal}")
+	@AssertTrue
 	public boolean checkPassword() {
 		if (password == null) {
             return false;
-        } else {
+        } 
+		else {
             return password.equals(confirmedPassword);
        }
 	}

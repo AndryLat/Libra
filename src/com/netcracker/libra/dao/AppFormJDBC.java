@@ -32,45 +32,6 @@ public class AppFormJDBC {
 		return jdbcTemplateObject.queryForInt("select templateid from template where active=1");
 	}
 
-	public Map<Integer, String> getAllUniversities() {
-
-		Map<Integer, String> map = new HashMap<>();
-		String sql = "select * from university";
-
-		for (Map<String, Object> x : jdbcTemplateObject.queryForList(sql)) {
-			map.put(((BigDecimal) x.get("universityid")).intValueExact(),
-					(String) x.get("universityname"));
-		}
-		return map;
-
-	}
-
-	public Map<Integer, String> getAllFaculties() {
-
-		Map<Integer, String> map = new HashMap<>();
-		String sql = "select * from faculty";
-
-		for (Map<String, Object> x : jdbcTemplateObject.queryForList(sql)) {
-			map.put(((BigDecimal) x.get("facultyid")).intValueExact(),
-					(String) x.get("facultyname"));
-		}
-		return map;
-
-	}
-
-	public Map<Integer, String> getAllDepartments() {
-
-		Map<Integer, String> map = new HashMap<>();
-		String sql = "select * from department";
-
-		for (Map<String, Object> x : jdbcTemplateObject.queryForList(sql)) {
-			map.put(((BigDecimal) x.get("departmentid")).intValueExact(),
-					(String) x.get("departmentname"));
-		}
-		return map;
-
-	}
-
 	public Long getAppformNextVal() {
 		return jdbcTemplateObject
 				.queryForLong("select AppForm_seq.NEXTVAL from dual");
@@ -80,39 +41,20 @@ public class AppFormJDBC {
 		return jdbcTemplateObject
 				.queryForLong("select User_seq.NEXTVAL from dual");
 	}
-
-	public Map queryForProgrammingLanguages() {
-
-		List<Map<String, Object>> list = jdbcTemplateObject
-				.queryForList("select * from languages where languagename!=ALL('Java', 'C++')");
-		Map map = new HashMap();
-
-		for (Map x : list) {
-			map.put(x.get("languageId"), x.get("languagename"));
-		}
-
-		return map;
-	}
 	
-	public boolean createNewUserAsStudent(Long userid, String name, String lastName, String password, String email) throws SQLException {
-		boolean success = false;
+	public void createNewUserAsStudent(Long userid, String name, String lastName, String password, String email) {
 		jdbcTemplateObject.update("insert into users values (?,?,?,?,?,1)", userid, name, lastName, email, password);
-		success = true;
-		return success;
 	}
 	
-	public boolean insertAppFormDetails(Long appId, Long userId, String patronymic, 
-			String phoneNumber, Long deptId, int adId, int course, Long graduated, int templateId) throws SQLException {
-		boolean success = false;
+	public void insertAppFormDetails(Long appId, Long userId, String patronymic, 
+			String phoneNumber, Long deptId, int adId, int course, Long graduated, int templateId) {
 		jdbcTemplateObject.update("insert into appform(appid, userid,patronymic,phonenumber,departmentid,advertisingid,course,graduated,datacreation,templateid) " +
 				"values (?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?)", 
 			appId, userId, patronymic, phoneNumber, 
 					deptId, adId, course, graduated, templateId);
-		success = true;
-		return success;
 	}
 	
-	public void fillAppForm(RegisterForm form) throws SQLException {
+	/*public void fillAppForm(RegisterForm form) throws SQLException {
 		if (createNewUserAsStudent(form.getUserId(), form.getName(), form.getLastName(), Security.getMD5hash(form.getPassword()), form.getEmail()) && 
 				insertAppFormDetails(form.getAppId(), form.getUserId(), form.getPatronymic(), 
 						form.getPhoneNumber(), form.getDepartment(), 1, 
@@ -123,5 +65,5 @@ public class AppFormJDBC {
 			}
 		}
 		return;
-	}
+	}*/
 }
