@@ -29,35 +29,63 @@ public class InterviewController
     @Autowired
     UserPreferences userPreferences;
         
+    //return new ModelAndView("redirect:showTypes.html");
     @RequestMapping("showInterviewDate")
     public ModelAndView showInterviewDate()
     {
         ModelAndView mav = new ModelAndView();
+
         if(userPreferences.accessLevel==0)
         {
-            List<InterviewDateInfo> ilist=interviewDateJDBC.getFreePlaces();
-            mav.addObject("interviewDates", ilist);
+            int request=0;
+            List<InterviewDateInfo> ilistHr=interviewDateJDBC.getFreePlaces(1);
+            List<InterviewDateInfo> ilistInterview=interviewDateJDBC.getFreePlaces(2);
+            mav.addObject("interviewDatesHr", ilistHr);
+            mav.addObject("interviewDatesInterview", ilistInterview);
+            //Gets Request
             try
-            {
-                mav.addObject("requestDate", interviewJDBC.getRequestInterviewDate(userPreferences.UserId));
+            {         
+                mav.addObject("requestDateHr", interviewJDBC.getRequestInterviewDate(userPreferences.UserId,1));
+                request=1;
             }
             catch(EmptyResultDataAccessException e)
-            {                
+            {  
             }
             try
             {
-                mav.addObject("interviewDate", interviewJDBC.getInterviewDateByAppId(userPreferences.UserId));
+                mav.addObject("requestDateInterview", interviewJDBC.getRequestInterviewDate(userPreferences.UserId,2));           
+                request=1;
+            }
+            catch(EmptyResultDataAccessException e)
+            {         
+            }
+                mav.addObject("request", request);           
+            
+            //Gets date on which student is assigned
+            //If student doesn't assigned return -1
+            try
+            {
+                int i=interviewJDBC.getInterviewDateByAppId(userPreferences.UserId,1);
+                mav.addObject("interviewDateHr", i);
+            }             
+            catch(EmptyResultDataAccessException e)
+            {
+                mav.addObject("interviewDateHr",-1);
+            }
+            try
+            {
+                mav.addObject("interviewDateInterview", interviewJDBC.getInterviewDateByAppId(userPreferences.UserId,2));
             }
             catch(EmptyResultDataAccessException e)
             {
-                mav.addObject("interviewDate",-1);
+                mav.addObject("interviewDateInterview",-1);
             }
             mav.setViewName("showInterviewDateView");       
             return mav;
         }
         else
         {
-             mav.setViewName("messageView");
+                        mav.setViewName("messageView");
             mav.addObject("link","<a href='/Libra/'>Вернуться назад</a>");
             mav.addObject("message","У Вас нету прав на эту страницу");
             mav.addObject("title","Ошибка");
@@ -74,25 +102,8 @@ public class InterviewController
             if(interviewDateJDBC.exists(selDate)>0)
             {
                 interviewJDBC.add(selDate, userPreferences.UserId, 1);
-                List<InterviewDateInfo> ilist=interviewDateJDBC.getFreePlaces();
-                mav.addObject("interviewDates", ilist);
-                try
-                {
-                    mav.addObject("requestDate", interviewJDBC.getRequestInterviewDate(userPreferences.UserId));
-                }
-                catch(EmptyResultDataAccessException e)
-                {
-                    mav.addObject("interviewDate",-1);
-                }
-                try
-                {
-                    mav.addObject("interviewDate", interviewJDBC.getInterviewDateByAppId(userPreferences.UserId));
-                }
-                catch(EmptyResultDataAccessException e)
-                {
-                    mav.addObject("interviewDate",-1);
-                }
-                mav.setViewName("showInterviewDateView");       
+                
+                mav.setViewName("redirect:showInterviewDate.html");       
                 return mav;
             }
             else
@@ -122,50 +133,33 @@ public class InterviewController
         {
             if(interviewDateJDBC.exists(selDate)>0)
             {
+                int role=interviewJDBC.getRole(selDate);
                 //If exists request
-                int c=interviewJDBC.exists0(userPreferences.UserId);
+                int c=interviewJDBC.exists0(userPreferences.UserId,role);
                 if(c>0)
                 {
                     //if selDate=InterviewDateId whith statys=1
-                    if(interviewJDBC.exists(selDate, userPreferences.UserId)>0)
+                    if(interviewJDBC.exists(selDate, userPreferences.UserId,role)>0)
                     {
                         //delete request
-                        interviewJDBC.deleteRequest(userPreferences.UserId);
+                        interviewJDBC.deleteRequest(userPreferences.UserId,role);
                     }
                     else
                     {
                         //update request
-                        interviewJDBC.updateRequest(userPreferences.UserId,selDate);
+                        interviewJDBC.updateRequest(selDate,userPreferences.UserId,role);
                     }
                 }
                 else// if doesn't exist request
                 {
                     //if selDate != current date
-                    if(interviewJDBC.exists(selDate, userPreferences.UserId)==0)
+                    if(interviewJDBC.exists(selDate, userPreferences.UserId,role)==0)
                     {
                         //addRequest
                         interviewJDBC.add(selDate, userPreferences.UserId, 0);
                     }
                 }
-                List<InterviewDateInfo> ilist=interviewDateJDBC.getFreePlaces();
-                mav.addObject("interviewDates", ilist);
-                try
-                {
-                    mav.addObject("requestDate", interviewJDBC.getRequestInterviewDate(userPreferences.UserId));
-                }
-                catch(EmptyResultDataAccessException e)
-                {
-                    mav.addObject("interviewDate",-1);
-                }
-                try
-                {
-                    mav.addObject("interviewDate", interviewJDBC.getInterviewDateByAppId(userPreferences.UserId));
-                }
-                catch(EmptyResultDataAccessException e)
-                {
-                    mav.addObject("interviewDate",-1);
-                }
-                mav.setViewName("showInterviewDateView");       
+                mav.setViewName("redirect:showInterviewDate.html");       
                 return mav;
             }
             else

@@ -77,4 +77,16 @@ public class StudentJDBC {
         String SQL = "select r.AccessLevel from users u join roles r on r.roleId=u.roleId where u.userId=?";
 	   return  jdbcTemplateObject.queryForInt(SQL, id);
    }
+   public static int exists(int userId,String p)
+   {
+       String SQL="select count(*) from users "
+               + "where userId=? and password=? ";
+       return jdbcTemplateObject.queryForInt(SQL,userId,p);
+   }
+   
+   public static void updatePassword(int userId, String password) 
+   {
+      String SQL = "update Users set password = ? where userid = ?";
+      jdbcTemplateObject.update(SQL, password,userId);
+   }
 }

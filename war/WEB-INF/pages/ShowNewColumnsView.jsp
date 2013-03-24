@@ -4,6 +4,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<% pageContext.setAttribute("showSwop", false); %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,13 +13,11 @@
         <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="resources/css/docs.css" rel="stylesheet">
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
-    <link href="resources/css/template.css" rel="stylesheet">		
+    <link href="resources/css/template.css" rel="stylesheet">	
+    	       <script src="resources/js/template.js"></script>
         <jsp:include page="resources.jsp" />
 
         <style type="text/css">
-   SELECT {
-    width: 300px; /* Ширина списка в пикселах */
-   }
   </style>
     </head>
     <body>
@@ -29,10 +28,10 @@
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span3">
+			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
-<%--<form class="well-template span8" method="POST" action="SubmitColumn.html">--%>
+<form class="well-template span8" method="POST" action="SubmitColumn.html">
             Введите имя колонки <input class="span-table" type="text" name="name" /></br>
             Выберите тип колонки<select class="span-table" name="selType">
                 <option value="0">Колонка для инфорации</option>
@@ -46,41 +45,19 @@
                     <option value="${c.getColumnId()}"><c:out value="${c.getName()}" /></option>
                 </c:forEach>
             </select></br>
-            <input type="hidden" name="templateId" value="${templateId}"/>
-            <input class="btn btn-primary "   type="submit" value="OK"/>
+           <input class="btn btn-primary "   type="submit" value="OK"/>
 </form>
-            
- <script type="text/javascript">
-function checkAll(obj) {
-  'use strict';
-  // Получаем NodeList дочерних элементов input формы: 
-  var items = obj.form.getElementsByTagName("input"), 
-      len, i;
-  // Здесь, увы цикл по элементам формы:
-  for (i = 0, len = items.length; i < len; i += 1) {
-    // Если текущий элемент является чекбоксом...
-    if (items.item(i).type && items.item(i).type === "checkbox") {
-      // Дальше логика простая: если checkbox "Выбрать всё" - отмечен            
-      if (obj.checked) {
-        // Отмечаем все чекбоксы...
-        items.item(i).checked = true;
-      } else {
-        // Иначе снимаем отметки со всех чекбоксов:
-        items.item(i).checked = false;
-      }       
-    }
-  }
-}
-</script>           
+                     
           <%--  <form class="well-template span8" action="delColumns.html" method="POST">--%>
           <div class="well-template span8">
-    <table border="1" cellspacing="0" cellpadding="4">
+    <table class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
         <caption>Информация о колонках</caption>
         <thead>
         <tr>
             <th>
-             <input type="image"  src="resources/images/del.png" width="25" height="25" title="Удалить" onclick="formSubmit()"/>
-             </br><input id="one" type="checkbox" name="one" value="all" onclick="checkAll(this)" />
+             <a href="#" onclick="submitDelete('delColumns.html',':checkbox[name^=delete]')"><img src="resources/images/del.png" width="25" height="25" title="Удалить" /></a>
+             </br><input id="one" type="checkbox" name="one" value="all" onclick="cbToggle();" />
+           
             </th>
             <th>Номер</th>
             <th>Название</th>
@@ -91,24 +68,40 @@ function checkAll(obj) {
         </thead>
         <tbody>  
             <c:forEach items="${columns}" var="c">
+                <c:set var="showSwop" value="${false}"/>
+            
             <tr>
-                <td>
+                <td class="checkbox-shift">
                <input  type="checkbox" class="checkbox" name="delete[]" value="<c:out value='${c.getColumnId()}'/>"/>        
                 </td>
                 <td>${c.getNumbers()}</td>
                 <td>${c.getName()}</td>
                 <td> 
+                    <c:forEach items="${columns}" var="list">  
+                        <c:if test="${(c.getParentColumn()==list.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}" >
+                            <c:set var="showSwop" value="${true}"/>
+                            
+                        </c:if>
+                     </c:forEach>
+                    <c:if test="${showSwop==true}">
                     <form action="changeColumn.html" method="POST">
                         <input name="column1" type="hidden" value="${c.getColumnId()}">
-                <select name="column2" size="1">
+                      
+                      
+                <select class="select-change" name="column2" size="1">
                 <c:forEach items="${columns}" var="list">  
-                    <c:if test="${(list.getParentColumn()==c.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}">
+                <c:if test="${(list.getParentColumn()==c.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}">
                         <option value="${list.getColumnId()}">${list.getName()}</option>
                 </c:if>
                 </c:forEach>
                 </select>  
-                    <input type="submit" value="OK"/>
+               
+                    <input class="btn btn-primary pull-right"  type="submit" value="OK"/>
                     </form>
+                         </c:if>
+                    <c:if test="${showSwop==false}">
+                        Ее не с кем менять
+                    </c:if>
                 </td>
                 <td>
                     <c:if test="${c.getTypeId()!=0}">
@@ -118,7 +111,7 @@ function checkAll(obj) {
                         Нету значений
                     </c:if>
                 </td>
-                <td><a href="editColumn.html?columnId=<c:out value='${c.getColumnId()}'/>">Редактировать</a></td>
+                <td class="align-center"><a href="editColumn.html?columnId=<c:out value='${c.getColumnId()}'/>"><img class="_img-size" src="resources/images/edit.png"  title="внести изменения"/></a></td>
             </tr>
             </c:forEach>
         </tbody>
