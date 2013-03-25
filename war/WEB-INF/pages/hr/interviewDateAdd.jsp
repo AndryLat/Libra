@@ -24,6 +24,10 @@
          
         <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
       <script type="text/javascript">
+           function closeMessage()
+            {
+                document.getElementById("alertMessage").innerHTML="";
+            }
     $(document).ready(function() {
         $("#type").bind("change", function(){    
         if ($("#type").val()==1) {
@@ -107,7 +111,30 @@
         <center>
         <h3>Добавление новой даты интервью</h3>
         </center>
-        
+        <table width="100%">
+         <tr>
+         <c:if test='${!errorMessage.equals("") && errorMessage != null}'>
+                                    <span id="alertMessage">
+                                    <div class="alert alert-error" align="center">
+                                        <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                                        ${errorMessage}
+                                    </div>
+                                    </span>
+                                </c:if>
+                                        </tr>
+         </table>
+         <table width="100%">
+         <tr>
+         <c:if test="${message != null}">
+                 <td align="left" id="alertMessage">
+                     <div class="alert alert-success" align="center">
+                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                         ${message}
+                     </div>
+                 </td>
+             </c:if>
+         </tr>
+		 </table>
          <form name="Form" action="interviewDateAdded.html" method="get">
          <table border="0px">
              <tr>
@@ -115,7 +142,7 @@
                  <td>
                      <select name="type" id="type" style="width: 115px">
                      <option value="1" > Hr </option>
-                     <option value="2"> Tech </option>
+                     <option value="2" ${typeInt == '2' ? 'selected' : ''}> Tech </option>
                      </select> 
                 </td>
              <tr>
@@ -123,7 +150,7 @@
                      Дата:
                  </td>
                  <td> 
-                     <input type="text" id="date" name="begin" class="tcal" value=""  style="width: 100px" />
+                     <input type="text" id="date" name="begin" class="tcal" value="${begin}"  style="width: 100px" />
                  </td>
              </tr>
 	</table>
@@ -138,7 +165,7 @@
             </div>
              
                Продолжительность (минуты): 
-               <input type="text" placeholder="Введите значение" name="duration" style="width: 50px" > 
+               <input type="text" placeholder="Введите значение" name="duration" value="${duration}" style="width: 50px" > 
         <br> 
         <div class="classForInters" style="text-decoration:underline;">
         Выберите интервьюеров:</div> 
