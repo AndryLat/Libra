@@ -18,7 +18,7 @@
 		<li><a href="hr/showDepartments.html">Управление кафедрами</a></li>
 		<li><a href="hr/interviewDate.html">Расписание собеседований</a></li>
                 <li><a href="showResults.html">Показать результаты</a></li>
-                <li><a href="hr/confirmEditing.html">Подтверждение анкетных изменений</a></li>
+                <li><a href="hr/сonfirmEditing.html">Подтверждение изменений дат интервью</a></li>
 		
 		<li class="nav-header">Отчеты</li>
 		<li><a href="showStudentRecords.html">График записи студентов</a></li>

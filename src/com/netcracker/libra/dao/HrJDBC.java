@@ -4,6 +4,7 @@ import com.netcracker.libra.model.DateAndInterviewer;
 import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
+import com.netcracker.libra.model.OldNewInterviewTime;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
 import com.netcracker.libra.model.User;
@@ -562,5 +563,37 @@ public class HrJDBC implements HrDAO {
         return resultList;
     }
     
+    /**
+     * Return general info about the student and 
+     * the date and time of interview that student is assigned first
+     * and the date ant time that student changed
+     */
+    public List <OldNewInterviewTime> getAllOldNewInterviewTime() {
+        String SQL = "SELECT oldInt.appId, u.firstName, u.lastName, u.email, "+
+                             "TO_CHAR(oldDate.dateStart,'hh24:mi')||' - '|| TO_CHAR(oldDate.dateFinish,'hh24:mi') oldTimeInterview, TO_CHAR(oldDate.dateFinish,'dd.mm.yyyy') oldDateInterview, "+
+                             "TO_CHAR(newDate.dateStart,'hh24:mi')||' - '||TO_CHAR(newDate.dateFinish,'hh24:mi') newTimeInterview, TO_CHAR(newDate.dateFinish,'dd.mm.yyyy') newDateInterview, oldInt.interviewId oldInterviewId, newInt.interviewId newInterviewId "+
+                     "FROM InterviewDate oldDate, InterviewDate newDate, Interview oldInt, Interview newInt, Users u, AppForm a "+
+                     "WHERE oldDate.InterviewDateId = oldInt.InterviewDateId AND newDate.InterviewDateId = newInt.InterviewDateId "+
+                     "AND oldInt.appId = newInt.appId AND oldInt.appId = a.appId AND a.userId = u.userId AND oldInt.status = 1 AND newInt.status = 0";
+        
+        List <OldNewInterviewTime> resultList = jdbcTemplateObject.query(SQL, new OldNewInterviewTimeRowMapper());
+        return resultList;
+    }
+    
+    /**
+     * Delete the interview
+     */
+    public void deleteInterview(Integer interviewId) {
+        String SQL = "DELETE FROM Interview WHERE interviewId = ?";
+        jdbcTemplateObject.update(SQL, interviewId);
+    }
+    
+    /**
+     * Confirm the interview by HR
+     */
+    public void congirmInterview(Integer interviewId) {
+        String SQL = "UPDATE Interview SET status = 1 WHERE interviewId = ?";
+        jdbcTemplateObject.update(SQL, interviewId);
+    }
 
 }

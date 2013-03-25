@@ -64,10 +64,17 @@
         <div align="center">
         <tr>
             <!-- radio buttons "role" -->
+            <td><div class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn">Left</button>
+                    <button type="button" class="btn">Middle</button>
+                    <button type="button" class="btn">Right</button>
+                </div>
+            </td>
+                
             <td><label class="radio"><input type="radio" name="role" value="0" ${checkedAll}>ВСЕ &nbsp;</label></td>
-            <td><label class="radio"><input type="radio" name="role" value="2" ${checkedHR}>HR &nbsp;</label></td>
-            <td><label class="radio"><input type="radio" name="role" value="3" ${checkedTech}>TECH &nbsp;</label></td>
-            <td><label class="radio"><input type="radio" name="role" value="4" ${checkedAdmin}>ADMIN &nbsp;</label></td>
+            <td><label class="radio"><input type="radio" name="role" value="2" ${checkedHR}> HR ( <img  src="../resources/images/admin/glyphicons_290_skull.png" width="12" height="12"/> ) &nbsp;&nbsp;</label></td>
+            <td><label class="radio"><input type="radio" name="role" value="3" ${checkedTech}> TECH ( <img  src="../resources/images/admin/glyphicons_280_settings.png" width="12" height="12"/> ) &nbsp;&nbsp;</label></td>
+            <td><label class="radio"><input type="radio" name="role" value="4" ${checkedAdmin}> ADMIN ( <img  src="../resources/images/admin/glyphicons_313_ax.png" width="12" height="12"/> ) &nbsp;&nbsp;</label></td>
              <td>
                  <!-- dropdown "byWhat" -->
                 <select name="byWhat" style="width: 20%">
@@ -85,16 +92,16 @@
         </form>
              
         <!-- displaying the message when no results -->
-        <div align="center"><c:if test="${employees.isEmpty()}"> ${noResults} </c:if></div>
+        <div align="center"><c:if test="${employees.isEmpty()}"><div class="alert alert-info">${noResults}<div></c:if></div>
         
         <c:if test="${employees.isEmpty() == false}">
         <table class="bordered">
             <caption><div class="alert alert-info">Сотрудники</div></caption>
         <tr>
-            <th><a href="sortEmployees.html?orderBy=FIRST_NAME">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME">фамилия</a></th>
-            <th><a href="sortEmployees.html?orderBy=ID">id</a></th>
-            <th><a href="sortEmployees.html?orderBy=ROLE">должность</a></th>
-            <th><a href="sortEmployees.html?orderBy=EMAIL">email</a></th>
+            <th><a href="sortEmployees.html?orderBy=FIRST_NAME" title="сортировка по имени">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME" title="сортировка по фамилии">фамилия</a> &nbsp; ${nameOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=ID" title="сортировка по ID">id</a> &nbsp; ${idOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=ROLE" title="сортировка по должности">должность</a> &nbsp; ${roleOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=EMAIL" title="сортировка по email">email &nbsp; ${emailOrder}</a></th>
             <th>пароль</th>
             <th>редактировать</th>
             <th>удалить</th>
@@ -104,9 +111,9 @@
                     <td>${emp.getFirstName()} ${emp.getLastName()}</td>
                     <td>${emp.getUserId()}</td>
                     <td>
-                        <c:if test="${emp.getRoleId() == 2}">HR</c:if>
-                        <c:if test="${emp.getRoleId() == 3}">TECH</c:if>
-                        <c:if test="${emp.getRoleId() == 4}">ADMIN</c:if>
+                        <c:if test="${emp.getRoleId() == 2}"><img  src="../resources/images/admin/glyphicons_290_skull.png" width="20" height="20"/></c:if>
+                        <c:if test="${emp.getRoleId() == 3}"><img  src="../resources/images/admin/glyphicons_280_settings.png" width="20" height="20"/></c:if>
+                        <c:if test="${emp.getRoleId() == 4}"><img  src="../resources/images/admin/glyphicons_313_ax.png" width="20" height="20"/></c:if>
                     </td>
                     <td>${emp.getEmail()}</td>
                     <c:if test="${currentUserId != emp.getUserId()}">
