@@ -242,4 +242,10 @@ WHERE (t1.columnId=1 and t2.ColumnId=14) OR (t2.columnId=14 and t1.ColumnId=1);
         return c;
     }*/
     
+    public int existColumn(int id)
+    {
+        String sql = "select Count(*) from NewColumns where columnId=?";
+        return jdbcColumnObject.queryForInt(sql,id);
+    }
+    
 }
