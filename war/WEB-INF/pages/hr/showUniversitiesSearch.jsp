@@ -21,6 +21,12 @@
         <title>Управление университетами - Поиск</title>
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
 </script>
+<script>
+    function closeMessage()
+            {
+                document.getElementById("alertMessage").innerHTML="";
+            }
+    </script>
         <script type="text/javascript" src="../resources/js/sort.js"></script>
     </head>
     <body>
@@ -38,7 +44,7 @@
         <div class="pull-left">
         <form name="Form" action="addUniversitiesAdded.html" method="get">
                 Введите название университета: <br>
-                <input type="text" name ="univerName"> <br>
+                <input type="text" placeholder="Введите университет" name ="univerName"> <br>
                 <input type="submit" class="btn btn-large btn-success" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Добавить" name="add">
             </form>
         </div>                        
@@ -50,19 +56,38 @@
             <option value="1" ${univerSearchInt == '1' ? 'selected' : ''}>№ университета </option>
             <option value="2" ${univerSearchInt == '2' ? 'selected' : ''}>Университет</option>
         </select><br>
-                <input type="text" name ="textBox" value="${textBoxString}"><br>
+                <input type="text" placeholder="Введите значение" name ="textBox" value="${textBoxString}"><br>
         <input type="submit" value="Показать" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" name="search">
             </form>
-         </div></div></div>
+         </div>
+                                </div>
+                        </div>
         <div class="span9">
-				<div class="hero-unit">
-         <h4>${msg}</h4>
+                                    <center>
+          <c:if test='${!errorMessage.equals("") && errorMessage != null}'>
+                                    <span id="alertMessage">
+                                    <div class="alert alert-error" align="center">
+                                        <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                                        ${errorMessage}
+                                    </div>
+                                    </span>
+                                </c:if>
+          <c:if test="${message != null}">
+                 <td align="left" id="alertMessage">
+                     <div class="alert alert-success" id="alertMessage" align="center">
+                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                         ${message}
+                     </div>
+                 </td>
+             </c:if>
         <table border ="1" class="bordered">
+            <caption><div class="alert alert-info">Университеты</div></caption>
             <thead>
                 <tr>
-                    <th><a href="#">№ университета</a> </th>
+                    <th><a href="#">№</a> </th>
                     <th><a href="#">Университет</a></th>
-                    <th>Действия</th>
+                    <th>Править</th>
+                    <th>Удалить</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,17 +97,19 @@
                     <td><c:out value="${u.universityName}"/></td>
                     <td>
                       <a href="editUniversity.html?universityId=<c:out value='${u.universityId}'/>">
-                            <img  src="../resources/images/edit.png" width="25" height="25" title="Править"/>
+                            <img  src="../resources/images/edit1.png" width="25" height="25" title="Править"/>
                         </a>
+                    </td>
+                    <td>
                         <a href= "delUniversity.html?universityId=<c:out value='${u.universityId}'/> ">
-                           <img  src="../resources/images/delete.png" width="25" height="25" title="Удалить"/>
+                           <img  src="../resources/images/delete.png" width="20" height="20" title="Удалить"/>
                         </a>
                     </td>
                 </tr>
                 </c:forEach>
             </tbody>
         </table>
-                                </div>
+                                    </center>
                         </div>
                 </div>
         </div>

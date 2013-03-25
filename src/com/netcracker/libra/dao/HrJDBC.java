@@ -99,13 +99,54 @@ public class HrJDBC implements HrDAO {
         List <Student> students = jdbcTemplateObject.query(SQL, new Object[]{id}, new ShortStudentRowMapper());
         return students;
      }
-
-        @Override
+    /*
+      * Returns right param for query if it needs to find students by education
+      */
+    public String whatEducationLookingFor(String myParam){
+        String eduParam="d.departmentId";
+        if (myParam.equals("university")) 
+            eduParam="un.universityId";
+        if (myParam.equals("faculty")) 
+            eduParam="f.facultyId";
+        return eduParam;
+    }
+    /*
+      * Returns students by appform id and education
+      */
+    public List<Student> getStudent(String eduParam, int eduValue, Integer idStudent) {
+        String education=whatEducationLookingFor(eduParam);
+        String query = "select a.appid, u.firstname,u.lastname,u.email "
+                + "from users u join appform a on u.userid=a.userid "
+                + "join department d on d.departmentId=a.DepartmentId "
+                + "join faculty f on f.facultyid=d.facultyId "
+                + "join university un on un.universityId=f.universityId "
+                + "where "+education+"=? and a.appid=?";
+        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), eduValue,idStudent);
+        return students;
+     }
+      /*
+      * Returns students by last name 
+      */
+     @Override
      public List<Student> getStudentsByLastName(String lname) {
         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
                 + "join appform a on u.userid=a.userid and lower(u.lastname) like '%"+lname.toLowerCase()+"%'";
         List <Student> students;
         students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
+        return students;
+     }
+     /*
+      * Returns students by last name and education
+      */
+     public List<Student> getStudentsByLastName(String eduParam, int eduValue, String lname) {
+        String education=whatEducationLookingFor(eduParam);
+        String query = "select a.appid, u.firstname,u.lastname,u.email "
+                + "from users u join appform a on u.userid=a.userid "
+                + "join department d on d.departmentId=a.DepartmentId "
+                + "join faculty f on f.facultyid=d.facultyId "
+                + "join university un on un.universityId=f.universityId "
+                + "where "+education+"=? and lower(u.lastname) like '%"+lname.toLowerCase()+"%'";         
+        List <Student> students=jdbcTemplateObject.query(query, new ShortStudentRowMapper(),eduValue);
         return students;
      }
         /*
@@ -114,20 +155,60 @@ public class HrJDBC implements HrDAO {
         public List<Student> getStudentsByAllFields(String value){
         String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
                         + "join appform a on u.userid=a.userid and "
-                             + "((a.appid like '"+value+"') or (lower(u.firstname) like '%"+value.toLowerCase()+"%') "
-                                + "or (lower(u.lastname) like '%"+value.toLowerCase()+"%') or (lower(u.email) like '%"+value.toLowerCase()+"%'))";
+                        + "((a.appid like '"+value+"') or (lower(u.firstname) like '%"+value.toLowerCase()+"%') "
+                        + "or (lower(u.lastname) like '%"+value.toLowerCase()+"%') or (lower(u.email) like '%"+value.toLowerCase()+"%'))";
         List <Student> students;
         students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
         return students;
         }
+        /*
+         * Returns students by any field and education
+         */
+        public List<Student> getStudentsByAllFields(String eduParam, int eduValue,String value){
+        String education=whatEducationLookingFor(eduParam);
+        String query = "select a.appid, u.firstname,u.lastname,u.email "
+                + "from users u join appform a on u.userid=a.userid "
+                + "join department d on d.departmentId=a.DepartmentId "
+                + "join faculty f on f.facultyid=d.facultyId "
+                + "join university un on un.universityId=f.universityId "
+                + "where "+education+"="+eduValue+" and ((a.appid like '"+value+"') "
+                + "or (lower(u.firstname) like '%"+value.toLowerCase()+"%') "
+                + "or (lower(u.lastname) like '%"+value.toLowerCase()+"%') "
+                + "or (lower(u.email) like '%"+value.toLowerCase()+"%'))";
+        
+        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper());
+        return students;
+        }
 
-        @Override
+        /*
+         * Returns students by First name
+         */
+     @Override
      public List<Student> getStudentsByFirstName(String fname) {
          String SQL = "select a.appid, u.firstname,u.lastname,u.email from users u "
-                 + "join appform a on u.userid=a.userid and lower(u.firstname) like '%"+fname.toLowerCase()+"%'";
+                 + "join appform a on u.userid=a.userid and lower(u.firstname) like '%"+fname.toLowerCase()+"%' "
+                 + "order by 1 ";
          List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
          return students;    
      }
+     /*
+      * Returns Students bu first name and education
+      */
+     public List<Student> getStudentsByFirstName(String eduParam, int eduValue, String fname) {
+         String education=whatEducationLookingFor(eduParam);
+         String query = "select a.appid, u.firstname,u.lastname,u.email "
+                + "from users u join appform a on u.userid=a.userid "
+                + "join department d on d.departmentId=a.DepartmentId "
+                + "join faculty f on f.facultyid=d.facultyId "
+                + "join university un on un.universityId=f.universityId "
+                + "where "+education+"=? and lower(u.lastname) like '%"+fname.toLowerCase()+"%'";
+         
+         List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(),eduValue);
+         return students;    
+     }
+     /*
+      * Returns students by Email
+      */
 
         @Override
      public List<Student> getStudentsByEmail(String mail) {
@@ -136,32 +217,57 @@ public class HrJDBC implements HrDAO {
         List <Student> students = jdbcTemplateObject.query(SQL, new ShortStudentRowMapper());
         return students;
      }
-        
+        /*
+         * Returns students by Email and Education
+         */
+     public List<Student> getStudentsByEmail(String eduParam, int eduValue, String mail) {
+        String education=whatEducationLookingFor(eduParam);
+         String query = "select a.appid, u.firstname,u.lastname,u.email "
+                + "from users u join appform a on u.userid=a.userid "
+                + "join department d on d.departmentId=a.DepartmentId "
+                + "join faculty f on f.facultyid=d.facultyId "
+                + "join university un on un.universityId=f.universityId "
+                + "where "+education+"=? and lower(u.lastname) like '%"+mail.toLowerCase()+"%'"; 
+        List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(),eduValue);
+        return students;
+     }
+        /*
+         * Returns all universities from database
+         */
      public List<University> getAllUniversity() {
         String query="select universityId, universityName from university";
         List<University> universities = jdbcTemplateObject.query(query, new UniversityRowMapper());
         return universities;
      }
-     
+     /*
+      * Returns unviersities by name
+      */
      public List<University> getUniversityByName(String name){
          String query="select universityId, universityName from university where lower(universityName) like '%"+name.toLowerCase()+"%'";
          List<University> universities = jdbcTemplateObject.query(query, new UniversityRowMapper());
          return universities;
      }
      
+     /*
+      * Returns universities by id
+      */
      public List<University> getUniversityById(int universityId){
          String query="select universityId, universityName from university where universityId=?";
          List<University> universities = jdbcTemplateObject.query(query, new UniversityRowMapper(), universityId);
          return universities;
      }
-     
+     /*
+      * Retutns all faculties
+      */
      public List<Faculty> getAllFaculties() {
         String query = "select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
                         + "join university u on f.universityId=u.universityId order by f.facultyId";
         List<Faculty> faculties = jdbcTemplateObject.query(query, new FacultyRowMapper() );
         return faculties;
      }
-     
+     /*
+      * Returns all faulties of university
+      */
      public List<Faculty> getAllFaculties(int univerId) {
         String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
                         + "join university u on f.universityId=u.universityId  where f.universityId=?";
@@ -169,6 +275,9 @@ public class HrJDBC implements HrDAO {
         faculties = jdbcTemplateObject.query(query, new FacultyRowMapper(), univerId);
         return faculties;
      }
+     /*
+      *Returns faculty by id
+      */
      public List<Faculty> getAllFacultiesById(int facultyId) {
         String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
                         + "join university u on f.universityId=u.universityId  where f.facultyId=?";
@@ -185,7 +294,9 @@ public class HrJDBC implements HrDAO {
         faculties = jdbcTemplateObject.query(query, new FacultyRowMapper(), universityId);
         return faculties;
      }
-     
+     /*
+      * Returns all faculties by param
+      */
      public List<Faculty> getAllFaculties(String param, String name) {
         String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
                         + "join university u on f.universityId=u.universityId  where lower("+param+") like '%"+name.toLowerCase()+"%'";
@@ -193,7 +304,9 @@ public class HrJDBC implements HrDAO {
         faculties = jdbcTemplateObject.query(query, new FacultyRowMapper());
         return faculties;
      }
-    
+    /*
+     * REturns all departments
+     */
      public List<Department> gelAllDepartemtns() {
         String query="select d.departmentId, d.departmentName, f.facultyId, f.facultyName, u.universityId, u.universityName from department d "
                         + "join faculty f on d.facultyId=f.facultyId "
@@ -201,7 +314,9 @@ public class HrJDBC implements HrDAO {
         List<Department> departments = jdbcTemplateObject.query(query, new departmentRowMapper());
         return departments;
      }
-     
+     /*
+      * Returns all departmetns by faculty or university
+      */
      public List<Department> getAllDepartments(String param, int facultyId) {
         String query="select d.departmentId, d.departmentName, f.facultyId, f.facultyName, u.universityId, u.universityName from department d "
                         + "join faculty f on d.facultyId=f.facultyId "
@@ -216,7 +331,9 @@ public class HrJDBC implements HrDAO {
         List<Department> departments = jdbcTemplateObject.query(query,new departmentRowMapper());
         return departments;
     }
-          
+    /*
+     * REturns all students by university
+     */      
     public List<Student> getStudentByUniversity(int universityId){
         String query="select a.appid, u.firstname,u.lastname,u.email, d.departmentName from users u "+
                         "join appform a on u.userid=a.userid "+
@@ -227,6 +344,9 @@ public class HrJDBC implements HrDAO {
         return students;
     }
     
+    /*
+     * REturns all students by faculty
+     */
     public List<Student> getStudentByFaculty(int facultyId){
         String query="select a.appid, u.firstname,u.lastname,u.email from users u "+
                         "join appform a on u.userid=a.userid "+
@@ -235,43 +355,65 @@ public class HrJDBC implements HrDAO {
         List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), facultyId);
         return students;
     }
-    
+    /*
+     * REturns all students by department
+     */
     public List<Student> getStudentByDepartment(int departmentId){
         String query="select a.appid, u.firstname,u.lastname,u.email from users u "+ 
                         "join appform a on u.userid=a.userid and a.departmentId=?";
         List <Student> students = jdbcTemplateObject.query(query, new ShortStudentRowMapper(), departmentId);
         return students;
     }
-    
+    /*
+     * Create new university
+     */
     public void addUniversity(String universityName){
         String query="insert into university values(University_seq.NEXTVAL,?)";
         jdbcTemplateObject.update(query,universityName);
     }
-    
+    /*
+     * Create new Faculty
+     */
     public void addFaculty(String facultyName, int univerId) {
         String query="insert into faculty values(Faculty_seq.NEXTVAL,?,?)";
         jdbcTemplateObject.update(query,facultyName,univerId);
     }
+    /*
+     * Create new department
+     */
     public void addDepartment(String departmentName, int facultyId){
         String query="insert into department values(Department_seq.NEXTVAL,?,?)";
         jdbcTemplateObject.update(query,departmentName,facultyId);
     }
+    /*
+     * Delete univetsity
+     */
     public void deleteUniversity(int universityID) {
         String query="delete from university where universityId=?";
         jdbcTemplateObject.update(query,universityID);   
     }
+    /*
+     * delete faculty
+     */
     public void deleteFaculty(int facultyId) {
         String query="delete faculty where facultyId=?";
         jdbcTemplateObject.update(query,facultyId);
     }
+    /*
+     * delete department
+     */
     public void deleteDepartment(int departemtnId) {
         String query="delete from department where departmentID=?";
         jdbcTemplateObject.update(query,departemtnId);
     }
+    /*
+     * update university
+     */
     public void updateUniversity(int universityID, String universityName) {
         String query="update university set universityName=? where universityId=?";
         jdbcTemplateObject.update(query,universityName,universityID);
     }
+    
     public List<Faculty> selectedUniversity(int facultyId) {
         String query="select f.facultyId, f.facultyName, u.universityId, u.universityName from faculty f "
                         + "join university u on f.universityId=u.universityId  where f.facultyId = ?";
@@ -289,18 +431,30 @@ public class HrJDBC implements HrDAO {
         List<University> univers = jdbcTemplateObject.query(query, new UniversityRowMapper(), university);
         return univers;
     }
+    /*
+     * update faculty
+     */
     public void updateFaculty(int facultyId, String facultyName, int univerId) {
         String query="update faculty set facultyName=?, universityId=? where facultyId=?";
         jdbcTemplateObject.update(query, facultyName,univerId, facultyId);
     }
+    /*
+     * Returns university number by university name 
+     */
     public int getUniversityIdByName(String name){
         String query="select universityId  from university where lower(universityName) = ?";
         return jdbcTemplateObject.queryForInt(query, name.toLowerCase());
     }
+    /*
+     * update department
+     */
     public void updateDepartment(int departmentId, String departmentName, int facId) {
         String query="update department set departmentName=?, facultyId=? where departmentId=?";
         jdbcTemplateObject.update(query, departmentName, facId,departmentId);
     }
+    /*
+     * REturns count departments of unviersity or faculty
+     */
     public int getCountDepts(String param, int id){
         String query="select count(*) from department d "
                         + "join faculty f on f.facultyId=d.facultyId "
@@ -362,6 +516,7 @@ public class HrJDBC implements HrDAO {
      * finds languages by name or part of name
      * @return list of langs
      */
+    
     public List<Map<String, Object>> showLangByName(String name){
         String query="select languageId, languageName from languages where languageName like '%"+name+"%'";
         List<Map<String, Object>> langs=jdbcTemplateObject.queryForList(query);
@@ -370,6 +525,7 @@ public class HrJDBC implements HrDAO {
     /*
      * Returns list of Sorted Students with filter
      */
+    @Deprecated
     public List<Student> getOrderStudent(String param, String value, String orderBy){
         if (param.equals("getAll")){
             String query="select a.appid, u.firstname,u.lastname,u.email from users u "
@@ -418,6 +574,7 @@ public class HrJDBC implements HrDAO {
     /*
      * Returns sorted List of Stundents 
      */
+    @Deprecated
     public List<Student> getOrderedStudentByEdu(String param, String value, String orderBy){
         String query=null;
         if (param.equals("getAll")){
@@ -494,6 +651,8 @@ public class HrJDBC implements HrDAO {
         }
         return interviewDateFinish;
     }
+    
+    
     
     /**
      * Returns a List of interviewers who were assigned to a certain time

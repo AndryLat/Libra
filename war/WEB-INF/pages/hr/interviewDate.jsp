@@ -68,10 +68,10 @@
             <option value="3">Интервьер</option>
         </select>
         <div id="justText">
-         <input type="text" name ="textBox" style="width: 100px">
+         <input type="text" placeholder="Введите значение" name ="textBox" style="width: 210px">
         </div>
         <div style="display: none;"  id="calc">
-          <input type="text" id="date" name="textBoxCalc" class="tcal" style="width: 100px" />
+          <input type="text" placeholder="Введите дату" id="date" name="textBoxCalc" class="tcal" style="width: 210px" />
         </div>
             <input type="submit" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Показать" name="search" class="btn btn-large btn-primary" >
             </form>
@@ -113,7 +113,7 @@
               <img  src="../resources/images/edit.png" width="25" height="25" title="Править"/> 
            </a>
          <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
-             <img  src="../resources/images/delete.png" width="25" height="25" title="Удалить"/> 
+             <img  src="../resources/images/delete.png" width="20" height="20" title="Удалить"/> 
                         </a>
         </td>
     </tr>

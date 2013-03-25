@@ -6,7 +6,10 @@ package com.netcracker.libra.controller;
 
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.util.mail.MailService;
-import com.netcracker.libra.util.mail.data;
+import com.netcracker.libra.util.mail.SendMailService;
+import java.util.HashMap;
+import java.util.Map;
+//import com.netcracker.libra.util.mail.data;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +31,19 @@ public class SendMailController  {
     
            @RequestMapping(value = "/sendmail", method = RequestMethod.GET)
 	   public ModelAndView sendView() {
-	      return new ModelAndView("SendMailView", "command", new data());
+               Map model = new HashMap();
+               model.put("user", "TestUser");
+               SendMailService.sendMail("neon-z@mail.ru", model, "template_1");
+               return null;
+	      //return new ModelAndView("SendMailView", "command", new data());
 	   }
            
-           @RequestMapping(value = "/sendmailsubmit", method = RequestMethod.POST)
+           /*@RequestMapping(value = "/sendmailsubmit", method = RequestMethod.POST)
            public String sendMail(@ModelAttribute("data") data Data, ModelMap model){
                
                MailService.sendConfirmRegistrationMessage(Data.getAdress(), Data.getUser(), Data.getCode());
                MailService.sendSuccessRegistrationMessage(Data.getAdress(), Data.getUser());
                MailService.sendFormMessage(Data.getAdress(), Data.getUser(),3);
                return "SuccessSendView";
-           }
+           }*/
 }

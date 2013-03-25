@@ -50,7 +50,7 @@
                         <td>
                             Кафедра: </td>
                         <td>
-                <input type="text" name ="deptName">
+                <input type="text" placeholder="Введите название кафедры" name ="deptName">
                         </td>
                     </tr>
                     <tr>
