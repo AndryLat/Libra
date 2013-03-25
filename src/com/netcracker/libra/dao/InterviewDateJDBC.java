@@ -151,6 +151,12 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         
         return jdbcTemplateObject.queryForInt(query,interviewDateId);
     }
+    public void deleteNotInterviewers(){
+        String query="delete from interviewerList where userid="
+                    + "ANY(select l.userId from interviewerList l "
+                        + "join users u on l.userId=u.userId where u.roleId!=2 and u.roleid!=3)";
+        jdbcTemplateObject.update(query);
+    }
     
     @Override
     public void addExtraTimeByAppId(Integer appId, Integer minutes) {

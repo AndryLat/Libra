@@ -52,7 +52,8 @@ public class LengthService {
     public static String checkPasswordLength(String password) {
         int length = password.length();
         return (length > AUTH_LENGTH) ? PASSWORD_TOO_LONG :
-                (length == 0) ? "Пожалуйста, введите пароль<br/>" : OK;
+                (length == 0) ? "Пожалуйста, введите пароль<br/>" : 
+                (length < 6) ? "Пароль должен содержать не менее 6 символов<br/>" : OK;
     }
     
 }

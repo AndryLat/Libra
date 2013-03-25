@@ -29,6 +29,7 @@ public class InterviewDateController
     public ModelAndView interDate()
     {
         ModelAndView mav = new ModelAndView();
+        iDateJdbc.deleteNotInterviewers();
         List<InterviewDate> id=iDateJdbc.getAllInterviewDatesWithInterviewers();  
         List<Map<String,Object>> inters=iDateJdbc.getInterviewersHr();
         mav.setViewName("hr/interviewDate");

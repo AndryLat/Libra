@@ -103,7 +103,7 @@ public class AdminJDBC implements AdminDAO {
                 catch (ArrayIndexOutOfBoundsException e) {
                     //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
                 }
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND firstName LIKE ? AND lastName LIKE ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND upper(firstName) LIKE upper(?) AND upper(lastName) LIKE upper(?)";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%"};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
                 return employees;
@@ -135,7 +135,7 @@ public class AdminJDBC implements AdminDAO {
                 catch (ArrayIndexOutOfBoundsException e) {
                     //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
                 }
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE firstName LIKE ? AND lastName LIKE ? AND RoleId = ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE upper(firstName) LIKE upper(?) AND upper(lastName) LIKE upper(?) AND RoleId = ?";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%", role};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
                 return employees;
@@ -154,7 +154,7 @@ public class AdminJDBC implements AdminDAO {
         public List <User> getAllEmployeesByFirstName(String firstName) {
             
             if(!firstName.isEmpty()) {
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND firstName LIKE ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND upper(firstName) LIKE upper(?)";
                 List <User> employees = jdbcTemplateObject.query(SQL, new Object[] {"%"+firstName+"%"}, new UserRowMapper());
                 return employees;
             }
@@ -174,7 +174,7 @@ public class AdminJDBC implements AdminDAO {
         public List <User> getAllEmployeesByFirstNameAndRole(String firstName, Integer role) {
             
             if(!firstName.isEmpty()) {
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE firstName LIKE ? AND RoleId = ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE upper(firstName) LIKE upper(?) AND RoleId = ?";
                 Object [] params = new Object[] {"%"+firstName+"%", role};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
                 return employees;
@@ -193,7 +193,7 @@ public class AdminJDBC implements AdminDAO {
         public List <User> getAllEmployeesByLastName(String lastName) {
             
             if(!lastName.isEmpty()) {
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND lastName LIKE ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND upper(lastName) LIKE upper(?)";
                 List <User> employees = jdbcTemplateObject.query(SQL, new Object[] {"%"+lastName+"%"}, new UserRowMapper());
                 return employees;
             }
@@ -213,7 +213,7 @@ public class AdminJDBC implements AdminDAO {
         public List <User> getAllEmployeesByLastNameAndRole(String lastName, Integer role) {
             
             if(!lastName.isEmpty()) {
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE lastName LIKE ? AND RoleId = ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE upper(lastName) LIKE upper(?) AND RoleId = ?";
                 Object [] params = new Object[] {"%"+lastName+"%", role};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
                 return employees;
@@ -232,7 +232,7 @@ public class AdminJDBC implements AdminDAO {
         public List <User> getAllEmployeesByEmail(String email) {
             
             if(!email.isEmpty()) {
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND email LIKE ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND upper(email) LIKE upper(?)";
                 List <User> employees = jdbcTemplateObject.query(SQL, new Object[] {"%"+email+"%"}, new UserRowMapper());
                 return employees;
             }
@@ -252,7 +252,7 @@ public class AdminJDBC implements AdminDAO {
         public List <User> getAllEmployeesByEmailAndRole(String email, Integer role) {
             
             if(!email.isEmpty()) {
-                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE email LIKE ? AND RoleId = ?";
+                String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE upper(email) LIKE upper(?) AND RoleId = ?";
                 Object [] params = new Object[] {"%"+email+"%", role};
                 List <User> employees = jdbcTemplateObject.query(SQL, params, new UserRowMapper());
                 return employees;

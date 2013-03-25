@@ -59,10 +59,12 @@ public class EducationController {
     public ModelAndView delUniver(@RequestParam("universityId") int universityId){
         List<University> univers = hr.getUniversityById(universityId);
         ModelAndView mav = new ModelAndView();
-        mav.addObject("univers", univers);
+        
         int countFact = hr.getCountFaculty(universityId);
         int countDept = hr.getCountDepts("u.universityId", universityId);
         int countStudents = hr.getCountStudents("u.universityId", universityId);
+        
+        mav.addObject("univers", univers);
         mav.addObject("countFact", countFact);
         mav.addObject("countDept", countDept);
         mav.addObject("countStudents", countStudents);
@@ -70,11 +72,11 @@ public class EducationController {
     }
     @RequestMapping(value="/hr/delFaculty", method=RequestMethod.GET)
     public ModelAndView delFact(@RequestParam("facultyId") int facultyId){
-        List<Faculty> facts = hr.getAllFacultiesById(facultyId);
         ModelAndView mav = new ModelAndView();
-        mav.addObject("facts", facts);
+        List<Faculty> facts = hr.getAllFacultiesById(facultyId);
         int countDept=hr.getCountDepts("f.facultyId", facultyId);
         int countStudents = hr.getCountStudents("f.facultyId", facultyId);
+        mav.addObject("facts", facts);
         mav.addObject("countDept", countDept);
         mav.addObject("countStudents", countStudents);
         return mav;
@@ -94,7 +96,7 @@ public class EducationController {
        ModelAndView mav = new ModelAndView();
        List<University> univers = hr.getAllUniversity();
        mav.addObject("univers", univers);
-       mav.addObject("msg", "Университет успешно удален!");
+       mav.addObject("message", "Университет успешно удален!");
        mav.setViewName("/hr/showUniversities");
        return mav;
     }
@@ -104,7 +106,7 @@ public class EducationController {
        ModelAndView mav = new ModelAndView();
        List<Faculty> facts = hr.getAllFaculties();
        mav.addObject("facts", facts);
-       mav.addObject("msg", "Факультет успешно удален!");
+       mav.addObject("message", "Факультет успешно удален!");
        mav.setViewName("/hr/showFaculties");
        return mav;
     }
@@ -114,7 +116,7 @@ public class EducationController {
         ModelAndView mav = new ModelAndView();
         List<Department> depts = hr.gelAllDepartemtns();
         mav.addObject("depts", depts);
-        mav.addObject("msg", "Кафедра успешно удалена!");
+        mav.addObject("message", "Кафедра успешно удалена!");
         mav.setViewName("/hr/showDepartments");
         return mav;
     }
@@ -169,19 +171,19 @@ public class EducationController {
         try{
             if (universityName.equals("")){
                 mav.addObject("u", hr.getUniversityById(universityId));
-                mav.addObject("msg", "Правка не выполнена, название университета имеет неправильный формат");
+                mav.addObject("errorMessage", "Правка не выполнена, название университета имеет неправильный формат");
                 mav.setViewName("/hr/editUniversity"); 
                 return mav;
                 }
             hr.updateUniversity(universityId, universityName);
             List<University> univers = hr.getAllUniversity();
             mav.addObject("univers", univers);
-            mav.addObject("msg", "Университет успешно изменен!");
+            mav.addObject("message", "Университет успешно изменен!");
             mav.setViewName("hr/showUniversities");
             return mav;
         }
             catch(Exception ex){
-                mav.addObject("msg", "Правка не выполнена!");
+                mav.addObject("errorMessage", "Правка не выполнена!");
                 mav.setViewName("/hr/editUniversity"); 
                 return mav;
             }
@@ -204,19 +206,19 @@ public class EducationController {
                 List<University> univ = hr.unselectedUniversity(i);
                 mav.addObject("selectedUniv", unsUniv);
                 mav.addObject("unselectedUniv", univ);
-                mav.addObject("msg", "Правка не выполнена!");
+                mav.addObject("errorMessage", "Правка не выполнена!");
                 mav.setViewName("hr/editFaculty");
                 return mav;
             }
             hr.updateFaculty(facultyId, facultyName, universityId);
             List<Faculty> faculty = hr.getAllFaculties();
             mav.addObject("facts", faculty);
-            mav.addObject("msg", "Факультет успешно изменен!");
+            mav.addObject("message", "Факультет успешно изменен!");
             mav.setViewName("hr/showFaculties");
             return mav;
             }
             catch(Exception ex){
-                mav.addObject("msg", "Правка не выполнена");
+                mav.addObject("errorMessage", "Правка не выполнена");
                 mav.setViewName("/hr/editFaculty"); 
                 return mav;
             }
@@ -247,7 +249,7 @@ public class EducationController {
                 mav.addObject("unselFacts", unselFacts);
                 mav.addObject("selectedUniv", unsUniv);
                 mav.addObject("unselectedUniv", univ);
-                mav.addObject("msg", "Editing failed!");
+                mav.addObject("errorMessage", "Правка не выполнена!");
                 mav.setViewName("hr/editDepartment");
                 return mav;
             }
@@ -258,13 +260,13 @@ public class EducationController {
             return mav;
             }
             catch(Exception ex){
-                mav.addObject("msg", "Правка не выполнена");
+                mav.addObject("showMessage", "Правка не выполнена");
                 mav.setViewName("/hr/editDepartment"); 
                 return mav;
             }
     }
             
-            
+    @Deprecated        
     @RequestMapping(value="/hr/addUniversities", method= RequestMethod.GET)
     public ModelAndView addUniver(
     org.springframework.web.context.request.WebRequest webRequest){
@@ -286,7 +288,7 @@ public class EducationController {
              univers = hr.getUniversityById(n);
             }
             catch(Exception e){
-                mav.addObject("msg", "№ университета имеет неправильный формат!");
+                mav.addObject("showMessage", "№ университета имеет неправильный формат!");
                 univers = hr.getAllUniversity();
                     }
                 }
@@ -299,11 +301,11 @@ public class EducationController {
         }
         finally{
             mav.addObject("univers", univers);
-            mav.setViewName("/hr/addUniversities");
+            mav.setViewName("/hr/showUniversities");
             return mav;
     }
     }
-    
+    @Deprecated
     @RequestMapping(value="/hr/addFaculties", method=RequestMethod.GET)
     public ModelAndView addFac(
     org.springframework.web.context.request.WebRequest webRequest){
@@ -338,6 +340,7 @@ public class EducationController {
             return mav;
         }
     }
+    @Deprecated
     @RequestMapping(value="/hr/addDepartments", method=RequestMethod.GET)
     public ModelAndView addDept(
     org.springframework.web.context.request.WebRequest webRequest){
@@ -384,16 +387,16 @@ public class EducationController {
     @RequestParam("univerName") String name){
         ModelAndView mav = new ModelAndView();
         if (name.equals("")) {
-            mav.addObject("msg", "Название университета некорректно");
-            mav.setViewName("/hr/addUniversities");
+            mav.setViewName("/hr/showUniversities");
             List<University> univers = hr.getAllUniversity();
             mav.addObject("univers", univers);
+            mav.addObject("errorMessage","Название университета некорректно");
             return mav;
         }
         hr.addUniversity(name);
         List<University> univers = hr.getAllUniversity();
         mav.addObject("univers", univers);
-        mav.addObject("msg", "Университет успешно добавлен!");
+        mav.addObject("message", "Университет успешно добавлен!");
         mav.setViewName("/hr/showUniversities");
         return mav;
     }
@@ -406,7 +409,7 @@ public class EducationController {
         hr.addFaculty(name, universityId);
         List<Faculty> facts = hr.getAllFaculties();
         mav.addObject("facts", facts);
-        mav.addObject("msg", "Факультет успешно добавлен!");
+        mav.addObject("message", "Факультет успешно добавлен!");
         mav.setViewName("/hr/showFaculties");
         return mav;
     }
@@ -419,7 +422,7 @@ public class EducationController {
         hr.addDepartment(name, facultyId);
         List<Department> depts = hr.gelAllDepartemtns();
         mav.addObject("depts", depts);
-        mav.addObject("msg", "Кафедра успешно добавлена!");
+        mav.addObject("message", "Кафедра успешно добавлена!");
         mav.setViewName("/hr/showDepartments");
         return mav;
     

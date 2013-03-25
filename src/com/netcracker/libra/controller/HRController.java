@@ -6,14 +6,17 @@ import com.netcracker.libra.model.DateAndInterviewer;
 import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
-import com.netcracker.libra.model.InterviewResults;
+import com.netcracker.libra.model.OldNewInterviewTime;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +35,11 @@ public class HRController {
            
      HrJDBC hr=new HrJDBC();
      Student s=new Student();
+     
+     //list contain general info about the student, date and time of his/her interview
+     //(that were before student's wishes to change and after it)
+     List <OldNewInterviewTime> oldNewInterviewTimeList; 
+     boolean order; //value of ascending or descending order; true when ascending
      
     @RequestMapping(value="hr/faculty", method= RequestMethod.POST)
      public ModelAndView myTest(@RequestParam("universityId") int universityId){
@@ -378,7 +386,6 @@ public class HRController {
           return mav;
       }
      
-     
       /**
        * Displays information about the student's interview.
        * @author Alexander Lebed
@@ -396,8 +403,7 @@ public class HRController {
           List dateAndInterviewerList = new ArrayList();
           List dateAndInterviewerResultsList = new ArrayList();
           
-          HrJDBC hrjdbc = new HrJDBC();
-          List <Integer> interviewIds = hrjdbc.getInterviewIds(appId);
+          List <Integer> interviewIds = hr.getInterviewIds(appId);
           
           if(interviewIds.isEmpty()) {
               //if no any information about the interview, displayed the message
@@ -408,19 +414,19 @@ public class HRController {
               
               int interviewId = id;
               //string of interview's finish date and time
-              String interviewDateFinish = hrjdbc.getInterviewFinishDate(interviewId);
-              boolean wasInterviewed = hrjdbc.getInterviewResults(interviewId);
+              String interviewDateFinish = hr.getInterviewFinishDate(interviewId);
+              boolean wasInterviewed = hr.getInterviewResults(interviewId);
               
               if(actualInterview(interviewDateFinish)) {
                   //else if the student will be interviewed, diplayed application's form ID, 
                   //interview's date and time, assigned interviewers
-                  List <DateAndInterviewer> resultList = hrjdbc.getDateAndInterviewer(interviewId);
+                  List <DateAndInterviewer> resultList = hr.getDateAndInterviewer(interviewId);
                   dateAndInterviewerList.addAll(resultList);
               }
               else if(wasInterviewed) {
                   //else if the student was interviewed, displayed the application's form ID, date and time of the interview, 
                   //assigned interviewers, results of the interview (marks, comments)
-                  List <DateAndInterviewerResults> resultList = hrjdbc.getDateAndInterviewerResults(interviewId);
+                  List <DateAndInterviewerResults> resultList = hr.getDateAndInterviewerResults(interviewId);
                   dateAndInterviewerResultsList.addAll(resultList);
               }
               else {
@@ -454,13 +460,204 @@ public class HRController {
           Date current = new Date();
           return current.before(sqlDate);
       }
-
-
       
       
-
-     
+      /**
+       * Go to page with general info about the student, date and time of his/her interview
+       * (that were before student's wishes to change and after it) 
+       */
+      @RequestMapping("hr/сonfirmEditing")
+      public ModelAndView showConfirmEditing() {
+          ModelAndView mv = new ModelAndView();
+          
+          oldNewInterviewTimeList = hr.getAllOldNewInterviewTime();
+          
+          mv.setViewName("hr/showConfirmEditing");
+          mv.addObject("timeList", oldNewInterviewTimeList);
+          return mv;
+      }
+      
+      /**
+       * Sort in ascending or descending order 
+       * by the app.form ID, first name, last name, email and field name
+       */
+      @RequestMapping("hr/sortOldNewInterview")
+      public ModelAndView sortByLink(@RequestParam("orderBy") String orderBy) {
+          
+          String up = "<img  src=\"../resources/images/admin/arrow_down.png\" width=\"12\" height=\"12\" title=\"по возрастанию\"/>";
+          String down = "<img  src=\"../resources/images/admin/arrow_up.png\" width=\"12\" height=\"12\" title=\"по убыванию\"/>";
+          
+           ModelAndView mv = new ModelAndView();
+           mv.setViewName("hr/showConfirmEditing");
+           
+           switch(orderBy) {
+               
+               case "APP_ID":
+                    Collections.sort(oldNewInterviewTimeList, new IdComparator(order));
+                    String idOrder = (order) ? up : down;
+                    mv.addObject("idOrder", idOrder);
+                    break;
+                   
+               case "FIRST_NAME":
+                    Collections.sort(oldNewInterviewTimeList, new FirstNameComparator(order));
+                    String nameOrder = (order) ? up : down;
+                    mv.addObject("nameOrder", nameOrder);
+                    break;
+                   
+               case "LAST_NAME":
+                    Collections.sort(oldNewInterviewTimeList, new LastNameComparator(order));
+                    nameOrder = (order) ? up : down;
+                    mv.addObject("nameOrder", nameOrder);
+                    break;
+                
+               case "EMAIL":
+                    Collections.sort(oldNewInterviewTimeList, new EmailComparator(order));
+                    String emailOrder = (order) ? up : down;
+                    mv.addObject("emailOrder", emailOrder);
+                    break;
+                   
+               case "FIELD_NAME":
+                    Collections.sort(oldNewInterviewTimeList, new FieldNameComparator(order));
+                    String fieldNameOrder = (order) ? up : down;
+                    mv.addObject("fieldNameOrder", fieldNameOrder);
+                    break;
+           }
+           //switch to ascending or descending order
+           order = (order) ? false : true;
+           mv.addObject("timeList", oldNewInterviewTimeList);
+           return mv;
+      }
+      
+      /**
+       * Cancel the changes with new date and time of interview
+       */
+      @RequestMapping("hr/cancelConfirmEditingInterviewTime")
+      public ModelAndView cancelConfirmEditingInterviewTime(@RequestParam("newInterviewId") int newInterviewId) {
+          
+          hr.deleteInterview(newInterviewId);
+          
+          for(ListIterator <OldNewInterviewTime> i = oldNewInterviewTimeList.listIterator(); i.hasNext(); ) {
+              OldNewInterviewTime obj = i.next();
+              if(obj.getNewInterviewId() == newInterviewId) {
+                  i.remove();
+              }
+          }
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showConfirmEditing");
+          mv.addObject("message", "Изменение успешно отменено");
+          mv.addObject("timeList", oldNewInterviewTimeList);
+          return mv;
+      }
+      
+      /**
+       * Change interview to new date and time
+       */
+      @RequestMapping("hr/doneConfirmEditingInterviewTime")
+      public ModelAndView doneConfirmEditingInterviewTime(@RequestParam("oldInterviewId") int oldInterviewId,
+                                                          @RequestParam("newInterviewId") int newInterviewId) {
+          hr.deleteInterview(oldInterviewId);
+          hr.congirmInterview(newInterviewId);
+          
+          for(ListIterator <OldNewInterviewTime> i = oldNewInterviewTimeList.listIterator(); i.hasNext(); ) {
+              OldNewInterviewTime obj = i.next();
+              if(obj.getOldInterviewId() == oldInterviewId) {
+                  i.remove();
+              }
+          }
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showConfirmEditing");
+          mv.addObject("message", "Изменения сохранены");
+          mv.addObject("timeList", oldNewInterviewTimeList);
+          return mv;
+      }
+      
+    /**
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order by the ID
+     */
+    public static class IdComparator implements Comparator <OldNewInterviewTime> {
+        private boolean asc; // true - sorts in ascending order, fasle - descending
+        public IdComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(OldNewInterviewTime obj1, OldNewInterviewTime obj2) {
+            if(asc) {
+                return (obj1.getAppId() > obj2.getAppId()) ? 1 
+                    : (obj1.getAppId() == obj2.getAppId()) ? 0 : -1;
+            }
+            else {
+                return (obj2.getAppId() > obj1.getAppId()) ? 1 
+                    : (obj2.getAppId() == obj1.getAppId()) ? 0 : -1;
+            }
+        }
+    }
     
+    /**
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order by the first name
+     */
+    public static class FirstNameComparator implements Comparator <OldNewInterviewTime> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public FirstNameComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+            return asc ? (o1.getFirstName().compareToIgnoreCase(o2.getFirstName())) 
+                       : (o2.getFirstName().compareToIgnoreCase(o1.getFirstName()));
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order by the last name
+     */
+    public static class LastNameComparator implements Comparator <OldNewInterviewTime> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public LastNameComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+            return asc ? (o1.getLastName().compareToIgnoreCase(o2.getLastName())) 
+                       : (o2.getLastName().compareToIgnoreCase(o1.getLastName()));
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order by the email
+     */
+    public static class EmailComparator implements Comparator <OldNewInterviewTime> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public EmailComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+            return asc ? (o1.getEmail().compareToIgnoreCase(o2.getEmail())) 
+                       : (o2.getEmail().compareToIgnoreCase(o1.getEmail()));
+        }
+    }
+    
+    /**
+     * Comparator has been created to be passed to a method Collections.sort 
+     * to sort of objects list in ascending or descending order by the email
+     */
+    public static class FieldNameComparator implements Comparator <OldNewInterviewTime> {
+        private boolean asc; //true - sorts in ascending order, fasle - descending
+        public FieldNameComparator(boolean asc) {
+            this.asc = asc;
+        }
+        @Override
+        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+            return asc ? (o1.getFieldName().compareToIgnoreCase(o2.getFieldName())) 
+                       : (o2.getFieldName().compareToIgnoreCase(o1.getFieldName()));
+        }
+    }
 
 }
 

@@ -23,7 +23,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
  */
 @Service("mailService")
 
-public class MailService implements IMailService {
+public class MailService  {
     private static JavaMailSender mailSender;
     private static VelocityEngine velocityEngine;
     private static ServletContext servletContext;
