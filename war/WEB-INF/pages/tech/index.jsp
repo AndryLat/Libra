@@ -12,7 +12,7 @@
 <head>
 <jsp:include page="../resources.jsp" />
 
-<title>Вход</title>
+<title>Tech :: Личный кабинет</title>
 </head>
 
 <body>
@@ -28,30 +28,10 @@
 			</div>
 
 			<div class="span9">
-				<form:form class="form-horizontal" method="POST">
-					<fieldset>
 					<div id="legend">
-      					<legend class="">Войти</legend>
+      					<legend class="">Welcome</legend>
     				</div>
-					<div class="control-group">
-						<label class="control-label">Электропочта</label>
-						<div class="controls">
-							<input type="text" id="email" name="email">
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Пароль</label>
-						<div class="controls">
-							<input type="password" name="password">
-						</div>
-					</div>
-					<div class="control-group">
-						<div class="controls">
-							<button type="submit" class="btn btn-success">Войти</button>
-						</div>
-					</div>
-					</fieldset>
-				</form:form>
+    				<p>Это личный кабинет Tech</p>
 			</div>
 		</div>
 	</div>

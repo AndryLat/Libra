@@ -34,6 +34,9 @@
     			</div>
 				<div class="row-fluid span7">На ваш электронный адрес <b>${regForm.email}</b> был выслан проверочный код.<br> Для завершения процесса регистрации, пожалуйста, введите код из письма.<br><br></div>
 					<form:form commandName="regForm" method="POST" class="span7" action="verifyCode.html">
+					<c:if test="${message!=null}">
+					<div class="row-fluid"><div class="alert alert-error">${message}</div></div>
+					</c:if>
 						<div class="row-fluid well">
 							<label class="span3">Проверочный код:</label>
 								<form:input path="enteredCode" type="text" class="span3" />

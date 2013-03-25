@@ -4,8 +4,6 @@
  */
 package com.netcracker.libra.dao;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +15,7 @@ public class UserPreferences
 {
     public int UserId=-1;
     public int accessLevel=-1;
+    public boolean isAppformFilled=false;
     /*private int UserId = -1;   
     private int accessLevel=-1;
 
