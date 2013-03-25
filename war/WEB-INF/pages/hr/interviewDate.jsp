@@ -80,7 +80,6 @@
                                 </div>
                         </div>
                                 <div class="span9">
-				<div class="hero-unit">
                                     <h4>${msg}</h4>
           <form  method="GET" >
               <table border="1" class="bordered">
@@ -110,7 +109,7 @@
        <img  src="../resources/images/mail.png" width="25" height="25" title="Уведомить"/> 
                         </a>   
           <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
-              <img  src="../resources/images/edit.png" width="25" height="25" title="Править"/> 
+              <img  src="../resources/images/edit1.png" width="25" height="25" title="Править"/> 
            </a>
          <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
              <img  src="../resources/images/delete.png" width="20" height="20" title="Удалить"/> 
@@ -124,7 +123,6 @@
                                   
          </div>
                         </div>
-                </div>
                 </div>
     </body>
 </html>

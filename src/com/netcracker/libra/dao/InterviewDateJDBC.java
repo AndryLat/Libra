@@ -265,7 +265,7 @@ public class InterviewDateJDBC implements InterviewDateDAO {
             typeInt=2;
         String query="select u.userid  "
                 + "from users u where u.roleid="+typeInt+" and u.userid != "
-                + "ALL( select ll.userid from interviewerList ll "
+                + "any( select ll.userid from interviewerList ll "
                 + "join interviewDate ii on ii.interviewDateId=ll.InterviewDateId "
                 + "where not ((to_date('"+start+"','DD/MM/YYYY HH24:MI')>ii.dateStart) "
                 + "or((to_date('"+start+"','DD/MM/YYYY HH24:MI')<ii.dateStart) "

@@ -169,33 +169,55 @@
         <br> 
         <div class="classForInters" style="text-decoration:underline;">
         Выберите интервьюеров:</div> 
-        <div id="hrDiv"> 
+        <div id="hrDiv">
+        <c:forEach items="${checkedIntersHr}" var="i">
             <table border="0">
-        <c:forEach items="${Inters}" var="i">
                 <tr>
                     <td>
-                        <input type="checkbox" style="margin: 0px;" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
+                        <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked>                     </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
+        </c:forEach>
+        <c:forEach items="${Inters}" var="i">
+            <table border="0">
+                <tr>
+                    <td>
+                         <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
                     </td>
                     <td>
-                        <label style="font-size:18px;margin-bottom: 0px;" for="<c:out value="${i.userid}"/>">${i.inters}</label>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
                     </td>
-               </tr>   
-        </c:forEach>
+               </tr>
             </table>
+        </c:forEach>
         </div>
         <div style="display: none;"  id="techDiv">
+       <c:forEach items="${checkedIntersTech}" var="i">
             <table border="0">
-        <c:forEach items="${intersTech}" var="i"> 
-            <tr>
+                <tr>
                     <td>
-                        <input type="checkbox" style="margin: 0px;" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
-                    </td>
+                        <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked>                     </td>
                     <td>
-                        <label style="font-size:18px;margin-bottom: 0px;" for="<c:out value="${i.userid}"/>">${i.inters}</label>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
                     </td>
-               </tr>   
-        </c:forEach>
+               </tr>
             </table>
+        </c:forEach>
+        <c:forEach items="${intersTech}" var="i">
+            <table border="0">
+                <tr>
+                    <td>
+                         <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
+                    </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
+        </c:forEach>
         </div>
             </br> 
         <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='interviewDate.html'" type="button"/>   

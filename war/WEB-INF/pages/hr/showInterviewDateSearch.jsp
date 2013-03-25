@@ -54,9 +54,6 @@
             <a href="interviewDateAdd.html">Добавить новую дату интервью</a>
 </div>
         <div class="pull-right" style="margin-right: 100px">
-            <a href="interviewDateAdd.html">Добавить новую дату интервью</a>
-            <br>
-            <h3>${msg}</h3>
             <form name="myForm" action="showInterviewDateSearch.html" method="get">
         <select name="interSearch" id="interSearch">
             <option value="0" ${interSearchInt == '0' ? 'selected' : ''}>Все </option>
@@ -77,7 +74,6 @@
                                 </div>
                         </div>
                                 <div class="span9">
-				<div class="hero-unit">
                                     <h4>${msg}</h4>
           <form method="GET" action="delInterviewDate.html">
               <table border="1" class="bordered">
@@ -102,16 +98,15 @@
       <td><c:out value="${d.interviewDuration}"/> минут </td>
       <td><c:out value="${d.listInterviewers}"/></td>
       <td>
-      <input type="submit" name="sentEmails" value="Уведомить">
       <input type="hidden" name="interviewDateId" value="<c:out value='${d.interviewDateId}  '/>"/>
        <a href="empty_link.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
        <img  src="../resources/images/mail.png" width="25" height="25" title="Уведомить"/> 
                         </a>   
           <a href="editInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId}'/>&type=<c:out value='${d.typeInterview}'/> ">
-              <img  src="../resources/images/edit.png" width="25" height="25" title="Править"/> 
+              <img  src="../resources/images/edit1.png" width="25" height="25" title="Править"/> 
            </a>
          <a href="delInterviewDate.html?interviewDateId=<c:out value='${d.interviewDateId} '/>">
-             <img  src="../resources/images/delete.png" width="25" height="25" title="Удалить"/> 
+             <img  src="../resources/images/delete.png" width="20" height="20" title="Удалить"/> 
                         </a>
         </td>
   </tr>
@@ -122,6 +117,5 @@
                                 </div>
                         </div>
                 </div>
-        </div>
     </body>
 </html>

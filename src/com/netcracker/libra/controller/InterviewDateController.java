@@ -104,6 +104,7 @@ public class InterviewDateController
      * @return 
      */
       @RequestMapping(value="hr/interviewDateAdded", method= RequestMethod.GET)
+    @SuppressWarnings("empty-statement")
       public ModelAndView addInterviewDate(@RequestParam("begin") String begin,
       @RequestParam("type") int typeInt,
       @RequestParam("end") String end,  
@@ -117,12 +118,12 @@ public class InterviewDateController
             }
             String beginInter=begin+" "+timeStart;
             String endInter = begin+" "+end;
-            List freeIntersList = new ArrayList();
+            List<Integer> freeIntersList = new ArrayList();
             List<Map<String,Object>> freeInters=iDateJdbc.getFreeInterviewers(type, beginInter, endInter);
             for (Map<String, Object> freeInter : freeInters) {
                 for (Map.Entry<String, Object> entry : freeInter.entrySet()) {
-                    BigDecimal  k=(BigDecimal )entry.getValue();
-                freeIntersList.add(k);
+                    String k=entry.getValue().toString();
+                freeIntersList.add(Integer.parseInt(k));
             }}
            
             for (int i=0;i<interviewers.length;i++){
@@ -131,14 +132,19 @@ public class InterviewDateController
                     List<Map<String,Object>> nameIn=iDateJdbc.getNameOfUser(interviewers[i]);
                        for (Map<String, Object> name:nameIn){
                           for (Map.Entry<String, Object> entryT: name.entrySet())
-                          mav.addObject("errorMessage", "Интервьер "+entryT.getValue()+"уже назначен на это же время!");
+                          mav.addObject("errorMessage", "Интервьер "+entryT.getValue()+" уже назначен на это же время!");
                 }
                 mav.addObject("typeInt", typeInt);
                 mav.addObject("begin",begin);
                 mav.addObject("end",end);
                 mav.addObject("timeStart", timeStart);
                 mav.addObject("duration", duration);
-                mav.addObject("checkInterviewers[]", interviewers);
+                List<Map<String,Object>> intersHr=iDateJdbc.getInterviewersHr();
+                List<Map<String,Object>> intersTech=iDateJdbc.getInterviewersTech();
+                 mav.addObject("Inters",intersHr); 
+                mav.addObject("intersTech",intersTech); 
+                mav.addObject("checkedIntersHr", interviewers);
+                mav.addObject("checkedIntersTech", interviewers);                
                 mav.setViewName("/hr/interviewDateAdd");
                 return mav;
                    }
