@@ -138,7 +138,7 @@
             </div>
              
                Продолжительность (минуты): 
-               <input type="text"  name="duration" style="width: 50px" > 
+               <input type="text" placeholder="Введите значение" name="duration" style="width: 50px" > 
         <br> 
         <div class="classForInters" style="text-decoration:underline;">
         Выберите интервьюеров:</div> 

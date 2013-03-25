@@ -19,7 +19,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Управление факультетами - Поиск </title>
         <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
-        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8">   
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript">   
             </script>
       <script type="text/javascript" src="../resources/js/sort.js"></script>
     </head>
@@ -38,7 +38,7 @@
         <div class="pull-left" style="margin-top: -40px">
         <form name="Form" action="addFacultiesAdded.html" method="get"> 
                 Введите название факультета: <br>
-                <input type="text" name ="facultyName"><br>
+                <input type="text" placeholder="Введите название факультета" name ="facultyName"><br>
                 Выберите университет: <br>
                 <select name="univ" id="univ">
                     <c:forEach items="${univers}" var="u">

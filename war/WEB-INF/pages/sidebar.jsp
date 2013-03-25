@@ -10,8 +10,8 @@
 		<li><a href="showTypes.html">Просмотреть типы</a></li>
 		<li class="nav-header">HR</li>
 		<li><a href="hr/showStudentbyIdView.html">Поиск студентов</a></li>
-		<li><a href="hr/showStudentByEducation.html">Поиск по
-				университету</a></li>
+		<li><a href="hr/showLanguages.html">Управление
+				языками</a></li>
 		<li><a href="hr/showUniversities.html">Управление
 				университетами</a></li>
 		<li><a href="hr/showFaculties.html">Управление факультетами</a></li>
