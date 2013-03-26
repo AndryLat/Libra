@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * Model for showing, editing types of columns
  * @author Sashenka
  */
 public class Type 

@@ -29,7 +29,6 @@ public class InterviewController
     @Autowired
     UserPreferences userPreferences;
         
-    //return new ModelAndView("redirect:showTypes.html");
     @RequestMapping("showInterviewDate")
     public ModelAndView showInterviewDate()
     {
@@ -37,7 +36,6 @@ public class InterviewController
 
         if(userPreferences.accessLevel==0)
         {
-            int request=0;
             List<InterviewDateInfo> ilistHr=interviewDateJDBC.getFreePlaces(1);
             List<InterviewDateInfo> ilistInterview=interviewDateJDBC.getFreePlaces(2);
             mav.addObject("interviewDatesHr", ilistHr);
@@ -46,7 +44,6 @@ public class InterviewController
             try
             {         
                 mav.addObject("requestDateHr", interviewJDBC.getRequestInterviewDate(userPreferences.UserId,1));
-                request=1;
             }
             catch(EmptyResultDataAccessException e)
             {  
@@ -54,13 +51,11 @@ public class InterviewController
             try
             {
                 mav.addObject("requestDateInterview", interviewJDBC.getRequestInterviewDate(userPreferences.UserId,2));           
-                request=1;
             }
             catch(EmptyResultDataAccessException e)
             {         
             }
-                mav.addObject("request", request);           
-            
+               
             //Gets date on which student is assigned
             //If student doesn't assigned return -1
             try

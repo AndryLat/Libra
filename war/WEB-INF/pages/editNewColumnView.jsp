@@ -48,6 +48,8 @@
                     </c:if> 
                 </c:forEach>
             </select></br>
+            
+            <input type="hidden" name="templateId" value="${templateId}"/>
             <input type="hidden" name="columnId" value="${columnId}"/>
             <input class="btn btn-primary" type="submit" value="OK"/>
     </form>

@@ -28,19 +28,7 @@
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
-                        <div class="span8">    
-<c:if test="${request==1}">
-<div class="bs-docs-example">
-                   
-<div class="alert alert-info">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <h4>Внимание!</h4>
-  <p> <c:out value="${requestDateHr}"></c:out></p>
-  <p><c:out value="${requestDateInterview}"></c:out></p>
-</div>	
-    
-</div>
-</c:if>              
+                        <div class="span8">                
                             
                             <div class="well-template shift-div-right align-center">
         <c:if test="${interviewDateHr==-1}">
@@ -59,9 +47,15 @@
                 <th>Количестов свободных мест</th>
             </tr>            
             <c:forEach items="${interviewDatesHr}" var="idate">  
-                <tr>
+                <tr 
+                    <c:if test="${requestDateHr==idate.getId()}">
+                        class="trReques" title="У Вас есть не подтвержденный запрос"
+                    </c:if>
+                    <c:if test="${interviewDateHr==idate.getId()}">
+                        class="trDate" 
+                    </c:if>>
                     <c:if test="${idate.getId()==interviewDateHr}">
-                        <td><input checked name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
+                        <td> <input checked name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
                     </c:if> 
                    <c:if test="${idate.getId()!=interviewDateHr}">
                    	<!-- убрал лишние скобки в следующем условиях -->
@@ -116,7 +110,11 @@
                 <th>Количестов свободных мест</th>
             </tr>            
             <c:forEach items="${interviewDatesInterview}" var="idate">  
-                <tr>
+                <tr <c:if test="${requestDateInterview==idate.getId()}">
+                        class="trReques" title="У Вас есть не подтвержденный запрос"</c:if>
+                        <c:if test="${interviewDateInterview==idate.getId()}">
+                        class="trDate" 
+                    </c:if>>
                     <c:if test="${idate.getId()==interviewDateInterview}">
                         <td><input checked name="selDate" type="radio" value="<c:out value='${idate.getId()}'/>"/></td>
                     </c:if> 

@@ -8,23 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * We need this object for getting filled template
  * @author Sashenka
  */
 public class ColumnFieldsModel
 {
     Map<Integer,String> map = new HashMap<Integer,String>();
-    public Map<Integer,OtherField> otherMap=new HashMap<Integer,OtherField>();
-
-    public Map<Integer, OtherField> getOtherMap() 
-    {
-        return otherMap;
-    }
-
-    public void setOtherMap(Map<Integer, OtherField> otherMap) 
-    {
-        this.otherMap = otherMap;
-    }
     public void setMap(Map<Integer,String> map)
     {
         this.map = map;  

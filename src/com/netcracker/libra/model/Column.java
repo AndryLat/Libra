@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * We need this object for edit column (getting list columns which we can set as parent)
  * @author Sashenka
  */
 public class Column 
@@ -13,7 +13,18 @@ public class Column
     private int columnId;
     private String Name;
     private int parentColumn;
+    private int lavel;
 
+    public void setLevel(int lavel) 
+    {
+        this.lavel = lavel;
+    }
+
+    public int getLevel() 
+    {
+        return lavel;
+    }
+    
     public int getParentColumn() 
     {
         return parentColumn;

@@ -18,6 +18,6 @@ public interface TemplateDAO
     public Template getTemplate(int id);
     public List<Template> getAll();
     public int add(String name);
-    public void delete(int id);
+    public void delete(int[] templates);
     public void update(int id, String name);
 }

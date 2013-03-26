@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ *  We need this object for edit column for getting current column(which we need edit)
  * @author Sashenka
  */
 public class ColumnForEdit extends Column

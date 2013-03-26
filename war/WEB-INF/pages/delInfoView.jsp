@@ -62,9 +62,18 @@
                 </td>
                 
             </tr>
+            </table>
         </c:if>
-            
-                </table>
+         <c:if test="${infoSize == 0  }">
+             <form action="<c:out value='${submit}'/>.html" method="POST">
+                        <c:forEach items="${delete}" var="d">
+                            <input type="hidden" name="delete[]" value="<c:out value='${d}'/>"/>
+                        </c:forEach>
+                    <input class="btn btn-info btn-block" type="submit" value="удалить"/>    
+                    <input class="btn btn-info btn-block" value="НЕТ" onclick="location.href='${location}'" type="button"/>
+                    </form>
+         </c:if>   
+                
             </div>
 		</div>
 	</div>

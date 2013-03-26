@@ -35,6 +35,8 @@
         <% int i=1; %>
         <%--<form class="well-template span8" action="delType.html" method="POST">--%>
         <div class="well-template span8">
+            <h4><a href="addType.html">Добавить тип</a></h4>
+            <hr>
         <table class="table-striped table-condensed table-font" border="1" cellspacing="0" cellpadding="4">
         <caption>Информация о типах данных</caption>
         <tr>

@@ -5,12 +5,15 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ *  Types of columns
  * @author Sashenka
  */
-enum columnType { textstring, 
-areastring,
-selectenum,
-checkboxenum,
-integerType,
-radioenum}
+enum columnType 
+{ 
+    textstring, 
+    areastring,
+    selectenum,
+    checkboxenum,
+    integerType,
+    radioenum
+}

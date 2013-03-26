@@ -26,26 +26,28 @@ public class InterviewResultsController
     @Autowired
     UserPreferences userPreferences;
     InterviewResultsJDBC iresults=new InterviewResultsJDBC();
-    int InterviewId;
+    //int appId;
+    /*Integer count;
+    Integer page;
+    String order="results";
+    boolean desc=true;*/
     @RequestMapping(value="addResult", method= RequestMethod.GET)
-    public ModelAndView addResult(@RequestParam("InterviewId") int InterviewId)
+    public ModelAndView addResult(@RequestParam("appId") int appId)
     {
         if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2 )
         {
-            if(iresults.exists(InterviewId)==0)
+            if(iresults.exists(appId)==0)
             {
                 return message("<a href='/Libra/'>Вернуться назад</a>","Такого интервью нету","Ошибка");
             }
-            String s="";
-                    s.replace("", "");
-            this.InterviewId=InterviewId;
+           // this.appId=appId;
             ModelAndView mav = new ModelAndView();
             mav.setViewName("addResultView");       
-            List<InterviewResult> intres=iresults.getResult(InterviewId);
-            mav.addObject("existsComment", iresults.existsComment(userPreferences.UserId, InterviewId));
+            List<InterviewResult> intres=iresults.getResult(appId);
+            mav.addObject("existsComment", iresults.existsComment(userPreferences.UserId, appId));
             mav.addObject("userId", userPreferences.UserId);
             mav.addObject("interviewResult",intres);
-            mav.addObject("InterviewId", InterviewId);
+            mav.addObject("appId", appId);
             return mav; 
         }
         else
@@ -56,12 +58,20 @@ public class InterviewResultsController
     
     @RequestMapping(value="addResultSubmit", method= RequestMethod.POST)
     public ModelAndView addResultSubmit(@RequestParam("mark") int mark,
-    @RequestParam("comment") String comment)
+    @RequestParam("comment") String comment,
+    @RequestParam("appId") int appId)
     {
         if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
         { 
-            iresults.addResult(InterviewId, userPreferences.UserId, mark, comment);        
-            return showResults();  
+            try
+            {
+                iresults.addResult(appId,userPreferences.accessLevel, userPreferences.UserId, mark, comment); 
+                return  new ModelAndView("redirect:showResults.html");
+            }
+            catch(Exception e)
+            {
+                return message("<a href='showResults.html'>Вернуться назад</a>","Вы не можете добавить комментарий к этой анкете","Ошибка");
+            }   
         }
         else
         {
@@ -71,12 +81,13 @@ public class InterviewResultsController
     
     @RequestMapping(value="updateResultSubmit", method= RequestMethod.POST)
     public ModelAndView updateResultSubmit(@RequestParam("mark") int mark,
-    @RequestParam("comment") String comment)
+    @RequestParam("comment") String comment,
+    @RequestParam("appId") int appId)
     {
         if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
         {         
-            iresults.updateResult(InterviewId, userPreferences.UserId, mark, comment);
-            return  showResults();
+            iresults.updateResult(appId, userPreferences.UserId, mark, comment);
+            return  new ModelAndView("redirect:showResults.html");
         }
         else
         {
@@ -85,13 +96,56 @@ public class InterviewResultsController
     }
     
     @RequestMapping("showResults")
-    public ModelAndView showResults()
+    public ModelAndView showResults(@RequestParam(required=false,value="page") Integer page,
+    @RequestParam(required=false,value="count") Integer count,
+    @RequestParam(required=false,value="serch") String serch,
+    @RequestParam(required=false,value="order") String order,
+    @RequestParam(required=false,value="desc") boolean desc)
     {
         if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
         {
+            
             ModelAndView mav = new ModelAndView();
-            List<InterviewResultsInfo> inf=iresults.getInfo();
-            mav.addObject("showStudents", inf);
+               
+            if(serch!=null)
+            {
+                String[] s=serch.split("[,\\s]+");
+                List<InterviewResultsInfo> inf=iresults.serch(s);
+                mav.addObject("showStudents", inf);
+                mav.setViewName("showResultsView");  
+                return mav;
+            }
+            else
+            {
+                if(order!=null)
+                {
+                    mav.addObject("order", order);
+                } 
+                if(order!=null&&order.equalsIgnoreCase(order))
+                {
+                     mav.addObject("desc", desc=!desc);
+                }
+                    
+            if((count==null && page==null)&&count==null||(serch==null&&order==null&&page==null&&count==null) )
+            {            
+                List<InterviewResultsInfo> inf=iresults.getAllInfo(order,desc);
+                mav.addObject("showStudents", inf);
+                mav.setViewName("showResultsView"); 
+                mav.addObject("count", "");
+                mav.addObject("page", "");
+                
+                return mav;
+            }
+                if(page==null)
+                    page=1;
+                List<InterviewResultsInfo> inf=iresults.getInfo(order,desc,1+(page-1)*count,page*count);
+                mav.addObject("pages",iresults.countPage(count));
+                mav.addObject("showStudents", inf);
+                mav.addObject("currentpage",page);
+                mav.setViewName("showResultsView");        
+            
+                
+            }
             mav.setViewName("showResultsView");        
             return mav; 
         }
@@ -102,12 +156,12 @@ public class InterviewResultsController
     }
     
     @RequestMapping(value="deleteResult", method= RequestMethod.GET)
-    public ModelAndView delResultSubmit(@RequestParam("interviewId") int interviewId)
+    public ModelAndView delResultSubmit(@RequestParam("appId") int appId)
     {
         if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
         {
-            iresults.deleteResult(interviewId,userPreferences.UserId);
-            return  showResults();
+            iresults.deleteResult(appId,userPreferences.UserId);
+            return  new ModelAndView("redirect:showResults.html");
         }
         else
         {

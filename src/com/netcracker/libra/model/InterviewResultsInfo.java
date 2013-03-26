@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * Model for showing  table whith results of interview
  * @author Sashenka
  */
 public class InterviewResultsInfo 
@@ -13,17 +13,27 @@ public class InterviewResultsInfo
     String fio;
     double avgMark;
     int appId;
-    String iDate;
-    int interviewId;
+    int r;
+    String email;
 
-    public int getInterviewId() 
+    public String getEmail() 
     {
-        return interviewId;
+        return email;
     }
 
-    public void setInterviewId(int interviewId) 
+    public void setEmail(String email) 
     {
-        this.interviewId = interviewId;
+        this.email = email;
+    }   
+    
+    public int getR() 
+    {
+        return r;
+    }
+
+    public void setR(int r) 
+    {
+        this.r = r;
     }
     
     public double getAvgMark() 
@@ -35,20 +45,10 @@ public class InterviewResultsInfo
     {
         return fio;
     }
-
-    public String getiDate() 
-    {
-        return iDate;
-    }
-
+    
     public int getAppId() 
     {
         return appId;
-    }
-
-    public void setiDate(String iDate) 
-    {
-        this.iDate = iDate;
     }
 
     public void setFio(String fio) 

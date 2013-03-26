@@ -4,7 +4,6 @@
  */
 package com.netcracker.libra.dao;
 
-import com.netcracker.libra.model.Interview;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,21 +59,7 @@ public class InterviewJDBC
                  + " where af.UserId=? and i.status=0 and r.AccessLevel=? ";
         return jdbcTemplateObject.queryForInt(sql,UserId,role);
     }
-    
-    public Interview getInterview(int id)
-    {
-        String SQL = "select * from Interview where InterviewId =?";
-        Interview interview = jdbcTemplateObject.queryForObject(SQL, new InterviewRowMapper(),id);      
-        return interview;
-    }
-    
-    public List<Interview> getAll()
-    {
-         String SQL = "select * from Interview order by InterviewId";
-        List <Interview> interviews = jdbcTemplateObject.query(SQL, new InterviewRowMapper());
-        return interviews;
-    }
-    
+
     private int getCurVal()
     {
         String sqlSeq = "select Interview_seq.NEXTVAL as Id from dual";
@@ -134,22 +119,16 @@ public class InterviewJDBC
         return jdbcTemplateObject.queryForInt(sql,userId,role);
     }
         
-    public String getRequestInterviewDate(int userId,int role)
+    public Integer getRequestInterviewDate(int userId,int role)
     {
-        String SQL="select distinct 'Вы хотели перезаписатся ";
-        if(role==1)// interview
-          SQL+="на интервью с HR-ом ";   
-        else
-            SQL+="на техническое интервью ";
-        SQL+="'||TO_CHAR(id.dateFinish,'dd.mm.yyyy')||' "
-                + "на '||TO_CHAR(id.dateStart,'hh24:mi')||'-'|| TO_CHAR(id.dateFinish,'hh24:mi') "
+        String SQL="select distinct i.InterviewDateId "
                 + "from Interview i join appForm af on af.appId=i.appId  "
                 + "join InterviewDate id on id.InterviewDateId=i.InterviewDateId "
                 + " join InterviewerList ilist on ilist.InterviewDateId=id.InterviewDateId "
                 + " join users u on u.UserId=ilist.UserId "
                 + " join roles r on r.roleId=u.roleId "
                 + "where af.UserId=? and i.status=0 and r.AccessLevel=?";
-        return (String)jdbcTemplateObject.queryForObject(SQL,String.class,userId,role);
+        return jdbcTemplateObject.queryForInt(SQL,userId,role);
     }
        
 }

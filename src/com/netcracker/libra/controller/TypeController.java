@@ -106,16 +106,27 @@ public class TypeController
     public String delType(ModelMap model,
     @RequestParam(value="types[]",required=false ) int[] delete)  
     {
-        List<InfoForDelete> info=typeJDBC.getInfoForDelete(delete);
-        int infoSize=info.size();
-        model.addAttribute("delete", delete);
-        model.addAttribute("info", info);
-        model.addAttribute("infoSize",infoSize);
-        model.addAttribute("title","Удалить анкеты");
-        model.addAttribute("h1","Вы действительно хотите удалить этот шаблон?");
-        model.addAttribute("submit","delSubmitType");
-        model.addAttribute("location","showTypes.html");
-        return "delInfoView";
+        if(delete==null)
+        {
+            return "redirect:showTypes.html";
+        }
+        if(userPreferences.accessLevel==1)
+        {
+            List<InfoForDelete> info=typeJDBC.getInfoForDelete(delete);
+            int infoSize=info.size();
+            model.addAttribute("delete", delete);
+            model.addAttribute("info", info);
+            model.addAttribute("infoSize",infoSize);
+            model.addAttribute("title","Удалить анкеты");
+            model.addAttribute("h1","Вы действительно хотите удалить этот шаблон?");
+            model.addAttribute("submit","delSubmitType");
+            model.addAttribute("location","showTypes.html");
+            return "delInfoView";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     /**
      * Передается информацию на страницу для
@@ -162,15 +173,8 @@ public class TypeController
     {
         ModelAndView mav = new ModelAndView();
         if(userPreferences.accessLevel==1)
-        {
-            for(int i=0;i<delete.length;i++)
-            {
-            if(typeJDBC.existType(delete[i])==0)
-                {
-                    return message("<a href='showTypes.html'>Посмотреть все типы</a>", "Нету такого типа", "Ошибка"); 
-                }        
-                typeJDBC.delete(delete[i]);
-            }
+        {             
+            typeJDBC.delete(delete);
             return showTypes();
         } 
         else

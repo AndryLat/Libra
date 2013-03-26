@@ -5,15 +5,11 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * We need this object for  displaying template for filling student
  * @author Sashenka
  */
-public class AppFormColumns extends ColumnLevel
+public class AppFormColumns extends Column
 {
-    /*
-    private int columnId;
-    private String columnName;*/
-    private int level;
     private abstractType cT;
     private String typeName;
     
@@ -74,33 +70,4 @@ public class AppFormColumns extends ColumnLevel
         this.typeName = typeName;
     }
     
-    public int getLevel() 
-    {
-        return level;
-    }
-
-    public void setLevel(int level) 
-    {
-        this.level = level;
-    }
-    
-   /* public int getColumnId() 
-    {
-        return columnId;
-    }
-
-    public String getColumnName() 
-    {
-        return columnName;
-    }
-
-    public void setColumnId(int columnId) 
-    {
-        this.columnId = columnId;
-    }
-
-    public void setColumnName(String columnName) 
-    {
-        this.columnName = columnName;
-    }*/
 }

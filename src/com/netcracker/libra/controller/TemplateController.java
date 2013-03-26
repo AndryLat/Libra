@@ -195,15 +195,8 @@ public class TemplateController
     public ModelAndView delSubmitTemplate(@RequestParam("delete[]") int[] delete)
     {
         if(userPreferences.accessLevel==1)
-        {
-            for(int i=0;i<delete.length;i++)
-            {
-                if(templateJDBC.existTemplate(delete[i])==0)
-                {
-                    return message("<a href='showTemplates.html'>Посмотреть все типы</a>", "Такого шаблона нету", "Ошибка"); 
-                }
-                templateJDBC.delete(delete[i]);
-            }
+        {              
+                templateJDBC.delete(delete);
             return new ModelAndView("redirect:showTemplates.html");
         } 
          else
