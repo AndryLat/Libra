@@ -43,7 +43,7 @@
 </body>
 <script>
     function getFile() {
-        location.href = "http://localhost:8085/Libra/getExcelReport.html";
+        location.href = "/Libra/getExcelReport.html";
     }
 </script>
 </html>

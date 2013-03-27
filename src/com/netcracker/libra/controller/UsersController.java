@@ -42,7 +42,7 @@ public class UsersController {
     String selected;    //selected value in the sorting by first name/last name/email etc.
     String text;        //value in the text field
     boolean order;      //value of ascending or descending order; true when ascending
-    int currentUserId;
+    Long currentUserId;
     
     @Autowired
     UserPreferences user;   // contains ID and access level

@@ -5,19 +5,26 @@
 
 package com.netcracker.libra.controller;
 
+import java.sql.SQLException;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.netcracker.libra.service.LoginService;
 import com.netcracker.libra.util.security.Security;
-import org.springframework.dao.EmptyResultDataAccessException;
+import com.netcracker.libra.util.security.SessionToken;
 
 import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.dao.UserPreferences;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 
 @Controller
 public class LoginController {
@@ -25,30 +32,40 @@ public class LoginController {
 	@Autowired
 	UserPreferences userPreferences;
 
-	@RequestMapping(value = "login", method = RequestMethod.GET)
-	public String login() {
-		if (userPreferences.UserId==-1)
-			return "login/login";
-		else
-			return "redirect:index.html";
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String showAppform() {
+		return "login/login";
 	}
 
-	@RequestMapping(value = "login", method = RequestMethod.POST)
-	public String verify(@RequestParam String email, @RequestParam String password) {
-		try {
-			userPreferences.UserId = LoginService.verifyCredentials(email, Security.getMD5hash(password));
-			userPreferences.accessLevel = LoginService.getUserAccess(userPreferences.UserId);
-				return "redirect:index.html";
-		} catch (EmptyResultDataAccessException e) {
-			return "login/loginFailed";
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ModelAndView login(@RequestParam("email") String email, 
+			@RequestParam("password") String password,
+			SessionStatus status, 
+			HttpServletRequest request) throws SQLException {
+
+		String viewName = "login/login";
+		ModelAndView mav = new ModelAndView(viewName);
+		SessionToken userData;
+
+		userData = LoginService.login(email, password);
+
+		status.setComplete();
+
+		if (userData == null) {
+			mav.getModel().put("loginFailedError",
+					"Проверьте правильность вводимых значений");
+		} else {
+			viewName = "redirect:welcome.html";
+			request.getSession().setAttribute("LOGGEDIN_USER", userData);
 		}
+		mav.setViewName(viewName);
+		return mav;
 	}
 
-	@RequestMapping(value = "logout")
-	public String logout() {
-		userPreferences.UserId = -1;
-		userPreferences.accessLevel = -1;
-		return "login/logout";
+	@RequestMapping(value = "/logout")
+	public String logout(ModelMap model) {
+		model.addAttribute("logoutMessage", "Вы вышли из системы");
+		return "redirect:/index.html";
 	}
 
 	@RequestMapping(value = "editLogin")
