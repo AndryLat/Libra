@@ -1,5 +1,6 @@
 package com.netcracker.libra.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,15 @@ public class RegformService {
 	@Transactional
 	public static void registerUser(RegisterForm form) {
 		jdbc.createNewUserAsStudent(form.getUserId(), form.getName(), form.getLastName(), Security.getMD5hash(form.getPassword()), form.getEmail());
-		jdbc.insertAppFormDetails(form.getAppId(), form.getUserId(), form.getPatronymic(), form.getPhoneNumber(), form.getDepartment(), 1, form.getCourse(), form.getGraduated(), form.getTemplateId());
+		jdbc.insertAppFormDetails(form.getAppId(), form.getUserId(), form.getPatronymic(), form.getPhoneNumber(), form.getDepartment(), 1, form.getCourse(), form.getGraduated(), 0);
+		return;
+	}
+	
+	@Transactional
+	public static void insertAppformAnswers(RegisterForm form, Long userId) throws SQLException {
+		jdbc.updateTemplateIdOnFormSubmit(userId);
+		jdbc.fillAppForm(form, userId);
+		return;
 	}
 	
 

@@ -49,11 +49,16 @@ public class AppFormJDBC {
 					deptId, adId, course, graduated, templateId);
 	}
 	
-	public void fillAppForm(RegisterForm form) throws SQLException {
-			Long appId = form.getAppId();
+	public void fillAppForm(RegisterForm form, Long userId) throws SQLException {
+		Long appId = jdbcTemplateObject.queryForLong("select appid from appform where userid=?", userId);
 			for (String x : form.getMap().keySet()) {
 				jdbcTemplateObject.update("insert into COLUMNFIELDS (columnid, appid, value, status) values (?,?,?,1)", x, appId, form.getMap().get(x));
 			}
+		return;
+	}
+	
+	public void updateTemplateIdOnFormSubmit(Long userId) {
+		jdbcTemplateObject.update("update appform set templateid=? where userid=?", userId);
 		return;
 	}
 }

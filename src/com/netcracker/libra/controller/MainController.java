@@ -1,41 +1,44 @@
 package com.netcracker.libra.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.netcracker.libra.dao.UserPreferences;
+import com.netcracker.libra.util.security.SessionToken;
 
 
 @Controller
+@SessionAttributes("LOGGEDIN_USER")
 public class MainController {
 	
-	@Autowired
-	UserPreferences userPreferences;
-	
-	@RequestMapping("index")
-	public String redirect() {
-		if (userPreferences.accessLevel==0)
-			return "redirect:/register/welcome.html";
-		if (userPreferences.accessLevel==1)
-			return "redirect:/hr/index.html";
-		if (userPreferences.accessLevel==2)
-			return "redirect:/tech/index.html";
-		if (userPreferences.accessLevel==3)
-			return "redirect:/admin/index.html";
+	@RequestMapping("/welcome")
+	public String redirect(@ModelAttribute("LOGGEDIN_USER") SessionToken token) {
+		if(token.getUserAccessLevel()==1) {
+			return "hr/index";
+		}
+		if(token.getUserAccessLevel()==2) {
+			return "tech/index";
+		}
+		if(token.getUserAccessLevel()==3) {
+			return "admin/index";
+		}
+		if(token.getUserAccessLevel()==0) {
+			return "welcome";
+		}
 		else
-			return "redirect:/";
+			return "index";
 	}
 	
-	@RequestMapping("welcome")
+	@RequestMapping("/index")
 	public String showWelcome() {
-		return "welcome";
+		return "index2";
 	}
 	
-	@RequestMapping(value = "showAppForm/{userID}", method=RequestMethod.GET)
+	@RequestMapping(value = "/showAppForm/{userID}", method=RequestMethod.GET)
 	public String showAppForm(@PathVariable Integer userID, ModelMap map) {
 		return "showAppForm";
 	}

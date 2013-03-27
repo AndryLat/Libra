@@ -13,6 +13,6 @@ import javax.sql.DataSource;
 public interface InterviewResultsDAO 
 {
     public void setDataSource(DataSource dataSource);
-    public void addResult(int appId,int accessLevel,int UserId,int mark, String comments);
-    public void updateResult(int appId,int UserId,int mark, String comments);
+    public void addResult(int interviewId,Long UserId,int mark, String comments);
+    public void updateResult(int appId,Long UserId,int mark, String comments);
 }

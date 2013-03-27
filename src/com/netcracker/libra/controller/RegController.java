@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.RegisterForm;
 import com.netcracker.libra.service.RegformService;
+import com.netcracker.libra.util.mail.MailService;
 import com.netcracker.libra.util.security.ConfirmationCodeGenerator;
 
 @Controller
@@ -51,17 +52,19 @@ public class RegController {
 		else {
 			form.setUserId(RegformService.getUserId());
 			form.setAppId(RegformService.getAppformId());
-			form.setTemplateId(RegformService.getActiveTemplateId());
-			//RegformService.registerUser(form);
+			userPreferences.userEmail=form.getEmail();
+			RegformService.registerUser(form);
 			return "signup/welcome";
 		}
 	}
 	
 	@RequestMapping(value = "/welcome", method=RequestMethod.GET)
-	public String showWelcomePage(){
+	public String showWelcomePage(@ModelAttribute("regForm") RegisterForm form, ModelMap model){
 		if (userPreferences.accessLevel==0) {
-			if (userPreferences.isAppformFilled)
-				return "redirect:welcome.html";
+			if (userPreferences.isAppformFilled) {
+				form.setUserId(userPreferences.UserId);
+				return "welcome";
+			}
 			else
 				return "signup/welcome";
 		}
@@ -84,6 +87,7 @@ public class RegController {
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String showAppForm(@ModelAttribute("regForm") RegisterForm form, ModelMap model) {
 		model.addAttribute("columns", RegformService.getActiveTemplate());
+		form.setTemplateId(RegformService.getActiveTemplateId());
 		model.put("regForm", form);
 		return "signup/showAppForm";
 	}
@@ -111,6 +115,7 @@ public class RegController {
 				}
 			}
 			form.setGeneratedCode(ConfirmationCodeGenerator.generateCode());
+			//MailService.sendConfirmRegistrationMessage(userPreferences.userEmail, userPreferences.UserId.toString(), form.getGeneratedCode());
 			model.put("regForm", form);
 			return "signup/review";
 		}
@@ -119,8 +124,8 @@ public class RegController {
 	@RequestMapping(value = "/verifyCode", method = RequestMethod.POST)
 	public String verifyCode(@ModelAttribute("regForm") RegisterForm form, ModelMap model) throws SQLException {
 		if (form.getEnteredCode().equals(form.getGeneratedCode())) {
-			userPreferences.isAppformFilled = true;
 			model.put("regForm", form);
+			RegformService.insertAppformAnswers(form, form.getUserId());
 			return "signup/success";
 		}
 

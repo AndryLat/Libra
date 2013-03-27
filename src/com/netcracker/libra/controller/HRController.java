@@ -295,7 +295,7 @@ public class HRController {
        * Go to page with general info about the student, date and time of his/her interview
        * (that were before student's wishes to change and after it) 
        */
-      @RequestMapping("hr/сonfirmEditing")
+      @RequestMapping("/hr/сonfirmEditing")
       public ModelAndView showConfirmEditing() {
           ModelAndView mv = new ModelAndView();
           

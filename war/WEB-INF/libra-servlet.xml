@@ -24,6 +24,10 @@
 
 	<bean id="servletcontext"
 		class="org.springframework.web.context.support.ServletContextFactoryBean" />
+	
+	<mvc:interceptors>
+      <bean class="com.netcracker.libra.util.security.LoginHandlerInterceptor" />
+    </mvc:interceptors> 
 
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
