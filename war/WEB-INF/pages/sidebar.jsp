@@ -6,9 +6,8 @@
 
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==0}">
 			<li class="nav-header">Собеседования</li>
-			<li><a href="#">Открыть анкету</a></li>
-			<li><a href="/Libra/showInterviewDate.html">Записаться на
-					собеседование</a></li>
+				<li><a href="#">Открыть анкету</a></li>
+				<li><a href="/Libra/showInterviewDate.html">Записаться на собеседование</a></li>
 		</c:if>
 
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==1}">
@@ -45,8 +44,8 @@
 
 		<c:if test="${LOGGEDIN_USER==null}">
 			<li class="nav-header">Навигация</li>
-				<li><a href="/Libra/hr/showUniversities.html">Регистрация</a></li>
-				<li><a href="/Libra/hr/showFaculties.html">Войти</a></li>
+				<li><a href="/Libra/register.html">Регистрация</a></li>
+				<li><a href="/Libra/login.html">Войти</a></li>
 		</c:if>
 	</ul>
 </div>
