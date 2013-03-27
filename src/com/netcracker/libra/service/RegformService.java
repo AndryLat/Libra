@@ -37,7 +37,7 @@ public class RegformService {
 		return jdbc.getAppformNextVal();
 	}
 
-	public static Long getUserId() {
+	public static Integer getUserId() {
 		return jdbc.getUserNextVal();
 	}
 	
@@ -57,7 +57,7 @@ public class RegformService {
 	}
 	
 	@Transactional
-	public static void insertAppformAnswers(RegisterForm form, Long userId) throws SQLException {
+	public static void insertAppformAnswers(RegisterForm form, Integer userId) throws SQLException {
 		jdbc.updateTemplateIdOnFormSubmit(userId);
 		jdbc.fillAppForm(form, userId);
 		return;

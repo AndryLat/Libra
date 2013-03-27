@@ -21,7 +21,7 @@ public class RegisterForm {
 	private String generatedCode;
 	private String enteredCode;
 	private String phoneNumber;
-	private Long userId;
+	private Integer userId;
 	private Long appId;
 	private MultipartFile photo;
 	private Long university;
@@ -201,11 +201,11 @@ public class RegisterForm {
 		this.languagesGrades = languagesGrades;
 	}
 
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

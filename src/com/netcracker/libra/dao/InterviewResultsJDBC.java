@@ -240,7 +240,7 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
     }
     
     @Override
-    public void updateResult(int InterviewId,Long UserId,int mark, String comments)
+    public void updateResult(int appId,int UserId,int mark, String comments)
     {
         String SQL ="Update InterviewResults set mark=?, comments=? where interviewId="
                  + "(select ir.interviewId from InterviewResults ir "
@@ -249,7 +249,7 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
                 +" and userId=?";
         jdbcTemplateObject.update(SQL,mark,comments,UserId,appId,UserId);
     }
-    public void deleteResult(int InterviewId,Long UserId)
+    public void deleteResult(int appId,int UserId)
     {
         String SQL ="delete InterviewResults "
                 +"where InterviewId in("

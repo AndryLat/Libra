@@ -32,16 +32,16 @@ public class AppFormJDBC {
 				.queryForLong("select AppForm_seq.NEXTVAL from dual");
 	}
 
-	public Long getUserNextVal() {
+	public Integer getUserNextVal() {
 		return jdbcTemplateObject
-				.queryForLong("select User_seq.NEXTVAL from dual");
+				.queryForInt("select User_seq.NEXTVAL from dual");
 	}
 	
-	public void createNewUserAsStudent(Long userid, String name, String lastName, String password, String email) {
+	public void createNewUserAsStudent(Integer userid, String name, String lastName, String password, String email) {
 		jdbcTemplateObject.update("insert into users values (?,?,?,?,?,1)", userid, name, lastName, email, password);
 	}
 	
-	public void insertAppFormDetails(Long appId, Long userId, String patronymic, 
+	public void insertAppFormDetails(Long appId, Integer userId, String patronymic, 
 			String phoneNumber, Long deptId, int adId, int course, Long graduated, int templateId) {
 		jdbcTemplateObject.update("insert into appform(appid, userid,patronymic,phonenumber,departmentid,advertisingid,course,graduated,datacreation,templateid) " +
 				"values (?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?)", 
@@ -49,7 +49,7 @@ public class AppFormJDBC {
 					deptId, adId, course, graduated, templateId);
 	}
 	
-	public void fillAppForm(RegisterForm form, Long userId) throws SQLException {
+	public void fillAppForm(RegisterForm form, Integer userId) throws SQLException {
 		Long appId = jdbcTemplateObject.queryForLong("select appid from appform where userid=?", userId);
 			for (String x : form.getMap().keySet()) {
 				jdbcTemplateObject.update("insert into COLUMNFIELDS (columnid, appid, value, status) values (?,?,?,1)", x, appId, form.getMap().get(x));
@@ -57,7 +57,7 @@ public class AppFormJDBC {
 		return;
 	}
 	
-	public void updateTemplateIdOnFormSubmit(Long userId) {
+	public void updateTemplateIdOnFormSubmit(Integer userId) {
 		jdbcTemplateObject.update("update appform set templateid=? where userid=?", userId);
 		return;
 	}

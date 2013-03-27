@@ -94,14 +94,14 @@ public class StudentJDBC {
 	   else
 	   		return true;
    }
-   public static int exists(Long userId,String p)
+   public static int exists(Integer userId,String p)
    {
        String SQL="select count(*) from users "
                + "where userId=? and password=? ";
        return jdbcTemplateObject.queryForInt(SQL,userId,p);
    }
    
-   public static void updatePassword(Long userId, String password) 
+   public static void updatePassword(Integer userId, String password) 
    {
       String SQL = "update Users set password = ? where userid = ?";
       jdbcTemplateObject.update(SQL, password,userId);
