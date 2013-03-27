@@ -33,7 +33,7 @@
                             
                 <table width="100%">
                     <tr>
-                        <td align="left">${view == 0 ? '<a href="showStudentbyIdView.html" class="btn"><i class="icon-arrow-left"></i> Назад</a>' : '<a href="showStudentByEducation.html" class="btn"><i class="icon-arrow-left"></i> Назад</a>'}</td>
+                        <td align="left">${view == 0 ? '<a href="showStudentbyIdView.html" class="btn"><img  src="../resources/images/admin/glyphicons_210_left_arrow.png" width="12" height="12"/> Назад </a>' : '<a href="showStudentByEducation.html" class="btn"><img  src="../resources/images/admin/glyphicons_210_left_arrow.png" width="12" height="12"/> Назад </a>'}</td>
                     </tr>
                 </table>
                 <br>

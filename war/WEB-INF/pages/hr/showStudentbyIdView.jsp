@@ -15,49 +15,84 @@
 <html class="no-js">
 <!--<![endif]-->
     <head>
-         <jsp:include page="../resources.jsp" />
-          <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <jsp:include page="../resources.jsp" />   
+         <jsp:include page="../navbar.jsp" />
+         <jsp:include page="../sidebar.jsp" />
+         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Поиск студентов</title>
-        <script>
+        <script type="text/javascript" src="../resources/js/jquery-latest.js"></script>
+	<script type="text/javascript" src="../resources/js/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="../resources/js/jquery.tablesorter.pager.js"></script>
+	<script type="text/javascript" src="../resources/js/chili/chili-1.8b.js"></script>
+	<script type="text/javascript" src="../resources/js/docs.js"></script>
+         <link rel="stylesheet" type="text/css" href="../resources/css/table_.css" />
+
+        <script>    
+ $(function() {
+		$("table")
+			.tablesorter({widthFixed: true, widgets: ['zebra']})
+			.tablesorterPager({container: $("#pager")});
+	});           
+ $(document).ready(function() {
+    getUniv();  
+ });
+function getUniv(){
+ $.get("university.html",
+                function(data) {
+                   $("#univ").html(data);
+                   $("#univ").val($("#myUniver").val());
+                   getFact();
+                }   
+           );
+    }
 function getFact(){
  $.post("faculty.html",{"universityId":$("#univ").val() },
                 function(data) {
                    $("#fact").html(data);
-                      getDept();
+                   $("#fact").val($("#myFact").val());
+                   getDept();
+                      
                 }   
            );
     }
-  function getDept(){
+function getDept(){
  $.post("department.html",{"facultyId":$("#fact").val() },
                 function(data) {
                    $("#dept").html(data);
+                   $("#dept").val($("#myDept").val());
                 }        
            );
-    }  
+    }
+function closeMessage()
+            {
+                document.getElementById("alertMessage").innerHTML="";
+            }
 </script>
     </head>
     <body>
-         <div class="navmenu">
-		<jsp:include page="../navbar.jsp" />
+        <div class="navmenu">
 	</div>
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
 		<div class="sidebar">
-				<jsp:include page="../sidebar.jsp" />
+				
 			</div>
-			<div class="span9">
+			<div class="span9" >
          <div class="hero-unit" style="padding-bottom: 150px">
+             <form method="POST" action="showStudentbyIdView.html">
              <div class="pull-left" style="margin-top: -15px">
-             <form method="post" action="showStudentByEducation.html">
-        <table border="0px">
+             <input type="hidden" name="myUniver" id="myUniver" value="${selectedUniv}">
+             <input type="hidden" name="myFact" id="myFact" value="${selectedFact}">
+             <input type="hidden" name="myDept" id="myDept" value="${selectedDept}">
+             <table border="0px" class="tablesorter" style="border-color: #eee; border: 1px">
+            <thead>
         <tr>   
-            <td>
+            <td style="border:0px;padding: 5px">
                 Университет:
             </td>
-            <td>
-                <select onchange="getFact();" name="univ" id="univ">
+            <td style="border:0px">
+                <select onchange="getFact();"  name="univ" id="univ">
                 <option value="0"> Все </option> 
                 <c:forEach items="${univers}" var="u">
                     <option value="${u.universityId}"> ${u.universityName}</option> 
@@ -65,32 +100,34 @@ function getFact(){
                 </select> 
             </td>
        </tr>
+            </thead>
+            <tbody>
        <tr>
-            <td>
+           
+            <td style="border:0px;padding: 2px">
                 Факультет:
             </td>
-            <td>
+            <td style="border:0px;padding: 2px">
             <select onchange="getDept();" name="fact" id="fact">
-             <option value="0"> Выберите университет </option> 
+             <option value="0"> Все </option> 
             </select>
             </td>
        </tr>
        <tr>
-            <td>
+            <td style="border:0px;padding: 2px">
                 Кафедра:
             </td> 
-            <td> 
+            <td style="border:0px;padding: 2px"> 
                 <select name="dept" id="dept">
-                <option value="0"> Выберите факультет </option> 
+                <option value="0"> Все </option> 
                 </select>
             </td>
        </tr>
-      </table>   
-        </form>          
-             </div>
-         <div class="pull-right" style="margin-right: 330px;margin-top: -15px;">
-        <form method="post" action="showStudentbyIdView.html">
+            </tbody>
+      </table> 
             
+             </div>
+         <div class="pull-right" style="margin-right: 250px;margin-top: -15px;">
         <select name="filter">
         <option value="1" ${filterInt == '1' ? 'selected' : ''}>Показать всех</option>
         <option value="2" ${filterInt == '2' ? 'selected' : ''}>Номер анкеты</option>
@@ -98,41 +135,71 @@ function getFact(){
         <option value="4" ${filterInt == '4' ? 'selected' : ''}>Фамилия</option>
         <option value="5" ${filterInt == '5' ? 'selected' : ''}>Email</option>
         <option value="6" ${filterInt == '6' ? 'selected' : ''}>По всем полям</option>
-</select><br>
-   <form method="GET">
-    <input type="text" name="textBox" value="${textBox}"><br>
-    
+</select>
+<br>
+
+    <input type="text" placeholder="Введите значение" name="textBox" value="${textBox}">
     <br>
     <center>
     <input type="submit" class="btn btn-large btn-primary" style="width:35x;height:30px;margin-left: 100px;font-size:15px; line-height: 5px" value="Показать">
-         </center> 
-            </form>
+      </center>                        
+    </div>   
+    </form>                     
     </div>
-                            
-    </div></div>
-                        <div class="span9">
-				<div class="hero-unit">
-    <form method="GET">
-        <h4>${msg}</h4>
-        <TABLE border ="1" class="bordered">
-    <th>
-        <a href="sortedBy.html?orderBy=appId&direction=asc&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">№ анкеты
-        </a>
-    </th>
-    <th>
-        <a href="sortedBy.html?orderBy=firstName&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">Имя
-        </a>
-    </th>
-    <th>
-        <a href="sortedBy.html?orderBy=lastName&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">Фамилия
-        </a>
-    </th >
-   <th>
-       <a href="sortedBy.html?orderBy=email&textBox=<c:out value='${textBox}'/>&filter=<c:out value='${filterInt}'/>">Email
-       </a>
-   </th>
-            <th>Действия</th>
-    </form>
+                        </div>
+         <div class="span8">
+           <table width="100%"><thead>
+         <c:if test='${!errorMessage.equals("") && errorMessage != null}'>
+             
+             <tr><th></th>
+                                    <span id="alertMessage">
+                                    <div class="alert alert-error" align="center">
+                                        <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                                        ${errorMessage}
+                                    </div>
+                                    </span>
+                                </c:if>
+           </tr></thead>
+         <tbody>
+          <tr>
+          <td></td>
+           </tr>
+           </tbody>
+           </table>
+           <table width="100%">
+            <thead>
+                <tr>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+         <tr>
+         <c:if test="${message != null}">
+                 <td align="left" id="alertMessage">
+                     <div class="alert alert-success" align="center">
+                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                         ${message}
+                     </div>
+                 </td>
+             </c:if>
+         </tr></tbody>
+                                        </table>
+             <c:if test="${Model.isEmpty() == false}">
+        <TABLE border ="1" class="tablesorter">
+        <caption><div class="alert alert-info">Студенты</div></caption>
+        <thead>
+        <tr>
+    <th><a href="">№</a></th>    
+    <th><a href="">Имя</a></th> 
+    <th><a href="">Фамилия</a></th> 
+    <th><a href="">Email</a></th>
+   
+            <th>Анкета</th>
+            <th>Интервью</th>
+            <th>Удалить</th>
+        </tr>
+        </thead>
+        <tbody>
     <c:forEach items="${Model}" var="s">
     <tr>
             <td><input type="hidden" name="appId" value="<c:out value='${s.getAppId()}'/>"/>${s.getAppId()}</td>
@@ -141,22 +208,48 @@ function getFact(){
             <td><input type="hidden" name="email" value="<c:out value='${s.getEmail()}'/>"/>${s.getEmail()}</td>
             <td> 
                 <a href="">
-                            <img  src="../resources/images/appForm.png" width="25" height="25" title="Анкета"/>
+                            <img  src="../resources/images/appForm.png" width="15" height="15" title="Анкета"/>
                         </a>
+            </td>
+            <td>
                 <a href="showStudentInterview.html?appId=<c:out value='${s.getAppId()}'/>&firstName=<c:out value='${s.getName()}'/>&lastName=<c:out value='${s.getLastName()}'/>&view=0">
                             <img  src="../resources/images/inter.png" width="25" height="25" title="Интервью"/>
                         </a>
+            </td>
+            <td>
                     <a href="deleteStudent.html?appId=<c:out value='${s.getAppId()}'/>">
-                            <img  src="../resources/images/delete.png" width="25" height="25" title="Удалить"/>
+                            <img  src="../resources/images/delete.png" width="20" height="20" title="Удалить"/>
                         </a>
       </td>
   </tr>
     </c:forEach>
-    </TABLE>
-    <h4>${msg1}</h4>
-                        </div>
+        </tbody>
+    </TABLE><br/><p><p>
+        
+       </form><br/>
+       <center>
+           
+          <div id="pager" class="pager">
+	<form><br>
+		<img src="../resources/images/icons/first.png" class="first"/>
+		<img src="../resources/images/icons/prev.png" class="prev"/>
+		<input type="text" class="pagedisplay"/>
+		<img src="../resources/images/icons/next.png" class="next"/>
+		<img src="../resources/images/icons/last.png" class="last"/>
+		<select class="pagesize">
+			<option selected="selected"  value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+		</select>
+	</form>
+</div>
+           </c:if>
+       </center>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+ </div>
                         </div>
                 </div>
-        </div>
+       
     </body>
 </html>

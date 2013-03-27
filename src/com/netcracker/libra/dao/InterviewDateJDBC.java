@@ -151,6 +151,12 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         
         return jdbcTemplateObject.queryForInt(query,interviewDateId);
     }
+    public void deleteNotInterviewers(){
+        String query="delete from interviewerList where userid="
+                    + "ANY(select l.userId from interviewerList l "
+                        + "join users u on l.userId=u.userId where u.roleId!=2 and u.roleid!=3)";
+        jdbcTemplateObject.update(query);
+    }
     
     @Override
     public void addExtraTimeByAppId(Integer appId, Integer minutes) {
@@ -240,25 +246,33 @@ public class InterviewDateJDBC implements InterviewDateDAO {
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query,interviewDateId) ;
         return interviewers;
     }
-    public List<Map<String, Object>> getFreeInterviewersHr(){
-        String query="select u.userid userid,u.firstname||' '||u.lastname inters "
-                + "from users u where u.roleid=2 and u.userid != ALL("
-                + "select ll.userid from interviewerList ll "
+    public List<Map<String, Object>>  getNameOfUser(int userID){
+        String query = "select u.firstname||' '||u.lastname name "
+                + "from users u where u.userid=? ";
+        List<Map<String, Object>>  name=jdbcTemplateObject.queryForList(query, userID);
+        return name;
+    }
+   /**
+    * Returns free interviewers in certin date
+    * @param type - type of interview (HR or Tech)
+    * @param start - begin of interview 
+    * @param finish - end
+    * @return  List of free interviewers
+    */
+    public List<Map<String, Object>> getFreeInterviewers(String type, String start, String finish){
+        int typeInt=3;
+        if ((type.toLowerCase()).equals("hr")) 
+            typeInt=2;
+        String query="select u.userid  "
+                + "from users u where u.roleid="+typeInt+" and u.userid != "
+                + "any( select ll.userid from interviewerList ll "
                 + "join interviewDate ii on ii.interviewDateId=ll.InterviewDateId "
-                + "where not ((sysdate>ii.dateStart)or((sysdate<ii.dateStart) and (sysdate<ii.dateFinish))))";
+                + "where not ((to_date('"+start+"','DD/MM/YYYY HH24:MI')>ii.dateStart) "
+                + "or((to_date('"+start+"','DD/MM/YYYY HH24:MI')<ii.dateStart) "
+                + "and (to_date('"+finish+"','DD/MM/YYYY HH24:MI')<ii.dateFinish))))";
         List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
         return interviewers;
     }
-    public List<Map<String, Object>> getFreeInterviewersTech(){
-        String query="select u.userid userid,u.firstname||' '||u.lastname inters "
-                + "from users u where u.roleid=3 and u.userid != ALL("
-                + "select ll.userid from interviewerList ll "
-                + "join interviewDate ii on ii.interviewDateId=ll.InterviewDateId "
-                + "where not ((sysdate>ii.dateStart)or((sysdate<ii.dateStart) and (sysdate<ii.dateFinish))))";
-        List<Map<String, Object>> interviewers = jdbcTemplateObject.queryForList(query) ;
-        return interviewers;
-    }
-
     
     public List<Map<String, Object>> getInterviewersHr(){
         String query="select userid, lastname||' '||firstname as inters " 

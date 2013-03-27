@@ -28,21 +28,21 @@
 			</div>
 
 			<div class="span9">
-				<form:form class="form-horizontal" method="POST" action="/Libra/submit.html">
+				<form:form class="form-horizontal" method="POST">
 					<fieldset>
 					<div id="legend">
       					<legend class="">Войти</legend>
     				</div>
 					<div class="control-group">
-						<label class="control-label" for="inputEmail">Электропочта</label>
+						<label class="control-label">Электропочта</label>
 						<div class="controls">
-							<input type="text" id="inputEmail" name="email">
+							<input type="text" id="email" name="email">
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputPassword">Пароль</label>
+						<label class="control-label">Пароль</label>
 						<div class="controls">
-							<input type="password" id="inputPassword" name="password">
+							<input type="password" name="password">
 						</div>
 					</div>
 					<div class="control-group">

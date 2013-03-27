@@ -39,3 +39,15 @@ form .line {
  .myClass.error {
     border:1px solid red;
   }
+  
+.welcome {
+
+border: 1px solid #ddd;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0px 0 7px #1A1A1A;
+	-moz-box-shadow: 0px 0 7px #1A1A1A;
+	box-shadow: 0px 0 7px #1A1A1A;
+
+ }

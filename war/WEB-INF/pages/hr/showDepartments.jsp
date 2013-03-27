@@ -51,7 +51,7 @@
                         <td>
                             Кафедра: </td>
                         <td>
-                <input type="text" name ="deptName">
+                <input type="text" placeholder="Введите название кафедры" name ="deptName">
                         </td>
                     </tr>
                     <tr>
@@ -91,7 +91,7 @@
             <option value="4">Университет</option>
         </select>
                 <br>
-        <input type="text" name ="textBox"><br>
+        <input type="text" placeholder="Введите значение" name ="textBox"><br>
         <input type="submit" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Показать" name="search">
             </form>
                   </div></div></div>

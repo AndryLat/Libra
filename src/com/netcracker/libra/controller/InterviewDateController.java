@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.dao.InterviewDateJDBC;
 import com.netcracker.libra.model.InterviewDate;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,6 +34,7 @@ public class InterviewDateController
     public ModelAndView interDate()
     {
         ModelAndView mav = new ModelAndView();
+        iDateJdbc.deleteNotInterviewers();
         List<InterviewDate> id=iDateJdbc.getAllInterviewDatesWithInterviewers();  
         List<Map<String,Object>> inters=iDateJdbc.getInterviewersHr();
         mav.setViewName("hr/interviewDate");
@@ -98,6 +104,7 @@ public class InterviewDateController
      * @return 
      */
       @RequestMapping(value="hr/interviewDateAdded", method= RequestMethod.GET)
+    @SuppressWarnings("empty-statement")
       public ModelAndView addInterviewDate(@RequestParam("begin") String begin,
       @RequestParam("type") int typeInt,
       @RequestParam("end") String end,  
@@ -105,15 +112,47 @@ public class InterviewDateController
       @RequestParam("duration") int duration,
       @RequestParam("checkInterviewers[]") int [] interviewers){
             ModelAndView mav=new ModelAndView();
-            
-            int interviewDateId = iDateJdbc.createInterviewDate(begin+" "+timeStart,begin+" "+end, duration);
-            for (int i=0;i<interviewers.length;i++){
-               if (typeInt==1){
-                    iDateJdbc.insertInterviewersAndDates(interviewers[i],interviewDateId,"HR");
-                    }
-                else{
-                    iDateJdbc.insertInterviewersAndDates(interviewers[i],interviewDateId,"Tech");
+            String type="Tech";
+            if (typeInt==1){ 
+                type="HR";
             }
+            String beginInter=begin+" "+timeStart;
+            String endInter = begin+" "+end;
+            List<Integer> freeIntersList = new ArrayList();
+            List<Map<String,Object>> freeInters=iDateJdbc.getFreeInterviewers(type, beginInter, endInter);
+            for (Map<String, Object> freeInter : freeInters) {
+                for (Map.Entry<String, Object> entry : freeInter.entrySet()) {
+                    String k=entry.getValue().toString();
+                freeIntersList.add(Integer.parseInt(k));
+            }}
+           
+            for (int i=0;i<interviewers.length;i++){
+                int index =freeIntersList.indexOf(interviewers[i]);
+                if (index==-1){
+                    List<Map<String,Object>> nameIn=iDateJdbc.getNameOfUser(interviewers[i]);
+                       for (Map<String, Object> name:nameIn){
+                          for (Map.Entry<String, Object> entryT: name.entrySet())
+                          mav.addObject("errorMessage", "Интервьер "+entryT.getValue()+" уже назначен на это же время!");
+                }
+                mav.addObject("typeInt", typeInt);
+                mav.addObject("begin",begin);
+                mav.addObject("end",end);
+                mav.addObject("timeStart", timeStart);
+                mav.addObject("duration", duration);
+                List<Map<String,Object>> intersHr=iDateJdbc.getInterviewersHr();
+                List<Map<String,Object>> intersTech=iDateJdbc.getInterviewersTech();
+                 mav.addObject("Inters",intersHr); 
+                mav.addObject("intersTech",intersTech); 
+                mav.addObject("checkedIntersHr", interviewers);
+                mav.addObject("checkedIntersTech", interviewers);                
+                mav.setViewName("/hr/interviewDateAdd");
+                return mav;
+                   }
+                }
+            
+            int interviewDateId = iDateJdbc.createInterviewDate(beginInter,endInter, duration);
+            for (int i=0;i<interviewers.length;i++){
+                iDateJdbc.insertInterviewersAndDates(interviewers[i],interviewDateId,type);
             }
             List<InterviewDate> id=iDateJdbc.getAllInterviewDatesWithInterviewers();  
             List<Map<String,Object>> intersHr=iDateJdbc.getInterviewersHr();
@@ -122,7 +161,7 @@ public class InterviewDateController
             mav.addObject("Inters",intersHr); 
             mav.addObject("intersTech",intersTech);
             mav.setViewName("hr/interviewDate");
-            mav.addObject("msg", "Дата успешно добавлена");
+            mav.addObject("message", "Дата успешно добавлена");
             return mav;
       }
       

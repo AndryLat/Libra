@@ -67,6 +67,7 @@ public class UsersController {
             mv.addObject("employees", employees);
             mv.addObject(checked, "checked");
             mv.addObject(selected, "selected");
+            mv.addObject("roleOrder", "<img  src=\"../resources/images/admin/arrow_left.png\" width=\"12\" height=\"12\" title=\"Редактировать\"/>");
             mv.addObject("currentUserId", currentUserId);
             return mv;
         }
@@ -74,7 +75,7 @@ public class UsersController {
          mv.setViewName("admin/message");
          mv.addObject("title", "Ошибка");
          mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-         mv.addObject("link","<a href='/Libra/' class=\"btn btn-large\"><i class=\"icon-arrow-left\"></i> Назад</a>"); 
+         mv.addObject("link","<a href='/Libra/' class=\"btn btn-large\"><img  src=\"../resources/images/admin/glyphicons_210_left_arrow.png\" width=\"15\" height=\"15\"/> Назад </a>"); 
          return mv;
         }
     }
@@ -206,7 +207,7 @@ public class UsersController {
                 
         }
         mv.addObject("employees", employees);
-        mv.addObject("noResults", "<div class=\"alert alert-info\">" + noResults + "</div>");
+        mv.addObject("noResults", noResults);
         mv.addObject(selected, "selected");
         mv.addObject("currentUserId", currentUserId);
         return mv;
@@ -221,10 +222,12 @@ public class UsersController {
     @RequestMapping("sortEmployees")
     public ModelAndView sortEmployeesByLink(@RequestParam("orderBy") String orderBy) {
         
+        String up = "<img  src=\"../resources/images/admin/arrow_down.png\" width=\"12\" height=\"12\" title=\"по возрастанию\"/>";
+        String down = "<img  src=\"../resources/images/admin/arrow_up.png\" width=\"12\" height=\"12\" title=\"по убыванию\"/>";
+        
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/employees");
         mv.addObject("currentUserId", currentUserId);
-        mv.addObject("noResults", "<div class=\"alert alert-info\">" + noResults + "</div>");
         mv.addObject(selected, "selected");
         mv.addObject(checked, "checked");
         mv.addObject("text", text);
@@ -233,27 +236,38 @@ public class UsersController {
             switch(orderBy) {
             case "ROLE":
                 Collections.sort(employees, new UsersController.RoleComparator(order));
+                String roleOrder = (order) ? "<img  src=\"../resources/images/admin/arrow_left.png\" width=\"12\" height=\"12\"/>" 
+                                           : "<img  src=\"../resources/images/admin/arrow_right.png\" width=\"12\" height=\"12\"/>";
+                mv.addObject("roleOrder", roleOrder);
                 break;
                 
             case "ID":
                 Collections.sort(employees, new UsersController.IdComparator(order));
+                String idOrder = (order) ? up : down;
+                mv.addObject("idOrder", idOrder);
                 break;
                 
             case "FIRST_NAME":
                 Collections.sort(employees, new UsersController.FirstNameComparator(order));
+                String nameOrder = (order) ? up : down;
+                mv.addObject("nameOrder", nameOrder);
                 break;
                 
             case "LAST_NAME":
                 Collections.sort(employees, new UsersController.LastNameComparator(order));
+                nameOrder = (order) ? up : down;
+                mv.addObject("nameOrder", nameOrder);
                 break;
                 
             case "EMAIL":
                 Collections.sort(employees, new UsersController.EmailComparator(order));
+                String emailOrder = (order) ? up : down;
+                mv.addObject("emailOrder", emailOrder);
                 break;
             }
         }
-        //switch to ASC or DESC order
-        order = (order==true) ? false : true;
+        //switch to ascending or descending order
+        order = (order) ? false : true;
         mv.addObject("employees", employees);
         return mv;
     }
@@ -568,10 +582,13 @@ public class UsersController {
             return mv;
         }
         else {
-            jdbc.addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
             
+            jdbc.addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
             User employee = jdbc.getEmployee(email);
-            employees.add(employee);
+            
+            if(employee != null) {
+                employees.add(employee);
+            }
             
             mv.setViewName("admin/employees");
             mv.addObject("message", "Сотрудник успешно добавлен");
@@ -724,46 +741,5 @@ public class UsersController {
             }
         }
     }
-    
-/*
-    
-     //* Checks for duplicates of emails by user's ID in User list
-     //* Returns true if there are duplicates, false - otherwise
-    public boolean checkDublicateValues(String email, int employeeId) {
-        
-        boolean dublicate = false;
-        List <String> list = jdbc.getAllUsersEmailsExceptThis(employeeId);
-        Set set = new TreeSet();
-        
-        set.add(email);
-        
-        for(String e : list) {
-            if(!set.add(e)) {
-                dublicate = true;
-            }
-        }
-        return dublicate;
-    }
-    
-    //* Checks for duplicates of emails in User list
-    //* Returns true if there are duplicates, false - otherwise
-    public boolean checkDublicateValues(String email) {
-        
-        boolean dublicate = false;
-        List <String> usersEmails = jdbc.getAllUsersEmails();
-        Set set = new TreeSet();
-        
-        set.add(email);
-        
-        System.out.println("checkDublicateValues(String email)");
-        for(String e : usersEmails) {
-            System.out.println(e);
-            if(!set.add(e)) {
-                dublicate = true;
-            }
-        }
-        return dublicate;
-    }
-*/
     
 }

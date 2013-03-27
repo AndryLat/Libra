@@ -42,21 +42,21 @@
                                 </c:if>
                                 
                                 <div class="control-group ${currentPasswordMark}">
-                                    <label class="control-label" for="currentPassword">Current password:</label>
+                                    <label class="control-label" for="currentPassword">Текущий пароль:</label>
                                     <div class="controls">
                                     <input type="password" id="currentPassword" name="currentPassword" value="${currentPassword}">
                                     </div>
                                 </div>
                                 
                                 <div class="control-group ${newPasswordMark}">
-                                    <label class="control-label" for="newPassword">New password:</label>
+                                    <label class="control-label" for="newPassword">Новый пароль:</label>
                                     <div class="controls">
                                     <input type="password" id="newPassword" name="newPassword" value="${newPassword}">
                                     </div>
                                 </div>
                                 
                                 <div class="control-group ${repeatNewPasswordMark}">
-                                    <label class="control-label" for="repeatNewPassword">Repeat new password:</label>
+                                    <label class="control-label" for="repeatNewPassword">Повторите новый пароль:</label>
                                     <div class="controls">
                                     <input type="password" id="repeatNewPassword" name="repeatNewPassword" value="${repeatNewPassword}">
                                     </div>
@@ -64,8 +64,8 @@
                                 
                                 <div class="control-group">
                                     <div class="controls">
-                                        <button class="btn btn-success" type="submit"><i class="icon-white icon-ok"></i> Change password</button>
-                                        <button type=button class="btn" onClick="parent.location='currentEmployees.html'">Cancel</button>
+                                        <button class="btn btn-success" type="submit"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15"/> Сменить пароль </button>
+                                        <button type=button class="btn" onClick="parent.location='currentEmployees.html'">Отмена</button>
                                     </div>
                                 </div>
                                 

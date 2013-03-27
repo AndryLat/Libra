@@ -24,6 +24,10 @@
          
         <script type="text/javascript" src="../resources/js/jquery.timePicker.js"></script>
       <script type="text/javascript">
+           function closeMessage()
+            {
+                document.getElementById("alertMessage").innerHTML="";
+            }
     $(document).ready(function() {
         $("#type").bind("change", function(){    
         if ($("#type").val()==1) {
@@ -107,7 +111,30 @@
         <center>
         <h3>Добавление новой даты интервью</h3>
         </center>
-        
+        <table width="100%">
+         <tr>
+         <c:if test='${!errorMessage.equals("") && errorMessage != null}'>
+                                    <span id="alertMessage">
+                                    <div class="alert alert-error" align="center">
+                                        <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                                        ${errorMessage}
+                                    </div>
+                                    </span>
+                                </c:if>
+                                        </tr>
+         </table>
+         <table width="100%">
+         <tr>
+         <c:if test="${message != null}">
+                 <td align="left" id="alertMessage">
+                     <div class="alert alert-success" align="center">
+                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                         ${message}
+                     </div>
+                 </td>
+             </c:if>
+         </tr>
+		 </table>
          <form name="Form" action="interviewDateAdded.html" method="get">
          <table border="0px">
              <tr>
@@ -115,7 +142,7 @@
                  <td>
                      <select name="type" id="type" style="width: 115px">
                      <option value="1" > Hr </option>
-                     <option value="2"> Tech </option>
+                     <option value="2" ${typeInt == '2' ? 'selected' : ''}> Tech </option>
                      </select> 
                 </td>
              <tr>
@@ -123,7 +150,7 @@
                      Дата:
                  </td>
                  <td> 
-                     <input type="text" id="date" name="begin" class="tcal" value=""  style="width: 100px" />
+                     <input type="text" id="date" name="begin" class="tcal" value="${begin}"  style="width: 100px" />
                  </td>
              </tr>
 	</table>
@@ -138,37 +165,59 @@
             </div>
              
                Продолжительность (минуты): 
-               <input type="text"  name="duration" style="width: 50px" > 
+               <input type="text" placeholder="Введите значение" name="duration" value="${duration}" style="width: 50px" > 
         <br> 
         <div class="classForInters" style="text-decoration:underline;">
         Выберите интервьюеров:</div> 
-        <div id="hrDiv"> 
+        <div id="hrDiv">
+        <c:forEach items="${checkedIntersHr}" var="i">
             <table border="0">
-        <c:forEach items="${Inters}" var="i">
                 <tr>
                     <td>
-                        <input type="checkbox" style="margin: 0px;" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
+                        <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked>                     </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
+        </c:forEach>
+        <c:forEach items="${Inters}" var="i">
+            <table border="0">
+                <tr>
+                    <td>
+                         <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
                     </td>
                     <td>
-                        <label style="font-size:18px;margin-bottom: 0px;" for="<c:out value="${i.userid}"/>">${i.inters}</label>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
                     </td>
-               </tr>   
-        </c:forEach>
+               </tr>
             </table>
+        </c:forEach>
         </div>
         <div style="display: none;"  id="techDiv">
+       <c:forEach items="${checkedIntersTech}" var="i">
             <table border="0">
-        <c:forEach items="${intersTech}" var="i"> 
-            <tr>
+                <tr>
                     <td>
-                        <input type="checkbox" style="margin: 0px;" name="checkInterviewers[]" id="<c:out value="${i.userid}"/>" value=<c:out value="${i.userid}"/> >
-                    </td>
+                        <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> checked>                     </td>
                     <td>
-                        <label style="font-size:18px;margin-bottom: 0px;" for="<c:out value="${i.userid}"/>">${i.inters}</label>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
                     </td>
-               </tr>   
-        </c:forEach>
+               </tr>
             </table>
+        </c:forEach>
+        <c:forEach items="${intersTech}" var="i">
+            <table border="0">
+                <tr>
+                    <td>
+                         <input style="margin: 0px;" type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
+                    </td>
+                    <td>
+                        <label style="font-size:18px;margin-bottom: 0px;" for="interviwers"> ${i.inters}</label>
+                    </td>
+               </tr>
+            </table>
+        </c:forEach>
         </div>
             </br> 
         <input value="Назад" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px" onclick="location.href='interviewDate.html'" type="button"/>   

@@ -10,14 +10,15 @@
 		<li><a href="showTypes.html">Просмотреть типы</a></li>
 		<li class="nav-header">HR</li>
 		<li><a href="hr/showStudentbyIdView.html">Поиск студентов</a></li>
-		<li><a href="hr/showStudentByEducation.html">Поиск по
-				университету</a></li>
+		<li><a href="hr/showLanguages.html">Управление
+				языками</a></li>
 		<li><a href="hr/showUniversities.html">Управление
 				университетами</a></li>
 		<li><a href="hr/showFaculties.html">Управление факультетами</a></li>
 		<li><a href="hr/showDepartments.html">Управление кафедрами</a></li>
 		<li><a href="hr/interviewDate.html">Расписание собеседований</a></li>
                 <li><a href="showResults.html">Показать результаты</a></li>
+                <li><a href="hr/сonfirmEditing.html">Подтверждение изменений дат интервью</a></li>
 		
 		<li class="nav-header">Отчеты</li>
 		<li><a href="showStudentRecords.html">График записи студентов</a></li>
@@ -27,5 +28,8 @@
 				собеседований</a></li>
                 <li class="nav-header">Студент</li>
                 <li><a href="showInterviewDate.html">Записаться на собеседование</a> </li>
+                
+                <li class="nav-header">Admin</li> 
+                <li><a href="admin/employees.html">Панель админа</a></li>
 	</ul>
 	</div>

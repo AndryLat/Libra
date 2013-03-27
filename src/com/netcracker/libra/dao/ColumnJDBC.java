@@ -8,7 +8,11 @@ import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.Column;
 import com.netcracker.libra.model.ColumnForEdit;
 import com.netcracker.libra.model.ColumnInfo;
+import com.netcracker.libra.model.ColumnLevel;
 import com.netcracker.libra.model.InfoForDelete;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import javax.sql.DataSource;
@@ -35,12 +39,6 @@ public class ColumnJDBC
     {
         String sqlSeq = "select NewColumns_seq.NEXTVAL as Id from dual";
         return jdbcColumnObject.queryForInt(sqlSeq);
-    }
-    
-    public int existColumn(int id)
-    {
-        String sql = "select Count(*) from NewColumns where columnId=?";
-        return jdbcColumnObject.queryForInt(sql,id);
     }
     
     public List<ColumnInfo> getColumnsInfo(int templateId) 
@@ -241,6 +239,7 @@ public class ColumnJDBC
     
     public List<AppFormColumns> getAppFormColumns(int id)
     {
+
         String SQL="select  c.columnId, c.name,  NVL(t.name,'show') typeName, NVL(t.DESCRIPTION,'show') DESCRIPTION, level " 
                     +"from newColumns c "
                     +" left join types t on t.typeId=c.typeId "
@@ -294,5 +293,11 @@ WHERE (t1.columnId=1 and t2.ColumnId=14) OR (t2.columnId=14 and t1.ColumnId=1);
         List<Column> c=jdbcColumnObject.query(SQL, new ColumnRowMapper(), columnId, parentId);
         return c;
     }*/
+    
+    public int existColumn(int id)
+    {
+        String sql = "select Count(*) from NewColumns where columnId=?";
+        return jdbcColumnObject.queryForInt(sql,id);
+    }
     
 }
