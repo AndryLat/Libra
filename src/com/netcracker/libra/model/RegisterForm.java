@@ -55,14 +55,15 @@ public class RegisterForm {
 	@Length(min=6, max=20)
 	private String password;
 	
-	@NotEmpty
-	@Length(min=6, max=20)
 	private String confirmedPassword;
 	
 	@NotEmpty
 	@Email
 	@Length(max=50)
 	private String email;
+	
+	private boolean isPasswordsEqual;
+	private boolean isCodesEqual;
 	
 	public RegisterForm() {
 		
@@ -158,8 +159,8 @@ public class RegisterForm {
 		this.email = email;
 	}
 	
-	@AssertTrue
-	public boolean checkPassword() {
+	@AssertTrue(message="Пароли не совпадают")
+	public boolean isPasswordsEqual() {
 		if (password == null) {
             return false;
         } 

@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.netcracker.libra.dao;
 
-import com.netcracker.libra.model.User;
 import com.netcracker.libra.model.UserResult;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 /**
  *
- * @author Admin
+ * @author Alexander Lebed
  */
 public class UserResultRowMapper  implements RowMapper <UserResult> {
     @Override

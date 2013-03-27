@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -28,21 +29,24 @@
 			</div>
 
 			<div class="span9">
-				<form:form class="form-horizontal" method="POST" action="/Libra/submit.html">
+				<form:form class="form-horizontal" method="POST">
 					<fieldset>
 					<div id="legend">
       					<legend class="">Войти</legend>
     				</div>
+    				<c:if test="${accessDeniedMessage!=null}">
+						<div class="row-fluid"><div class="alert alert-error span9">${accessDeniedMessage}</div></div>
+					</c:if>
 					<div class="control-group">
-						<label class="control-label" for="inputEmail">Электропочта</label>
+						<label class="control-label">Электропочта</label>
 						<div class="controls">
-							<input type="text" id="inputEmail" name="email">
+							<input type="text" id="email" name="email">
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputPassword">Пароль</label>
+						<label class="control-label">Пароль</label>
 						<div class="controls">
-							<input type="password" id="inputPassword" name="password">
+							<input type="password" name="password">
 						</div>
 					</div>
 					<div class="control-group">

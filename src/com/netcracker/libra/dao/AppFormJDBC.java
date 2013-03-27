@@ -1,10 +1,6 @@
 package com.netcracker.libra.dao;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -13,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.netcracker.libra.model.RegisterForm;
-import com.netcracker.libra.util.security.Security;
 
 @Repository
 public class AppFormJDBC {
@@ -54,16 +49,16 @@ public class AppFormJDBC {
 					deptId, adId, course, graduated, templateId);
 	}
 	
-	/*public void fillAppForm(RegisterForm form) throws SQLException {
-		if (createNewUserAsStudent(form.getUserId(), form.getName(), form.getLastName(), Security.getMD5hash(form.getPassword()), form.getEmail()) && 
-				insertAppFormDetails(form.getAppId(), form.getUserId(), form.getPatronymic(), 
-						form.getPhoneNumber(), form.getDepartment(), 1, 
-							form.getCourse(), form.getGraduated(), form.getTemplateId())) {
-			Long appId = form.getAppId();
+	public void fillAppForm(RegisterForm form, Long userId) throws SQLException {
+		Long appId = jdbcTemplateObject.queryForLong("select appid from appform where userid=?", userId);
 			for (String x : form.getMap().keySet()) {
 				jdbcTemplateObject.update("insert into COLUMNFIELDS (columnid, appid, value, status) values (?,?,?,1)", x, appId, form.getMap().get(x));
 			}
-		}
 		return;
-	}*/
+	}
+	
+	public void updateTemplateIdOnFormSubmit(Long userId) {
+		jdbcTemplateObject.update("update appform set templateid=? where userid=?", userId);
+		return;
+	}
 }

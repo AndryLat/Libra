@@ -1,13 +1,21 @@
 package com.netcracker.libra.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
+import javax.sql.RowSet;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import com.netcracker.libra.model.Student;
+import com.netcracker.libra.util.security.Security;
+import com.netcracker.libra.util.security.SessionToken;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 
@@ -68,23 +76,32 @@ public class StudentJDBC {
       return;
    }
    
-   public static int verifyLogin(String email, String password) throws EmptyResultDataAccessException  {
-	   String SQL = "select userid from users where email=? and password=?";
-	   return  jdbcTemplateObject.queryForInt(SQL, email, password);
+   public static SessionToken verifyLogin(String email, String password) throws EmptyResultDataAccessException  {
+	   String SQL = "select userid, accesslevel from users natural join roles where email=? and password=?";
+	   Map result = jdbcTemplateObject.queryForMap(SQL, email, Security.getMD5hash(password));
+	   return new SessionToken(((BigDecimal)result.get("userid")).longValueExact(), email, ((BigDecimal)result.get("accessLevel")).intValueExact());
    }
-   public static int getAccess(int id)
+   public static int getAccess(Long id)
    {
         String SQL = "select r.AccessLevel from users u join roles r on r.roleId=u.roleId where u.userId=?";
 	   return  jdbcTemplateObject.queryForInt(SQL, id);
    }
-   public static int exists(int userId,String p)
+   
+   public static boolean isAppformExist(Long id)
+   {
+	   if (jdbcTemplateObject.queryForInt("select templateid from appform where userid=?", id)==0)
+	   		return false;
+	   else
+	   		return true;
+   }
+   public static int exists(Long userId,String p)
    {
        String SQL="select count(*) from users "
                + "where userId=? and password=? ";
        return jdbcTemplateObject.queryForInt(SQL,userId,p);
    }
    
-   public static void updatePassword(int userId, String password) 
+   public static void updatePassword(Long userId, String password) 
    {
       String SQL = "update Users set password = ? where userid = ?";
       jdbcTemplateObject.update(SQL, password,userId);

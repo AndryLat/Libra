@@ -34,11 +34,12 @@
       					<legend>Регистрация в системе</legend>
     			</div>
     			
-		<form:form commandName="regForm" action="register/welcome.html" method="POST" enctype="multipart/form-data">
-			
+		<form:form commandName="regForm" method="POST">
+			<div class="row-fluid"><form:errors path="*" cssClass="alert alert-error span6"></form:errors></div>
 			<div class="row-fluid">
 				<div class="well span6" >
 					<div class="alert alert-info"><b>Данные для входа в систему</b></div>
+					
 						<div class="controls">
 							<div class="controls">
 								<div class="span5">Электронная почта</div><input type="email" name="email" required>
@@ -46,12 +47,12 @@
 						</div>
 						<div class="controls">
 							<div class="controls">
-								<div class="span5">Введите пароль</div><input type="password" name="password" required>
+								<div class="span5">Введите пароль</div><form:input type="password" path="password"/>
 							</div>
 						</div>
 						<div class="controls">
 							<div class="controls">
-								<div class="span5">Подтвердите пароль</div><input type="password" name="confirmedPassword" required>
+								<div class="span5">Подтвердите пароль</div><form:input type="password" path="confirmedPassword"/>
 							</div>
 						</div>
 					</div>

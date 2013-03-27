@@ -41,7 +41,7 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
         String SQL="select count(*) from interviewResults where interviewId=?";
         return jdbcTemplateObject.queryForInt(SQL,InterviewId);
     }
-    public int existsComment(int userId, int InterviewId)
+    public int existsComment(Long userId, int InterviewId)
     {
         String SQL="select count(*) from interviewResults where userId=? and interviewId=?";
         return jdbcTemplateObject.queryForInt(SQL,userId,InterviewId);
@@ -64,19 +64,19 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
         return interview;
     }
     @Override
-    public void addResult(int InterviewId,int UserId,int mark, String comments)
+    public void addResult(int InterviewId,Long UserId,int mark, String comments)
     {
         String SQL ="INSERT INTO InterviewResults VALUES(?,?,?,?)";
         jdbcTemplateObject.update(SQL,InterviewId,UserId,mark,comments);
     }
     
     @Override
-    public void updateResult(int InterviewId,int UserId,int mark, String comments)
+    public void updateResult(int InterviewId,Long UserId,int mark, String comments)
     {
         String SQL ="Update InterviewResults set mark=?, comments=? where interviewId=? and userId=?";
         jdbcTemplateObject.update(SQL,mark,comments,InterviewId,UserId);
     }
-    public void deleteResult(int InterviewId,int UserId)
+    public void deleteResult(int InterviewId,Long UserId)
     {
         String SQL ="delete InterviewResults where interviewId=? and userId=?";
         jdbcTemplateObject.update(SQL,InterviewId,UserId);

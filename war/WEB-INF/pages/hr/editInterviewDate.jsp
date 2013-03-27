@@ -122,7 +122,7 @@
              <input name="timeStart" type="text" id="time3" size="10"  value="${d.timeS}" style="width: 50px"/> :
              <input name="timeFinish" type="text" id="time4" size="10"  value="${d.timeF}" style="width: 50px"/>
         </td>
-        <td><input type="text" name="interviewDuration" style="width: 50px" value="${d.interviewDuration}"/></td>
+        <td><input type="text" placeholder="Введите значение" name="interviewDuration" style="width: 50px" value="${d.interviewDuration}"/></td>
         </c:forEach>
         </table>
        <div class="classForInters" style="text-decoration:underline;">

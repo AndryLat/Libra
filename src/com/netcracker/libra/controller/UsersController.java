@@ -5,7 +5,6 @@ import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.service.LengthService;
 import com.netcracker.libra.util.security.Security;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +42,7 @@ public class UsersController {
     String selected;    //selected value in the sorting by first name/last name/email etc.
     String text;        //value in the text field
     boolean order;      //value of ascending or descending order; true when ascending
-    int currentUserId;
+    Long currentUserId;
     
     @Autowired
     UserPreferences user;   // contains ID and access level
@@ -68,6 +67,7 @@ public class UsersController {
             mv.addObject("employees", employees);
             mv.addObject(checked, "checked");
             mv.addObject(selected, "selected");
+            mv.addObject("roleOrder", "<img  src=\"../resources/images/admin/arrow_left.png\" width=\"12\" height=\"12\" title=\"Редактировать\"/>");
             mv.addObject("currentUserId", currentUserId);
             return mv;
         }
@@ -207,7 +207,7 @@ public class UsersController {
                 
         }
         mv.addObject("employees", employees);
-        mv.addObject("noResults", "<div class=\"alert alert-info\">" + noResults + "</div>");
+        mv.addObject("noResults", noResults);
         mv.addObject(selected, "selected");
         mv.addObject("currentUserId", currentUserId);
         return mv;
@@ -222,10 +222,12 @@ public class UsersController {
     @RequestMapping("sortEmployees")
     public ModelAndView sortEmployeesByLink(@RequestParam("orderBy") String orderBy) {
         
+        String up = "<img  src=\"../resources/images/admin/arrow_down.png\" width=\"12\" height=\"12\" title=\"по возрастанию\"/>";
+        String down = "<img  src=\"../resources/images/admin/arrow_up.png\" width=\"12\" height=\"12\" title=\"по убыванию\"/>";
+        
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/employees");
         mv.addObject("currentUserId", currentUserId);
-        mv.addObject("noResults", "<div class=\"alert alert-info\">" + noResults + "</div>");
         mv.addObject(selected, "selected");
         mv.addObject(checked, "checked");
         mv.addObject("text", text);
@@ -234,27 +236,38 @@ public class UsersController {
             switch(orderBy) {
             case "ROLE":
                 Collections.sort(employees, new UsersController.RoleComparator(order));
+                String roleOrder = (order) ? "<img  src=\"../resources/images/admin/arrow_left.png\" width=\"12\" height=\"12\"/>" 
+                                           : "<img  src=\"../resources/images/admin/arrow_right.png\" width=\"12\" height=\"12\"/>";
+                mv.addObject("roleOrder", roleOrder);
                 break;
                 
             case "ID":
                 Collections.sort(employees, new UsersController.IdComparator(order));
+                String idOrder = (order) ? up : down;
+                mv.addObject("idOrder", idOrder);
                 break;
                 
             case "FIRST_NAME":
                 Collections.sort(employees, new UsersController.FirstNameComparator(order));
+                String nameOrder = (order) ? up : down;
+                mv.addObject("nameOrder", nameOrder);
                 break;
                 
             case "LAST_NAME":
                 Collections.sort(employees, new UsersController.LastNameComparator(order));
+                nameOrder = (order) ? up : down;
+                mv.addObject("nameOrder", nameOrder);
                 break;
                 
             case "EMAIL":
                 Collections.sort(employees, new UsersController.EmailComparator(order));
+                String emailOrder = (order) ? up : down;
+                mv.addObject("emailOrder", emailOrder);
                 break;
             }
         }
-        //switch to ASC or DESC order
-        order = (order==true) ? false : true;
+        //switch to ascending or descending order
+        order = (order) ? false : true;
         mv.addObject("employees", employees);
         return mv;
     }
@@ -570,28 +583,12 @@ public class UsersController {
         }
         else {
             
-            //                                                           --------------------- NULL POINTER EXCEPTION
-            System.out.println(" - - -");
-            java.util.Date date1 = Calendar.getInstance().getTime();
-            System.out.println("Time before jdbc.addEmployee: " + date1.getTime());
             jdbc.addEmployee(firstName, lastName, email, Security.getMD5hash(password), roleId);
-            
-            java.util.Date date2 = Calendar.getInstance().getTime();
-            System.out.println("Time before jdbc.getEmployee: " + date2.getTime());
             User employee = jdbc.getEmployee(email);
             
-            java.util.Date date3 = Calendar.getInstance().getTime();
-            System.out.println("Time before employees.add: " + date3.getTime());
-            try {
-                Thread.sleep(200);
+            if(employee != null) {
+                employees.add(employee);
             }
-            catch (InterruptedException e) {
-                System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
-            }
-            employees.add(employee);
-            
-            java.util.Date date4 = Calendar.getInstance().getTime();
-            System.out.println("Time After employees.add: " + date4.getTime());
             
             mv.setViewName("admin/employees");
             mv.addObject("message", "Сотрудник успешно добавлен");
@@ -744,46 +741,5 @@ public class UsersController {
             }
         }
     }
-    
-/*
-    
-     //* Checks for duplicates of emails by user's ID in User list
-     //* Returns true if there are duplicates, false - otherwise
-    public boolean checkDublicateValues(String email, int employeeId) {
-        
-        boolean dublicate = false;
-        List <String> list = jdbc.getAllUsersEmailsExceptThis(employeeId);
-        Set set = new TreeSet();
-        
-        set.add(email);
-        
-        for(String e : list) {
-            if(!set.add(e)) {
-                dublicate = true;
-            }
-        }
-        return dublicate;
-    }
-    
-    //* Checks for duplicates of emails in User list
-    //* Returns true if there are duplicates, false - otherwise
-    public boolean checkDublicateValues(String email) {
-        
-        boolean dublicate = false;
-        List <String> usersEmails = jdbc.getAllUsersEmails();
-        Set set = new TreeSet();
-        
-        set.add(email);
-        
-        System.out.println("checkDublicateValues(String email)");
-        for(String e : usersEmails) {
-            System.out.println(e);
-            if(!set.add(e)) {
-                dublicate = true;
-            }
-        }
-        return dublicate;
-    }
-*/
     
 }

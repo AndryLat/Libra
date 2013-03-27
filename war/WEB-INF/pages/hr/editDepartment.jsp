@@ -57,7 +57,7 @@
              <c:forEach items="${depts}" var="d"> 
         <td><label for="departmentId">${d.departmentId}</label>
         <input type="hidden" name="departmentId" value="<c:out value='${d.departmentId}  '/>"/></td>
-        <td><input type="text" name="departmentName" value="${d.departmentName}"/></td>
+        <td><input type="text" placeholder="Введите значение" name="departmentName" value="${d.departmentName}"/></td>
         </c:forEach>
         <td>
             <select name="fact" id="fact">

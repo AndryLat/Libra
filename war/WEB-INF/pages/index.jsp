@@ -1,44 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<title>Libra - Главная страница</title>
-	</head>
-	
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+<jsp:include page="resources.jsp" />
+<title>Добро пожаловать</title>
+</head>
 <body>
-	<a href="register.html">Зарегистироваться</a>
-	<br>
-	<a href="login.html">Войти</a>
-	<br>
-        <a href="logout.html">Выйти</a>
-	<a href="signup.html">Test</a>
-        
-        <h1>HR</h1>
-        <p>hr@mail.ru</p>
-        <p>12345</p>
-         
-        <ul>
-            <b>Admin</b>
-            <li>admin@gmail.com</li>
-            <li>54321</li>
-        </ul>
-        
-        <a href="showTemplates.html">Шаблоны</a>
-        <a href="showTypes.html">Типы</a>
-        <a href="hr/showStudentbyIdView.html">Поиск1</a>
-        <a href="hr/interviewDate.html">Расписание</a>
-        <a href="admin/employees.html">Admin</a>
-        <a href="sendmail.html">SendMail</a>
-        <a href="showInterviewDate.html">Записаться на собеседование</a>
-        <a href="hr/showStudentByEducation.html">Поиск2</a> 
-        <br>
-        <a href="hr/showUniversities.html">Управление универами</a>
-        <a href="hr/showFaculties.html">Управление факультетами</a>
-        <a href="hr/showDepartments.html">Управление кафедрами</a>
-        <a href="hr/showLanguages.html">Управление языками</a>
-        <br>
-        </br>
-                <a href="showResults.html">Показать результаты</a>
+
+	<div class="navmenu">
+		<jsp:include page="navbar.jsp" />
+	</div>
+	
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="sidebar">
+				<jsp:include page="sidebar.jsp" />
+			</div>
+			<div class="span9">
+			<div id="legend">
+      			<legend>Панель управления</legend>
+    		</div>
+    		<c:if test="${LOGGEDIN_USER.userAccessLevel==0}">
+    			<p>Всякие штуки для студента</p>
+    		</c:if>
+
+			</div>
+		</div>
+	</div>
 </body>
 </html>

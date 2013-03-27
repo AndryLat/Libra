@@ -27,7 +27,7 @@ public class InterviewJDBC
         jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
-    public int exists(int interviewDateId,int UserId,int role)
+    public int exists(int interviewDateId,Long UserId,int role)
     {
          String sql = "select Count(*) from Interview i "
                  + " join appForm af on af.appId=i.appId "
@@ -49,7 +49,7 @@ public class InterviewJDBC
         return jdbcTemplateObject.queryForInt(sql,request);
     }
     
-    public int exists0(int UserId,int role)
+    public int exists0(Long UserId,int role)
     {
          String sql = "select Count(*) from Interview i "
                  + " join appForm af on af.appId=i.appId "
@@ -81,7 +81,7 @@ public class InterviewJDBC
         return jdbcTemplateObject.queryForInt(sqlSeq);
     }
    
-    public int add(int interviewDateId, int UserId, int status)
+    public int add(int interviewDateId, Long UserId, int status)
     {
         int i=getCurVal();
         String SQL ="INSERT INTO Interview VALUES(?,?,"+
@@ -91,7 +91,7 @@ public class InterviewJDBC
         return i;
     }
     
-    public void updateRequest(int interviewDateId, int UserId,int role)
+    public void updateRequest(int interviewDateId, Long UserId,int role)
     {
             String   SQL="Update Interview set InterviewDateId=? "
                     + " where appId=(select appId from appForm where UserId=?) and status=0"
@@ -106,7 +106,7 @@ public class InterviewJDBC
                     + ")";
             jdbcTemplateObject.update(SQL,interviewDateId,UserId,role);
     }
-    public void deleteRequest(int userId,int role)
+    public void deleteRequest(Long userId,int role)
     {
         String SQL="delete from interview "
                 + " where appId=(select appId from appForm where UserId=?) "
@@ -123,7 +123,7 @@ public class InterviewJDBC
         jdbcTemplateObject.update(SQL, userId,role);
     }
     
-    public int getInterviewDateByAppId(int userId,int role)
+    public int getInterviewDateByAppId(Long userId,int role)
     {
         String sql="select  distinct i.InterviewDateId from interview i "
                 + " join appform af on af.appid=i.appid "
@@ -134,7 +134,7 @@ public class InterviewJDBC
         return jdbcTemplateObject.queryForInt(sql,userId,role);
     }
         
-    public String getRequestInterviewDate(int userId,int role)
+    public String getRequestInterviewDate(Long userId,int role)
     {
         String SQL="select distinct 'Вы хотели перезаписатся ";
         if(role==1)// interview

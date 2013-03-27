@@ -37,7 +37,7 @@
     				После этого, на ваш электронный адрес придет письмо с кодом подтверждения.</p>
     				
     			<p>После подтверждения анкеты, вы сможете выбрать удобные для вас дату и время собеседования.</p>
-    			<a type="submit" class="btn btn-primary pull-right" href="signup.html">Заполнить анкету</a>
+    			<a type="submit" class="btn btn-primary pull-right" href="register/signup.html">Заполнить анкету</a>
     			</div>
 			</div>
 			</div>

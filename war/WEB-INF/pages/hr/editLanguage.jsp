@@ -47,7 +47,7 @@
             <label for="languageId">${l.languageId}</label>
         <input type="hidden" name="languageId" value="<c:out value='${l.languageId}  '/>"/></td>
         <td>
-            <input type="text" name="languageName" value="${l.languageName}"/></td>
+            <input type="text"  name="languageName" value="${l.languageName}"/></td>
         </c:forEach>
         </table><br>
         <center>
