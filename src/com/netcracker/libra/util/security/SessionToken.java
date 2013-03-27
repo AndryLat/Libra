@@ -4,17 +4,18 @@ public class SessionToken {
 	
 	public SessionToken(){};
 	
-	public SessionToken(Long userId, String userEmail, int userAccessLevel) {
+	public SessionToken(Integer userId, String userEmail, int userAccessLevel) {
 		this.userId = userId;
 		this.userEmail = userEmail;
 		this.userAccessLevel=userAccessLevel;
 	}
 	
-	private Long userId = null;
+	private Integer userId = null;
 	private String userEmail = null;
 	private int userAccessLevel = -1;
+	private boolean appFormFlag = false;
 	
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
@@ -25,5 +26,14 @@ public class SessionToken {
 	public int getUserAccessLevel() {
 		return userAccessLevel;
 	}
+
+	public boolean getAppFormFlag() {
+		return appFormFlag;
+	}
+
+	public void setAppFormFlag(boolean appFormFlag) {
+		this.appFormFlag = appFormFlag;
+	}
+
 
 }

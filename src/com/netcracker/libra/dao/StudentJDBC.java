@@ -79,7 +79,7 @@ public class StudentJDBC {
    public static SessionToken verifyLogin(String email, String password) throws EmptyResultDataAccessException  {
 	   String SQL = "select userid, accesslevel from users natural join roles where email=? and password=?";
 	   Map result = jdbcTemplateObject.queryForMap(SQL, email, Security.getMD5hash(password));
-	   return new SessionToken(((BigDecimal)result.get("userid")).longValueExact(), email, ((BigDecimal)result.get("accessLevel")).intValueExact());
+	   return new SessionToken(((BigDecimal)result.get("userid")).intValueExact(), email, ((BigDecimal)result.get("accessLevel")).intValueExact());
    }
    public static int getAccess(Long id)
    {

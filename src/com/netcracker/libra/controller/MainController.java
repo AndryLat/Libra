@@ -27,7 +27,7 @@ public class MainController {
 			return "admin/index";
 		}
 		if(token.getUserAccessLevel()==0) {
-			return "welcome";
+			return "forward:/register/welcome.html";
 		}
 		else
 			return "index";
