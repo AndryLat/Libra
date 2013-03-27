@@ -83,3 +83,33 @@ function number_control()
 
     });
   }
+  
+  function ajax_result()
+  {
+    $.ajax(
+    {
+        url: 'resultAjax.html',             // указываем URL и
+        dataType : "json",                     // тип загружаемых данных
+        success: function (data, textStatus) 
+        { // вешаем свой обработчик на функцию success
+            $("#studentTable").empty();
+            $.each(data.students, function(i, val) 
+            {    // обрабатываем полученные данные
+                var tr = $("<tr></tr>");
+                $("<td></td>").append(val.r).appendTo(tr);
+                $("<td></td>").append(val.appId).appendTo(tr);
+                $("<td></td>").append(val.fio).appendTo(tr);
+                $("<td></td>").append(val.email).appendTo(tr);
+                $("<td></td>").append(val.avgMark).appendTo(tr);
+                $("<td>nya</td>").appendTo(tr);
+                tr.appendTo("#studentTable");
+            });
+        },
+        error: function ( jqXHR, textStatus, errorThrown )
+        {
+            console.log(errorThrown);
+        }
+    }
+    );
+
+  }

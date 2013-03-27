@@ -7,15 +7,19 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Типы ответов</title>  <link href="resources/css/bootstrap.css" rel="stylesheet">
+        <title>Типы ответов</title>  
+        <link href="resources/css/bootstrap.css" rel="stylesheet">
     <link href="resources/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="resources/css/docs.css" rel="stylesheet">
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="resources/css/template.css" rel="stylesheet">		
-        <jsp:include page="resources.jsp" />
+    <script src="resources/js/template.js"></script>
+    <jsp:include page="resources.jsp" />
         	<%--<link href="http://bootsnipp.com/bundles/bootstrapper/css/bootstrap.min.css" media="all" type="text/css" rel="stylesheet">
 <link href="http://bootsnipp.com/bundles/bootstrapper/css/bootstrap-responsive.min.css" media="all" type="text/css" rel="stylesheet">
-        --%><script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        --%>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
+
     </head>
     <body>
         <div class="navmenu">
@@ -24,7 +28,7 @@
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span3">
+			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>   
 
@@ -37,8 +41,9 @@
         <caption>Информация о типах данных</caption>
         <tr>
             <th class="checkbox-shift">
-                <input type="image"  src="resources/images/del.png" width="25" height="25" title="Удалить" onclick="formSubmit()"/>
-             </br><input id="one" type="checkbox" name="one" value="all" onclick="checkAll(this)" />
+                <a href="#" onclick="submitDelete('delType.html',':checkbox[name^=type]')"><img src="resources/images/del.png" width="25" height="25" title="Удалить" /></a>
+ 
+           </br><input id="one" type="checkbox" name="one" value="all" onclick="cbToggle();" />
             </th>
             <th>№</th>
             <th>Название</th>
@@ -51,13 +56,13 @@
                 <%--
                 <a href="delType.html?type=<c:out value='${t.getTypeId()} '/>"><img src="resources\images\del.jpg"  width="25" height="25" border="0" title="удалить"/></a>
                 --%>
-                <input  type="checkbox" class="checkbox" name="types[]" value="<c:out value='${t.getTypeId()}'/>"/>        
+                <input  type="checkbox" class="case" name="types[]" value="<c:out value='${t.getTypeId()}'/>"/>        
             </td>
-            <form action="showTypes.html" method="POST">
+
             <td>
                 <%=i%>
                 <%--${t.getTypeId()} --%>
-                <input type="hidden" name="selType" value="<c:out value='${t.getTypeId()}  '/>"/>
+                
             </td>
             <c:if test="${t.getTypeName()=='textstring'}">
             <td>Однострочное текстовое поле </td>
@@ -78,7 +83,8 @@
             <td>Переключатели</td>            
             </c:if>
             <td>
-                <form method="POST" action="showTypes">
+                <form method="POST" action="showTypes.html">
+                <input type="hidden" name="selType" value="<c:out value='${t.getTypeId()}  '/>"/>
                 <div class="nya<c:out value='${t.getTypeId()}'/>">${t.getInfoDescription()}</div>
                 <div class="nya<c:out value='${t.getTypeId()}'/>" style="display:none">
                         <input type="text" name="description" value="<c:out value='${t.getDescription()}'/>"/>
@@ -103,11 +109,12 @@
                 <input type="text" name="name"/>
             </td>--%>
         </tr>
-            </form>
+
             <% i++;%>
         </c:forEach>
         </table>
-            </form>
+           <%-- </form>--%>
+           </div>
 		</div>
 	</div>
         

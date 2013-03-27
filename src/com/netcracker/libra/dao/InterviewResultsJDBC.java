@@ -57,36 +57,39 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
                     +"from  interview i where i.status=1";
         return jdbcTemplateObject.queryForInt(SQL,count,count,count,count);
     }
-    public List<InterviewResultsInfo> getAllInfo(String order,boolean desc)
+    public List<InterviewResultsInfo> getAllInfo(String order,Boolean desc)
     {
-        String SQL = "select u.firstname||' '||af.patronymic||' '||u.lastName fio, "
+        String SQL = "select u.lastName||' '||af.patronymic||' '||u.firstname fio, "
 	+"af.appId, nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) avgMark  ,  u.email,  "
                 + "ROW_NUMBER()   OVER ( ORDER BY";
-        if(order.equalsIgnoreCase("results"))
-        {
-            SQL+= "  nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0)   ";
-        }
-        else
-        {
-            if(order.equalsIgnoreCase("appId"))
+        if(order!=null)
+        { 
+            if(order.equalsIgnoreCase("results"))
             {
-                SQL+= "  af.appId  ";
+                SQL+= "  nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0)   ";
             }
             else
             {
-                if(order.equalsIgnoreCase("lastname"))
+                if(order.equalsIgnoreCase("appId"))
                 {
-                    SQL+= "  u.lastName ";
+                    SQL+= "  af.appId  ";
                 }
                 else
                 {
-                    if(order.equalsIgnoreCase("firstname"))
+                    if(order.equalsIgnoreCase("lastname"))
                     {
-                        SQL+= " u.firstname ";
+                        SQL+= "  u.lastName ";
+                    }
+                    else
+                    {
+                        if(order.equalsIgnoreCase("email"))
+                        {
+                            SQL+= " u.email ";
+                        }
                     }
                 }
-            }
-        }          
+            }   
+        }
         if(desc)
             SQL+="desc";
         else 
@@ -115,12 +118,12 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
         List<InterviewResultsInfo> interview = jdbcTemplateObject.query(SQL, new InterviewResultInfoRowMapper());      
         return interview;
     }
-    public List<InterviewResultsInfo> getInfo(String order, boolean desc, int start, int finish)
+    public List<InterviewResultsInfo> getInfo(String order, Boolean desc, int start, int finish)
     {
         String SQL = "select  "
 	+"appId, avgMark, fio, r, email "
         +"from("
-                + "select u.firstname||' '||af.patronymic||' '||u.lastName fio, "
+                + "select u.lastName||' '||af.patronymic||' '||u.firstname fio, "
 	+"af.appId, nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) avgMark  , u.email,  "
                   + "ROW_NUMBER()   OVER ( ORDER BY";
         if(order.equalsIgnoreCase("results"))
@@ -141,9 +144,9 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
                 }
                 else
                 {
-                    if(order.equalsIgnoreCase("firstname"))
+                    if(order.equalsIgnoreCase("email"))
                     {
-                        SQL+= " u.firstname ";
+                        SQL+= " u.email ";
                     }
                 }
             }

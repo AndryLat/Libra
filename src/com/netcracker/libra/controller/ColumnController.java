@@ -5,6 +5,7 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.ColumnJDBC;
+import com.netcracker.libra.dao.TemplateJDBC;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +26,15 @@ import org.springframework.ui.ModelMap;
 @Controller
 public class ColumnController
 {
+    
+    @RequestMapping(value="index2")
+    public String index(ModelMap model)  
+    {
+        return "index2";
+    }
+    
     TypeJDBC typeJDBC=new TypeJDBC();
+    TemplateJDBC templateJDBC=new TemplateJDBC();
     ColumnJDBC columnJDBC=new ColumnJDBC();
     @Autowired
     UserPreferences userPreferences;
@@ -47,14 +56,7 @@ public class ColumnController
         return "messageView";
     }
     
-    @RequestMapping(value="changeOrder",method = RequestMethod.POST)
-    public String changeOrder(ModelMap model,
-    @RequestParam(required=true,value="column1") int column1,
-    @RequestParam(required=true,value="column2") int column2)  
-    {
-        
-        return "redirect:showColumn.html?templateId="+templateId;
-    }
+
     @RequestMapping(value="SubmitColumn",method = RequestMethod.POST)
     public String addColumn(ModelMap model,
     @RequestParam("name") String name,
@@ -128,13 +130,35 @@ public class ColumnController
     @RequestParam("columnId") int columnId,
      @RequestParam("templateId") int templateId)  
     {
-        columnJDBC.update(name, selType, parentColumn, columnId);
-        return "redirect:showColumn.html?templateId="+templateId;
+        if(userPreferences.accessLevel==1)
+        {
+            String message=TemplateService.checkColumn(name);
+            if(typeJDBC.existType(selType)==0)
+            {
+                message+="<p>Такого типа не существует</p>";
+            }
+            if(columnJDBC.existColumn(parentColumn)==0)
+            {
+                message+="<p>Такой колонки не существует</p>";
+            }
+            if(!message.equals(""))
+            {
+                model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+                model.addAttribute("message", message);
+                model.addAttribute("title", "Ошибка");
+            }
+            columnJDBC.update(name, selType, parentColumn, columnId);
+            return "redirect:showColumn.html?templateId="+templateId;
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
     @RequestMapping(value="delColumns",method = RequestMethod.POST)
     public String delColumns(ModelMap model,
-    @RequestParam("delete[]") int[] delete)  
+    @RequestParam(value="delete[]",required=false) int[] delete)  
     {
         if(delete==null)
         {
@@ -168,10 +192,13 @@ public class ColumnController
             columnJDBC.delete(delete);          
             return "redirect:showTemplates.html";
         }
-        return "redirect:showColumn.html?templateId="+templateId;
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
-    @RequestMapping(value="changeColumn",method = RequestMethod.POST)
+    @RequestMapping(value="changeColumn",method = RequestMethod.GET)
     public String ChangeColumn(ModelMap model,
     @RequestParam("column1") int column1,
     @RequestParam("column2") int column2,
@@ -212,22 +239,29 @@ public class ColumnController
     }
     
     //submitForm
-    
+/*
     @RequestMapping(value="submitForm",method = RequestMethod.POST)
     public String submitForm(ModelMap model,
     @ModelAttribute("columnFields") ColumnFieldsModel columnFields)  
     {
-       Map<Integer,String> map=columnFields.getMap();   
+        Map<Integer,String> map=columnFields.getMap();   
+        
+        Set s=map.entrySet();
+        // Move next key and value of HashMap by iterator
+        Iterator it=s.iterator();
+        while(it.hasNext())
+        {
+            // key=value separator this by Map.Entry to get key and value
+            Map.Entry m =(Map.Entry)it.next();
+            // getKey is used to get key of HashMap
+            int key=(Integer)m.getKey();
+            // getValue is used to get value of key in HashMap
+            String value=(String)m.getValue();
+            if(!value.equalsIgnoreCase(""))
+            {
+                columnsJDBS.addColumnField(key, userPreferences.UserId, value, 1);
+            }
+        }
         return "appFormView";
-    }
-    
-    @RequestMapping(value="changeColumn",method = RequestMethod.POST)
-    public String ChangeColumn(ModelMap model,
-    @RequestParam("column1") int column1,
-    @RequestParam("column2") int column2)  
-    {
-        columnJDBC.swop(column1, column2);
-        //model.addAttribute("columns", columnJDBC.getBrothers(column,parentColumn));
-          return "redirect:showColumn.html?templateId="+templateId;
-   }
+    }  */
 }

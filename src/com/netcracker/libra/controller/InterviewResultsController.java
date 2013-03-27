@@ -11,11 +11,11 @@ import com.netcracker.libra.model.InterviewResultsInfo;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 /**
  *
  * @author Sashenka
@@ -30,7 +30,60 @@ public class InterviewResultsController
     /*Integer count;
     Integer page;
     String order="results";
-    boolean desc=true;*/
+    boolean desc=true;*/    
+    @RequestMapping("resultAjax")
+    public ModelAndView ajax(@RequestParam(required=false,value="page") Integer page,
+    @RequestParam(required=false,value="count") Integer count,
+    @RequestParam(required=false,value="serch") String serch,
+    @RequestParam(required=false,value="order") String order,
+    @RequestParam(required=false,value="desc") Boolean desc)
+    {
+        
+            
+            ModelAndView mav = new ModelAndView();
+               
+            if(serch!=null)
+            {
+                String[] s=serch.split("[,\\s]+");
+                List<InterviewResultsInfo> inf=iresults.serch(s);
+                mav.addObject("showStudents", inf);
+                mav.addObject("serch", serch);
+                mav.setViewName("resultAjax");  
+                return mav;
+            }
+            
+            if(order==null)
+            {
+                order="results";
+            }
+            if(desc==null)
+            {
+                desc=true;
+            }
+            
+            mav.addObject("order",order);
+            mav.addObject("desc",desc);
+            if(count==null && page==null )
+            {            
+                mav.addObject("showStudents", iresults.getAllInfo(order,desc));
+                mav.setViewName("resultAjax"); 
+                mav.addObject("count", null);
+                mav.addObject("page", null);
+                 return mav;
+                
+            }
+            else
+            {
+                List<InterviewResultsInfo> inf=iresults.getInfo(order,desc,1+(page-1)*count,page*count);
+                mav.addObject("pages",iresults.countPage(count));
+                mav.addObject("showStudents", inf);
+                mav.addObject("currentpage",page);
+                mav.addObject("count",count);
+                mav.setViewName("resultAjax");       
+                return mav;
+            }
+           
+    }
     @RequestMapping(value="addResult", method= RequestMethod.GET)
     public ModelAndView addResult(@RequestParam("appId") int appId)
     {
@@ -100,7 +153,7 @@ public class InterviewResultsController
     @RequestParam(required=false,value="count") Integer count,
     @RequestParam(required=false,value="serch") String serch,
     @RequestParam(required=false,value="order") String order,
-    @RequestParam(required=false,value="desc") boolean desc)
+    @RequestParam(required=false,value="desc") Boolean desc)
     {
         if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
         {
@@ -112,42 +165,45 @@ public class InterviewResultsController
                 String[] s=serch.split("[,\\s]+");
                 List<InterviewResultsInfo> inf=iresults.serch(s);
                 mav.addObject("showStudents", inf);
+                mav.addObject("serch", serch);
                 mav.setViewName("showResultsView");  
                 return mav;
             }
+            
+            if(order==null)
+            {
+                order="results";
+            }
+            if(desc==null)
+            {
+                desc=true;
+            }
+            
+            mav.addObject("order",order);
+            mav.addObject("desc",desc);
+            if(count==null && page==null )
+            {            
+                mav.addObject("showStudents", iresults.getAllInfo(order,desc));
+                mav.setViewName("showResultsView"); 
+                mav.addObject("count", null);
+                mav.addObject("page", null);
+                 return mav;
+                
+            }
             else
             {
-                if(order!=null)
-                {
-                    mav.addObject("order", order);
-                } 
-                if(order!=null&&order.equalsIgnoreCase(order))
-                {
-                     mav.addObject("desc", desc=!desc);
-                }
-                    
-            if((count==null && page==null)&&count==null||(serch==null&&order==null&&page==null&&count==null) )
-            {            
-                List<InterviewResultsInfo> inf=iresults.getAllInfo(order,desc);
-                mav.addObject("showStudents", inf);
-                mav.setViewName("showResultsView"); 
-                mav.addObject("count", "");
-                mav.addObject("page", "");
-                
-                return mav;
-            }
-                if(page==null)
-                    page=1;
                 List<InterviewResultsInfo> inf=iresults.getInfo(order,desc,1+(page-1)*count,page*count);
                 mav.addObject("pages",iresults.countPage(count));
                 mav.addObject("showStudents", inf);
                 mav.addObject("currentpage",page);
-                mav.setViewName("showResultsView");        
-            
-                
+                mav.addObject("count",count);
+                mav.setViewName("showResultsView");       
+                return mav;
             }
+            /*
             mav.setViewName("showResultsView");        
             return mav; 
+            */
         }
         else
         {

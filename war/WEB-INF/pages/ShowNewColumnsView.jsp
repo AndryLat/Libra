@@ -78,40 +78,12 @@
                 <td>${c.getNumbers()}</td>
                 <td>${c.getNameWithIndent()}</td>
                 <td> 
-                    <c:if test="${c.getColumnUpp()!=0}">
-                     ${c.getColumnUpp()}
+                    <c:if test="${c.getColumnUpp()!=0}"> 
+                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnUpp()}&templateId=${templateId}"> <img src="resources/images/admin/arrow_up.png"/></a>
                      </c:if>
-                    <c:if test="${c.getColumnUpp()!=0}">
-                     </br>
-                    ${c.getColumnDown()}
+                    <c:if test="${c.getColumnDown()!=0}">
+                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnDown()}&templateId=${templateId}"><img src="resources/images/admin/arrow_down.png"/></a> 
                      </c:if>   
-                       
-                    <c:forEach items="${columns}" var="list" >  
-                        <c:if test="${(c.getParentColumn()==list.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}" >
-                            <c:set var="showSwop" value="${true}"/>
-                        </c:if>                        
-                     </c:forEach>
-                    
-                    <i class="icon-search"></i>
-                    <c:if test="${showSwop==true}">
-                    <form action="changeColumn.html" method="POST">
-                        
-                        <input name="column1" type="hidden" value="${c.getColumnId()}">
-                      <input type="hidden" name="templateId" value="${templateId}"/>              
-                <%--<select class="select-change" name="column2" size="1">
-                <c:forEach items="${columns}" var="list">  
-                <c:if test="${(list.getParentColumn()==c.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}">
-                        <option value="${list.getColumnId()}">${list.getName()}</option>
-                </c:if>
-                </c:forEach>
-                </select>  
-               --%>
-                    <input class="btn btn-primary pull-right"  type="submit" value="OK"/>
-                    </form>
-                         </c:if>
-                    <c:if test="${showSwop==false}">
-                        Ее не с кем менять
-                    </c:if>
                 </td>
                 <td>
                     <c:if test="${c.getTypeId()!=0}">

@@ -8,7 +8,6 @@ import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.Column;
 import com.netcracker.libra.model.ColumnForEdit;
 import com.netcracker.libra.model.ColumnInfo;
-import com.netcracker.libra.model.ColumnLevel;
 import com.netcracker.libra.model.InfoForDelete;
 import java.util.ArrayList;
 import java.util.HashMap;

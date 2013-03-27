@@ -21,6 +21,8 @@
     <script src="http://bootsnipp.com/js/prettify.js"></script>
     <script src="http://bootsnipp.com/js/codemirror.js"></script>
 <script src="http://bootsnipp.com/js/humane.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
+<script src="resources/js/template.js"></script>
         <jsp:include page="resources.jsp" />
     </head>
     <body>
@@ -49,18 +51,19 @@
                                     <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Сортировать <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="showResults.html?order=firstname">По имени</a></li>
-              <li><a href="showResults.html?order=lastname">По фамилие</a></li>
-              <li><a href="showResults.html?order=appId">По номеру анкеты</a></li>
-              <li><a href="showResults.html?order=results">По результатам</a></li>
-            </ul>
+              <li><a href="showResults.html?order=results<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='results'}">&desc=<c:out value='${!desc}'/></c:if>">По результатам</a></li>
+              <li><a href="showResults.html?order=appId<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='appId'}">&desc=<c:out value='${!desc}'/></c:if>">По номеру анкеты</a></li>
+              <li><a href="showResults.html?order=email<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='email'}">&desc=<c:out value='${!desc}'/></c:if>">По email</a></li>
+              <li><a href="showResults.html?order=lastname<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='lastname'}">&desc=<c:out value='${!desc}'/></c:if>">По фамилие</a></li>            
+
+</ul>
           </li>     
 					<li class="divider-vertical"></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" href="#" data-toggle="dropdown">Формат вывода <strong class="caret"></strong></a>
 						<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-							<form method="post" action="showResults.html?page=1" accept-charset="UTF-8">
-								<input style="margin-bottom: 15px;" type="text" placeholder="Количество строк на экране" name="count">
+							<form method="post" action="showResults.html?page=1<c:if test='${order!=null}'>&order=<c:out value='${order}'/>&desc=<c:out value='${desc}'/></c:if>" accept-charset="UTF-8">	
+                                                            <input style="margin-bottom: 15px;" type="text" placeholder="Количество строк на экране" name="count">
                                                                 <input class="btn btn-primary btn-block" type="submit" id="sign-in-twitter" value="Применить">
 							</form>
 						</div>
@@ -100,18 +103,37 @@ $(document).ready(function()
 </script>
                             
                             
-                            
+<c:if test="${serch!=null}">
+    <h4 class="align-center">Результат поиска</h4> 
+</c:if>      
+    <input type="button" value="click me" onclick="ajax_result()" />
 			<table class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
             <thead>
                 <tr>
                     <th>№</th>
-                    <th>№ анкеты</th>
-                    <th>ФИО</th>
-                    <th>email</th>
-                    <th>Оценка</th>
+                    <th>
+                        № анкеты 
+                        <c:if test="${desc==false &&order=='appId'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='appId'}">&uarr;</c:if>
+                    </th>
+                    <th>
+                        ФИО 
+                        <c:if test="${desc==false &&order=='lastname'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='lastname'}">&uarr;</c:if>
+                    </th>
+                    <th>
+                        email
+                        <c:if test="${desc==false &&order=='email'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='email'}">&uarr;</c:if>
+                    </th>
+                    <th>Оценка     
+                        <c:if test="${desc==false &&order=='results'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='results'}">&uarr;</c:if>
+                    </th>
                     <th>Комментарии</th>
                 </tr>
             </thead>
+            <tbody id="studentTable">
             <c:forEach items="${showStudents}" var="student">
             <tr>
                 <td>
@@ -134,22 +156,23 @@ $(document).ready(function()
                 </td>
             </tr>
             </c:forEach>
+            </tbody>
         </table>
                         <c:if test="${pages>1}">
                         <div class="pagination align-center">
                             <ul>
                               <li <c:if test="${currentpage==1}"> class="disabled"</c:if>>
-                                  <a <c:if test="${currentpage!=1}"> href="showResults.html?page=<c:out value='${currentpage-1}'/>" </c:if>>Prev</a>
+                                  <a <c:if test="${currentpage!=1}"> href="showResults.html?page=<c:out value='${currentpage-1}'/>&count=<c:out value='${count}'/>&order=<c:out value='${order}'/>&desc=<c:out value='${desc}'/>" </c:if>>Prev</a>
                               </li>                           
                               
                               <c:forEach var="i" begin="1" end="${pages}">
                                  <li <c:if test="${i==currentpage}"> class="active"</c:if>>
-                                     <a href="showResults.html?page=<c:out value='${i}'/>">${i}</a>
+                                     <a href="showResults.html?page=<c:out value='${i}'/>&count=<c:out value='${count}'/>&order=<c:out value='${order}'/>&desc=<c:out value='${desc}'/>">${i}</a>
                                  </li>
                               </c:forEach>
                                  
                               <li <c:if test="${currentpage==pages}"> class="disabled"</c:if>>
-                                  <a <c:if test="${currentpage<pages}">  href="showResults.html?page=<c:out value='${currentpage+1}'/>" </c:if>>Next</a>
+                                  <a <c:if test="${currentpage<pages}">  href="showResults.html?page=<c:out value='${currentpage+1}'/>&count=<c:out value='${count}'/>&order=<c:out value='${order}'/>&desc=<c:out value='${desc}'/>" </c:if>>Next</a>
                               </li>
                             </ul>
                         </div>
