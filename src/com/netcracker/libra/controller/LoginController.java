@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.netcracker.libra.service.LoginService;
+import com.netcracker.libra.service.RegformService;
 import com.netcracker.libra.util.security.Security;
 import com.netcracker.libra.util.security.SessionToken;
 
@@ -56,6 +57,7 @@ public class LoginController {
 					"Проверьте правильность вводимых значений");
 		} else {
 			viewName = "redirect:welcome.html";
+			userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
 			request.getSession().setAttribute("LOGGEDIN_USER", userData);
 		}
 		mav.setViewName(viewName);
@@ -65,7 +67,7 @@ public class LoginController {
 	@RequestMapping(value = "/logout")
 	public String logout(ModelMap model) {
 		model.addAttribute("logoutMessage", "Вы вышли из системы");
-		return "redirect:/index.html";
+		return "forward:/index.html";
 	}
 
 	@RequestMapping(value = "editLogin")

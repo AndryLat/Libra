@@ -7,6 +7,7 @@ package com.netcracker.libra.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 
 import org.hibernate.validator.constraints.Email;
@@ -14,18 +15,17 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.netcracker.libra.service.RegformService;
+
 public class RegisterForm {
 	
 	private Map<String, String> map = new HashMap<>();
-	private Map<String, String> languagesGrades = new HashMap<>();
 	private String generatedCode;
 	private String enteredCode;
 	private String phoneNumber;
 	private Integer userId;
-	private Long appId;
+	private Integer appId;
 	private MultipartFile photo;
-	private Long university;
-	private Long faculty;
 	private Long department;
 	private Integer course;
 	private Long graduated;
@@ -64,6 +64,7 @@ public class RegisterForm {
 	
 	private boolean isPasswordsEqual;
 	private boolean isCodesEqual;
+	private boolean isEmailAlreadyInUse;
 	
 	public RegisterForm() {
 		
@@ -159,6 +160,11 @@ public class RegisterForm {
 		this.email = email;
 	}
 	
+	@AssertFalse(message="Электронный адрес уже используется")
+	public boolean isEmailAlreadyInUse() {
+		return RegformService.checkEmailAvailability(email);
+	}
+	
 	@AssertTrue(message="Пароли не совпадают")
 	public boolean isPasswordsEqual() {
 		if (password == null) {
@@ -193,14 +199,6 @@ public class RegisterForm {
 		this.map = submittedValues;
 	}
 
-	public Map<String, String> getLanguagesGrades() {
-		return languagesGrades;
-	}
-
-	public void setLanguages(Map<String, String> languagesGrades) {
-		this.languagesGrades = languagesGrades;
-	}
-
 	public Integer getUserId() {
 		return userId;
 	}
@@ -209,11 +207,11 @@ public class RegisterForm {
 		this.userId = userId;
 	}
 
-	public Long getAppId() {
+	public Integer getAppId() {
 		return appId;
 	}
 
-	public void setAppId(Long appId) {
+	public void setAppId(Integer appId) {
 		this.appId = appId;
 	}
 
@@ -231,22 +229,6 @@ public class RegisterForm {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-	
-	public Long getUniversity() {
-		return university;
-	}
-
-	public void setUniversity(Long university) {
-		this.university = university;
-	}
-
-	public Long getFaculty() {
-		return faculty;
-	}
-
-	public void setFaculty(Long faculty) {
-		this.faculty = faculty;
 	}
 
 	public Long getDepartment() {

@@ -17,25 +17,61 @@
 	<div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
-	
+
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
 			<div class="span9">
-			<c:if test="${logoutMessage!=null}">
-				<div class="row-fluid"><div class="alert alert-error">${logoutMessage}</div></div>
-			</c:if>
-				<div class="hero-unit">
-					<h1>Libra&nbsp;</h1>
-					<c:if test="${LOGGEDIN_USER.userId==null}">
-					<p>Войдите или зарегистрируйтесь.</p>
-					<p>
-						<a href="login.html"><button class="btn btn-large btn-primary" type="button">Вход</button></a>
-						<a href="register.html"><button class="btn btn-large btn-success" type="button">Регистрация</button></a>
-					</p>
-					</c:if>
+				<div class="row-fluid">
+					<div class="hero-unit span12">
+						<div class="span6">
+							<h1>Libra&nbsp;</h1>
+							<p>Be all you can be.</p>
+							<a class="btn btn-success btn-large" href="#">Узнай больше</a>
+						</div>
+
+						<div class="span6">
+							<blockquote>
+								<p><h2>Hello, World</h2></p>
+								<small>Неизвестный программист</small>
+							</blockquote>
+						</div>
+					</div>
+				</div>
+
+				<div class="row-fluid">
+					<div class="span4">
+						<h2>Учись</h2>
+						<p>Пройди обучение в нашем Центре и получи необходимые навыки
+							и знания востребованных технологий для разработки и тестирования
+							программного обеспечения</p>
+						<p>
+							<a class="btn btn-primary btn-large" href="#">Учебный центр</a>
+						</p>
+					</div>
+
+					<div class="span4">
+						<h2>Развивайся</h2>
+						<p>После окончания учебного центра у тебя есть возможность
+							попасть на стажировку в компанию и получить неоценимый опыт
+							разработки и работы в команде.</p>
+						<p>
+							<a class="btn btn-primary btn-large" href="#">Стажировка</a>
+						</p>
+					</div>
+
+					<div class="span4">
+						<h2>Создавай</h2>
+						<p>Если ты успешно закончил обучение и прошел стажировку, у
+							тебя есть неплохие шансы получить работу в компании. Список
+							вакансий постоянно обновляется</p>
+						<p>
+							<a class="btn btn-primary btn-large" href="#">Работа в
+								компании</a>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>

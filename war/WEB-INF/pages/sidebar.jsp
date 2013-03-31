@@ -6,7 +6,9 @@
 
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==0}">
 			<li class="nav-header">Собеседования</li>
-				<li><a href="#">Открыть анкету</a></li>
+				<c:if test="${LOGGEDIN_USER.appFormFlag}"><li><a href="#">Открыть анкету</a></li></c:if>
+				<c:if test="${!LOGGEDIN_USER.appFormFlag}"><li><a href="/Libra/register/signup.html">Заполнить анкету</a></li></c:if>
+			<li class="nav-header">Собеседования</li>
 				<li><a href="/Libra/showInterviewDate.html">Записаться на собеседование</a></li>
 		</c:if>
 
@@ -44,7 +46,7 @@
 
 		<c:if test="${LOGGEDIN_USER==null}">
 			<li class="nav-header">Навигация</li>
-				<li><a href="/Libra/register.html">Регистрация</a></li>
+				<li><a href="/Libra/register.html">Зарегистрироваться</a></li>
 				<li><a href="/Libra/login.html">Войти</a></li>
 		</c:if>
 	</ul>

@@ -14,7 +14,15 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler) throws Exception {
 		
 		String uri = request.getRequestURI();
-		if (!uri.endsWith("contacts.html") && !uri.endsWith("about.html") && !uri.endsWith("index.html") && !uri.endsWith("login.html")) {
+		if (!uri.endsWith("contacts.html") && 
+				!uri.endsWith("about.html") && 
+				!uri.endsWith("index.html") && 
+				!uri.endsWith("login.html") &&
+				!uri.endsWith("university.html") &&
+				!uri.endsWith("faculty.html") &&
+				!uri.endsWith("department.html") &&
+				!uri.endsWith("welcome.html") &&
+				!uri.endsWith("register.html")) {
 			SessionToken userData = (SessionToken) request.getSession().getAttribute("LOGGEDIN_USER");
 			if (userData == null) {
 				request.getSession().setAttribute("accessDeniedMessage", "Недостаточно прав для доступа к запрашиваемой странице");

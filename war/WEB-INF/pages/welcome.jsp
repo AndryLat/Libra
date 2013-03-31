@@ -28,7 +28,7 @@
 			</div>
 
 			<div class="span9">
-					<div id="legend">
+				<div id="legend">
       					<legend class="">Welcome</legend>
     				</div>
 			</div>
