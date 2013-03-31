@@ -18,7 +18,7 @@
 				<li><a href="/Libra/hr/сonfirmEditing.html">Подтверждение изменений дат интервью</a></li>
 			<li class="nav-header">Собеседования</li>
 				<li><a href="/Libra/hr/interviewDate.html">Расписание собеседований</a></li>
-				<li><a href="/Libra/hr/showResults.html">Показать результаты</a></li>
+				<li><a href="/Libra/showResults.html">Показать результаты</a></li>
 			<li class="nav-header">Отчеты</li>
 				<li><a href="/Libra/hr/showStudentRecords.html">График записи студентов</a></li>
 				<li><a href="/Libra/hr/showRegReport.html">Зарегистрировались/пришли</a></li>
@@ -26,9 +26,9 @@
 				<li><a href="/Libra/hr/showStudentActivity.html">Посещаемость
 				собеседований</a></li>
 			<li class="nav-header">Управление шаблонами</li>
-				<li><a href="/Libra/hr/showTemplates.html">Шаблоны</a></li>
-				<li><a href="/Libra/hr/addType.html">Добавить тип</a></li>
-				<li><a href="/Libra/hr/showTypes.html">Просмотреть типы</a></li>
+				<li><a href="/Libra/showTemplates.html">Шаблоны</a></li>
+				<li><a href="/Libra/addType.html">Добавить тип</a></li>
+				<li><a href="/Libra/showTypes.html">Просмотреть типы</a></li>
 
 			<li class="nav-header">Управление университетами</li>
 				<li><a href="/Libra/hr/showUniversities.html">Изменить университеты</a></li>

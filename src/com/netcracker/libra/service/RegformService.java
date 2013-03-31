@@ -66,7 +66,7 @@ public class RegformService {
 	
 	@Transactional
 	public static void insertAppformAnswers(RegisterForm form, Integer userId) throws SQLException {
-		jdbc.updateTemplateIdOnFormSubmit(userId);
+		jdbc.updateTemplateIdOnFormSubmit(form.getTemplateId(), userId);
 		jdbc.fillAppForm(form, userId);
 		return;
 	}

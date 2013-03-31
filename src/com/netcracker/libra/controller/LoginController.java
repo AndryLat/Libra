@@ -57,7 +57,7 @@ public class LoginController {
 					"Проверьте правильность вводимых значений");
 		} else {
 			viewName = "redirect:welcome.html";
-			userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
+			//userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
 			request.getSession().setAttribute("LOGGEDIN_USER", userData);
 		}
 		mav.setViewName(viewName);

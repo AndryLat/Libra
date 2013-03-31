@@ -9,13 +9,16 @@ import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.model.Type;
 import com.netcracker.libra.service.TemplateService;
+import com.netcracker.libra.util.security.SessionToken;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -23,32 +26,32 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Sashenka
  */
 @Controller
+@SessionAttributes({"regForm", "LOGGEDIN_USER"})
 public class TypeController 
 {
     TypeJDBC typeJDBC=new TypeJDBC();
     
-    @Autowired
-    UserPreferences userPreferences;
+    //@Autowired
+    //UserPreferences userPreferences;
     
     /**
      * Обрабатывает запрос по добавлению нового типа.
      * @param name имя типа, который мы хотим добавить. Передается в POST запросе.
      */
     @RequestMapping(value="SubmitType", method= RequestMethod.POST)
-    public ModelAndView processPost(@RequestParam("name") String name,
+    public ModelAndView processPost(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("name") String name,
             @RequestParam("description") String description)
     {
-        ModelAndView mav = new ModelAndView();
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
-                mav.setViewName("messageView");
-                    String message=TemplateService.checkType(name);
+                String message=TemplateService.checkType(name);
                 if(!message.equals(""))
                 {
                     return message("<a href='addType.html'>Вернуться назад</a>", message, "Ошибка");
                 } 
                 typeJDBC.add(name,description);
-                return showTypes();
+                 return new ModelAndView("redirect:showTypes.html");
         } 
         else
         {
@@ -61,10 +64,10 @@ public class TypeController
      * Вызывается при запросе по ссылке "showTypes.html"
      */
     @RequestMapping("showTypes")
-    public ModelAndView showTypes()
+    public ModelAndView showTypes(@ModelAttribute("LOGGEDIN_USER") SessionToken token)
     {
         ModelAndView mav = new ModelAndView();
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             mav.setViewName("showTypeView");
             List<Type> types=typeJDBC.getAllInfo();
@@ -83,11 +86,12 @@ public class TypeController
      */
     @RequestMapping(value="showTypes", method= RequestMethod.POST)
     public ModelAndView editSummitPost(
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("selType") int selType,
     @RequestParam("description") String description)
     {
         ModelAndView mav = new ModelAndView();
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             if(typeJDBC.existType(selType)==0)
                  {
@@ -95,7 +99,7 @@ public class TypeController
                  }
                 mav.setViewName("messageView");          
                 typeJDBC.update(selType, description);
-                return showTypes();
+                 return new ModelAndView("redirect:showTypes.html");
         } 
         else
         {
@@ -104,13 +108,14 @@ public class TypeController
     }
     @RequestMapping(value="delType", method= RequestMethod.POST)
     public String delType(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam(value="types[]",required=false ) int[] delete)  
     {
         if(delete==null)
         {
             return "redirect:showTypes.html";
         }
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             List<InfoForDelete> info=typeJDBC.getInfoForDelete(delete);
             int infoSize=info.size();
@@ -169,13 +174,13 @@ public class TypeController
      * @param typeId номер типа, который удаляем. Он передается POST запросм
      */
      @RequestMapping(value="delSubmitType", method= RequestMethod.POST)
-    public ModelAndView delSubmitType(@RequestParam("delete[]") int[] delete)
+    public ModelAndView delSubmitType(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("delete[]") int[] delete)
     {
-        ModelAndView mav = new ModelAndView();
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {             
             typeJDBC.delete(delete);
-            return showTypes();
+            return new ModelAndView("redirect:showTypes.html");
         } 
         else
         {

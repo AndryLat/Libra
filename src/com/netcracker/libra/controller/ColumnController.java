@@ -16,34 +16,39 @@ import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.ColumnFieldsModel;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.service.TemplateService;
+import com.netcracker.libra.util.security.SessionToken;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 /**
  *
  * @author Sashenka
  */
 @Controller
+@SessionAttributes({"regForm", "LOGGEDIN_USER"})
 public class ColumnController
 {
     
-    @RequestMapping(value="index2")
+   /* @RequestMapping(value="index2")
     public String index(ModelMap model)  
     {
         return "index2";
     }
-    
+    */
     TypeJDBC typeJDBC=new TypeJDBC();
     TemplateJDBC templateJDBC=new TemplateJDBC();
     ColumnJDBC columnJDBC=new ColumnJDBC();
-    @Autowired
-    UserPreferences userPreferences;
+    //@Autowired
+    //UserPreferences userPreferences;
    // int templateId;
     @RequestMapping(value="showColumn",method = RequestMethod.GET)
     public String showColumns(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam int templateId)  
     {
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             model.addAttribute("types", typeJDBC.getAllInfo());
             model.addAttribute("templateId", templateId);    
@@ -59,12 +64,13 @@ public class ColumnController
 
     @RequestMapping(value="SubmitColumn",method = RequestMethod.POST)
     public String addColumn(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("name") String name,
     @RequestParam("selType") int selType,
     @RequestParam("parentColumn") int parentColumn,
     @RequestParam("templateId") int templateId)  
     {
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             String message=TemplateService.checkColumn(name);
             if(typeJDBC.existType(selType)==0&&selType!=0)
@@ -93,10 +99,11 @@ public class ColumnController
     
     @RequestMapping(value="editColumn",method = RequestMethod.GET)
     public String editColumn(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("columnId") int columnId,
     @RequestParam("templateId") int templateId)  
     {
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             String message="";
             if(columnJDBC.existColumn(columnId)==0)
@@ -124,13 +131,14 @@ public class ColumnController
     
     @RequestMapping(value="editSubmitColumn",method = RequestMethod.POST)
     public String editSubmitColumn(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("name") String name,
     @RequestParam("selType") int selType,
     @RequestParam("parentColumn") int parentColumn,
     @RequestParam("columnId") int columnId,
      @RequestParam("templateId") int templateId)  
     {
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             String message=TemplateService.checkColumn(name);
             if(typeJDBC.existType(selType)==0)
@@ -158,13 +166,14 @@ public class ColumnController
     
     @RequestMapping(value="delColumns",method = RequestMethod.POST)
     public String delColumns(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam(value="delete[]",required=false) int[] delete)  
     {
         if(delete==null)
         {
             return "redirect:showTemplates.html";
         }
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             List<InfoForDelete> info=columnJDBC.getInfoForDelete(delete);
             int infoSize=info.size();
@@ -185,9 +194,10 @@ public class ColumnController
     
     @RequestMapping(value="delSubmitColumns",method = RequestMethod.POST)
     public String delSubmiteColumns(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("delete[]") int[] delete)  
     {
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {   
             columnJDBC.delete(delete);          
             return "redirect:showTemplates.html";
@@ -200,11 +210,12 @@ public class ColumnController
     
     @RequestMapping(value="changeColumn",method = RequestMethod.GET)
     public String ChangeColumn(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("column1") int column1,
     @RequestParam("column2") int column2,
     @RequestParam("templateId") int templateId)  
     {
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             String message="";
             
