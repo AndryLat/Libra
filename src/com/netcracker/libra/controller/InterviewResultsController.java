@@ -8,23 +8,33 @@ import com.netcracker.libra.dao.InterviewResultsJDBC;
 import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.InterviewResult;
 import com.netcracker.libra.model.InterviewResultsInfo;
+import com.netcracker.libra.util.security.SessionToken;
+import java.io.StringWriter;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 /**
  *
  * @author Sashenka
  */
 @Controller
+@SessionAttributes({"regForm", "LOGGEDIN_USER"})
 public class InterviewResultsController 
 {
-    @Autowired
-    UserPreferences userPreferences;
+  //  @Autowired
+  //  UserPreferences userPreferences;
     InterviewResultsJDBC iresults=new InterviewResultsJDBC();
     //int appId;
     /*Integer count;
@@ -38,20 +48,17 @@ public class InterviewResultsController
     @RequestParam(required=false,value="order") String order,
     @RequestParam(required=false,value="desc") Boolean desc)
     {
-        
-            
-            ModelAndView mav = new ModelAndView();
-               
-            if(serch!=null)
-            {
+        ModelAndView mav = new ModelAndView();
+        List<InterviewResultsInfo> list=new ArrayList<InterviewResultsInfo>();
+        JSONObject resultJson = new JSONObject();  
+          JSONArray students = new JSONArray();   
+        if(serch!=null)
+        {
                 String[] s=serch.split("[,\\s]+");
-                List<InterviewResultsInfo> inf=iresults.serch(s);
-                mav.addObject("showStudents", inf);
-                mav.addObject("serch", serch);
-                mav.setViewName("resultAjax");  
-                return mav;
-            }
-            
+                 list=iresults.serch(s);
+        }
+        else
+        {
             if(order==null)
             {
                 order="results";
@@ -60,34 +67,53 @@ public class InterviewResultsController
             {
                 desc=true;
             }
-            
-            mav.addObject("order",order);
-            mav.addObject("desc",desc);
+            resultJson.put("order",order);
+            resultJson.put("desc",desc);
             if(count==null && page==null )
-            {            
-                mav.addObject("showStudents", iresults.getAllInfo(order,desc));
-                mav.setViewName("resultAjax"); 
-                mav.addObject("count", null);
-                mav.addObject("page", null);
-                 return mav;
-                
+            {
+                  list=iresults.getAllInfo(order,desc);
+                  
             }
             else
             {
-                List<InterviewResultsInfo> inf=iresults.getInfo(order,desc,1+(page-1)*count,page*count);
-                mav.addObject("pages",iresults.countPage(count));
-                mav.addObject("showStudents", inf);
-                mav.addObject("currentpage",page);
-                mav.addObject("count",count);
-                mav.setViewName("resultAjax");       
-                return mav;
+                 list=iresults.getInfo(order,desc,1+(page-1)*count,page*count);
+                 resultJson.put("pages",iresults.countPage(count));
+                 resultJson.put("currentpage",page);
+                 resultJson.put("count",count);
             }
-           
+        }
+                    
+          for(InterviewResultsInfo i: list)
+          {
+              JSONObject s = new JSONObject(); 
+              s.put("r", i.getR());
+              s.put("fio", i.getFio());
+              s.put("avgMark", i.getAvgMark());
+              s.put("appId", i.getAppId());
+              s.put("email", i.getEmail());
+              students.add(s);
+          }  
+          resultJson.put("students",students);
+         // resultJson.put("page", 1);
+          
+           //mav.addObject();
+          String jsonText = JSONValue.toJSONString(resultJson);
+          mav.addObject("json", jsonText);
+          mav.setViewName("resultAjax");
+             /*   mav.addObject("showStudents", );
+                mav.setViewName("resultAjax"); 
+                mav.addObject("count", null);
+                mav.addObject("page", null);
+                 return mav;*/
+            return mav;
+                
+            
     }
     @RequestMapping(value="addResult", method= RequestMethod.GET)
-    public ModelAndView addResult(@RequestParam("appId") int appId)
+    public ModelAndView addResult(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("appId") int appId)
     {
-        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2 )
+        if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2 )
         {
             if(iresults.exists(appId)==0)
             {
@@ -97,8 +123,8 @@ public class InterviewResultsController
             ModelAndView mav = new ModelAndView();
             mav.setViewName("addResultView");       
             List<InterviewResult> intres=iresults.getResult(appId);
-            mav.addObject("existsComment", iresults.existsComment(userPreferences.UserId, appId));
-            mav.addObject("userId", userPreferences.UserId);
+            mav.addObject("existsComment", iresults.existsComment(token.getUserId(), appId));
+            mav.addObject("userId", token.getUserId());
             mav.addObject("interviewResult",intres);
             mav.addObject("appId", appId);
             return mav; 
@@ -110,15 +136,16 @@ public class InterviewResultsController
     }
     
     @RequestMapping(value="addResultSubmit", method= RequestMethod.POST)
-    public ModelAndView addResultSubmit(@RequestParam("mark") int mark,
+    public ModelAndView addResultSubmit(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("mark") int mark,
     @RequestParam("comment") String comment,
     @RequestParam("appId") int appId)
     {
-        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
+        if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2)
         { 
             try
             {
-                iresults.addResult(appId,userPreferences.accessLevel, userPreferences.UserId, mark, comment); 
+                iresults.addResult(appId,token.getUserAccessLevel(), token.getUserId(), mark, comment); 
                 return  new ModelAndView("redirect:showResults.html");
             }
             catch(Exception e)
@@ -133,13 +160,14 @@ public class InterviewResultsController
     }
     
     @RequestMapping(value="updateResultSubmit", method= RequestMethod.POST)
-    public ModelAndView updateResultSubmit(@RequestParam("mark") int mark,
+    public ModelAndView updateResultSubmit(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("mark") int mark,
     @RequestParam("comment") String comment,
     @RequestParam("appId") int appId)
     {
-        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
+        if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2)
         {         
-            iresults.updateResult(appId, userPreferences.UserId, mark, comment);
+            iresults.updateResult(appId,token.getUserId(), mark, comment);
             return  new ModelAndView("redirect:showResults.html");
         }
         else
@@ -150,16 +178,17 @@ public class InterviewResultsController
     
     @RequestMapping("showResults")
     public ModelAndView showResults(@RequestParam(required=false,value="page") Integer page,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam(required=false,value="count") Integer count,
     @RequestParam(required=false,value="serch") String serch,
     @RequestParam(required=false,value="order") String order,
     @RequestParam(required=false,value="desc") Boolean desc)
     {
-        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
+        if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2)
         {
             
             ModelAndView mav = new ModelAndView();
-               
+               /*
             if(serch!=null)
             {
                 String[] s=serch.split("[,\\s]+");
@@ -200,10 +229,10 @@ public class InterviewResultsController
                 mav.setViewName("showResultsView");       
                 return mav;
             }
-            /*
+            */
             mav.setViewName("showResultsView");        
             return mav; 
-            */
+            
         }
         else
         {
@@ -212,11 +241,12 @@ public class InterviewResultsController
     }
     
     @RequestMapping(value="deleteResult", method= RequestMethod.GET)
-    public ModelAndView delResultSubmit(@RequestParam("appId") int appId)
+    public ModelAndView delResultSubmit(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("appId") int appId)
     {
-        if(userPreferences.accessLevel==1 || userPreferences.accessLevel==2)
+        if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2)
         {
-            iresults.deleteResult(appId,userPreferences.UserId);
+            iresults.deleteResult(appId,token.getUserId());
             return  new ModelAndView("redirect:showResults.html");
         }
         else

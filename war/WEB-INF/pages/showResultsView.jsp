@@ -25,7 +25,7 @@
 <script src="resources/js/template.js"></script>
         <jsp:include page="resources.jsp" />
     </head>
-    <body>
+    <body onload="ajax_result(null,null,null,null,null)">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -43,7 +43,7 @@
 	<div class="navbar-inner">
 		<div class="container-fluid">
 			
-			<a class="brand" href="showResults.html" name="top">Все</a>
+                    <a class="brand" href="#" onclick="empty_all();return false;"  name="top">Все</a>
 			<div class="nav-collapse collapse">
 				<ul class="nav">
                                     <li><a href="#">Отправить письмо</a></li>
@@ -51,21 +51,31 @@
                                     <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Сортировать <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="showResults.html?order=results<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='results'}">&desc=<c:out value='${!desc}'/></c:if>">По результатам</a></li>
+          <%--    <li><a href="showResults.html?order=results<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='results'}">&desc=<c:out value='${!desc}'/></c:if>">По результатам</a></li>
               <li><a href="showResults.html?order=appId<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='appId'}">&desc=<c:out value='${!desc}'/></c:if>">По номеру анкеты</a></li>
               <li><a href="showResults.html?order=email<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='email'}">&desc=<c:out value='${!desc}'/></c:if>">По email</a></li>
               <li><a href="showResults.html?order=lastname<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='lastname'}">&desc=<c:out value='${!desc}'/></c:if>">По фамилие</a></li>            
+--%><%--
+href="<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='results'}">&desc=<c:out value='${!desc}'/></c:if>"
+--%>
+              <li id="serch_results"><a onclick="change_order(null,null,null,'results',false)" >По результатам</a></li>
+              <li id="serch_appId"><a onclick="change_order(null,null,null,'appId',true)" >По номеру анкеты</a></li>
+              <li id="serch_email"><a onclick="change_order(null,null,null,'email',true)" >По email</a></li>
+              <li id="serch_lastname"><a  onclick="change_order(null,null,null,'lastname',true)" >По фамилии</a></li>            
 
 </ul>
           </li>     
 					<li class="divider-vertical"></li>
-					<li class="dropdown">
+					<li class="dropdown"  >
 						<a class="dropdown-toggle" href="#" data-toggle="dropdown">Формат вывода <strong class="caret"></strong></a>
-						<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-							<form method="post" action="showResults.html?page=1<c:if test='${order!=null}'>&order=<c:out value='${order}'/>&desc=<c:out value='${desc}'/></c:if>" accept-charset="UTF-8">	
-                                                            <input style="margin-bottom: 15px;" type="text" placeholder="Количество строк на экране" name="count">
-                                                                <input class="btn btn-primary btn-block" type="submit" id="sign-in-twitter" value="Применить">
-							</form>
+						<div id="dropdown" class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+                                                    <form onsubmit="format_submit();return false;">
+                                                        <div id="order">
+                                                            
+                                                        </div>
+                                                              <input style="margin-bottom: 15px;" type="text" placeholder="Количество строк на экране" name="count">
+                                                              <input class="btn btn-primary btn-block" type="submit" id="sign-in-twitter" value="Применить" >
+                                                    </form>
 						</div>
 					</li>
 					
@@ -76,7 +86,7 @@
 					<li class="dropdown">
 						<a class="dropdown-toggle" href="#" data-toggle="dropdown">Поиск <strong class="caret"></strong></a>
 						<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-							<form method="post" action="showResults.html" accept-charset="UTF-8">
+							<form onsubmit="serch_submit();return false;">
 								<input style="margin-bottom: 15px;" type="text" placeholder="Поле поиска"  name="serch">
                                                                 <input class="btn btn-primary btn-block" type="submit" id="sign-in-twitter" value="Найти">
 							</form>
@@ -101,39 +111,42 @@ $(document).ready(function()
         });
   });
 </script>
-                            
-                            
-<c:if test="${serch!=null}">
-    <h4 class="align-center">Результат поиска</h4> 
-</c:if>      
-    <input type="button" value="click me" onclick="ajax_result()" />
+    
+  <h4 id="serch_info" class="align-center"></h4> 
+
 			<table class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
             <thead>
                 <tr>
+                    
+                    <th><input id="one" type="checkbox" name="one" value="all" onclick="cbToggle();" /></th>
                     <th>№</th>
                     <th>
                         № анкеты 
-                        <c:if test="${desc==false &&order=='appId'}">&darr;</c:if>
-                        <c:if test="${desc==true &&order=='appId'}">&uarr;</c:if>
+                        <span id="appId_arrow"></span>
+                      <%--  <c:if test="${desc==false &&order=='appId'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='appId'}">&uarr;</c:if>--%>
                     </th>
                     <th>
                         ФИО 
-                        <c:if test="${desc==false &&order=='lastname'}">&darr;</c:if>
-                        <c:if test="${desc==true &&order=='lastname'}">&uarr;</c:if>
+                         <span id="lastname_arrow"></span>
+                     <%--   <c:if test="${desc==false &&order=='lastname'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='lastname'}">&uarr;</c:if>--%>
                     </th>
                     <th>
                         email
-                        <c:if test="${desc==false &&order=='email'}">&darr;</c:if>
-                        <c:if test="${desc==true &&order=='email'}">&uarr;</c:if>
+                        <span id="email_arrow"></span>
+                      <%--  <c:if test="${desc==false &&order=='email'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='email'}">&uarr;</c:if>--%>
                     </th>
-                    <th>Оценка     
-                        <c:if test="${desc==false &&order=='results'}">&darr;</c:if>
-                        <c:if test="${desc==true &&order=='results'}">&uarr;</c:if>
+                    <th>Оценка  
+                         <span id="results_arrow"></span>
+<%--                        <c:if test="${desc==false &&order=='results'}">&darr;</c:if>
+                        <c:if test="${desc==true &&order=='results'}">&uarr;</c:if>--%>
                     </th>
                     <th>Комментарии</th>
                 </tr>
             </thead>
-            <tbody id="studentTable">
+            <tbody id="studentTable" >
             <c:forEach items="${showStudents}" var="student">
             <tr>
                 <td>
@@ -158,9 +171,8 @@ $(document).ready(function()
             </c:forEach>
             </tbody>
         </table>
-                        <c:if test="${pages>1}">
-                        <div class="pagination align-center">
-                            <ul>
+                        <div id="pages" class="pagination align-center">
+                           <%-- <ul>
                               <li <c:if test="${currentpage==1}"> class="disabled"</c:if>>
                                   <a <c:if test="${currentpage!=1}"> href="showResults.html?page=<c:out value='${currentpage-1}'/>&count=<c:out value='${count}'/>&order=<c:out value='${order}'/>&desc=<c:out value='${desc}'/>" </c:if>>Prev</a>
                               </li>                           
@@ -174,9 +186,8 @@ $(document).ready(function()
                               <li <c:if test="${currentpage==pages}"> class="disabled"</c:if>>
                                   <a <c:if test="${currentpage<pages}">  href="showResults.html?page=<c:out value='${currentpage+1}'/>&count=<c:out value='${count}'/>&order=<c:out value='${order}'/>&desc=<c:out value='${desc}'/>" </c:if>>Next</a>
                               </li>
-                            </ul>
+                            </ul>--%>
                         </div>
-                        </c:if>
             </div>
 		</div>
 	</div>

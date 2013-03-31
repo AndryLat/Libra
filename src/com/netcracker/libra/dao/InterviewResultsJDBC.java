@@ -59,8 +59,8 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
     }
     public List<InterviewResultsInfo> getAllInfo(String order,Boolean desc)
     {
-        String SQL = "select u.lastName||' '||af.patronymic||' '||u.firstname fio, "
-	+"af.appId, nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) avgMark  ,  u.email,  "
+        String SQL = "select u.lastName||' '||u.firstname||' '||af.patronymic fio, "
+	+"af.appId, round(nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0),3) avgMark  ,  u.email,  "
                 + "ROW_NUMBER()   OVER ( ORDER BY";
         if(order!=null)
         { 
@@ -121,9 +121,9 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
     public List<InterviewResultsInfo> getInfo(String order, Boolean desc, int start, int finish)
     {
         String SQL = "select  "
-	+"appId, avgMark, fio, r, email "
+	+"appId, round(avgMark,3) avgMark, fio, r, email "
         +"from("
-                + "select u.lastName||' '||af.patronymic||' '||u.firstname fio, "
+                + "select u.lastName||' '||u.firstname||' '||af.patronymic fio, "
 	+"af.appId, nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) avgMark  , u.email,  "
                   + "ROW_NUMBER()   OVER ( ORDER BY";
         if(order.equalsIgnoreCase("results"))
@@ -155,7 +155,7 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
             SQL+="desc";
         else 
             SQL+="asc";
-        SQL+=") r  "
+        SQL+=", hr.appId) r  "
         +"from users u join appForm af on af.UserId=u.UserId "
         +"right join "
         +"(select i.appId , i.interviewid , avg(nvl(ir.mark,0)) avgMark  "
@@ -184,10 +184,54 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
     
     public List<InterviewResultsInfo> serch(String[] serchString)
     {
-        String SQL = "select  "
-	+"appId, avgMark, fio, r, email "
+        String SQL = 
+                "select  appId, round(avgMark,3) avgMark, fio, r, email "
+        +"from "
+	+"(select u.firstname||' '||u.lastName||' '||af.patronymic fio, "
+			+"u.email, af.appId, nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) avgMark  ,    "
+			+"ROW_NUMBER()   OVER ( ORDER BY nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) desc) r  "
+			+"from users u join appForm af on af.UserId=u.UserId "
+			+"right join "
+				+"( "
+					+"select i.appId , i.interviewid , avg(nvl(ir.mark,0)) avgMark  "
+					+"from interview i "
+					+"join appForm af on af.AppId=i.AppId "
+					+"join users u on af.UserId=u.UserId "
+					+"join interviewerList ilHR on ilHR.interviewdateId=i.interviewdateId "
+					+"join users uHR on uHR.userId=ilHR.userId "
+					+"join roles rHR on rHR.roleId=uHR.roleId "
+					+"left join interviewResults ir on ir.InterviewId=i.interviewId "
+					+"where i.status=1 and rHR.accessLevel=1 and (";
+                                        for(int i=0;i<serchString.length-1;i++)
+                                        {
+                                            SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[i]+"'))) or ";
+                                        }
+                                        SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[serchString.length-1]+"'))))";						
+                                        SQL+="group by i.appId , i.interviewid, u.firstname,af.patronymic,u.lastName,af.appId,u.email  "
+				+") HR on HR.appId=af.AppId full "
+				+"outer join "
+				+"( "
+					+"select i.appId , i.interviewid , avg(nvl(ir.mark,0)) avgMark  "
+					+"from interview i "
+					+"join appForm af on af.AppId=i.AppId "
+					+"join users u on af.UserId=u.UserId  "
+					+"join interviewerList ili on ili.interviewdateId=i.interviewdateId "
+					+"join users ui on ui.userId=ili.userId "
+					+"join roles ri on ri.roleId=ui.roleId "
+					+"left join interviewResults ir on ir.InterviewId=i.interviewId "
+					+"where i.status=1 and ri.accessLevel=2 and (" ;
+                                        for(int i=0;i<serchString.length-1;i++)
+                                        {
+                                            SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[i]+"'))) or ";
+                                        }
+                                        SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[serchString.length-1]+"'))))";
+					SQL+="group by i.appId , i.interviewid, u.firstname,af.patronymic,u.lastName,af.appId,u.email   "
+				+") Interv on Interv.appId=HR.appId "
+	+")";
+                /*"select  "
+	+"appId, round(avgMark,3) avgMark, fio, r, email "
         +"from("
-                + "select u.firstname||' '||af.patronymic||' '||u.lastName fio, u.email, "
+                + "select u.firstname||' '||u.lastName||' '||af.patronymic fio, u.email, "
 	+"af.appId, nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) avgMark  ,   "
         +"u.firstname||af.patronymic||u.lastName||af.appId||u.email serchString, "    
         + " ROW_NUMBER()   OVER ( ORDER BY nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) desc) r  "
@@ -218,7 +262,7 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
                     SQL+="regexp_like(UPPER(serchString),Trim(UPPER('"+serchString[i]+"'))) or ";
                 }
                 SQL+="regexp_like(UPPER(serchString),Trim(UPPER('"+serchString[serchString.length-1]+"')))";
-        
+        */
         List<InterviewResultsInfo> interview = jdbcTemplateObject.query(SQL, new InterviewResultInfoRowMapper());      
         return interview;
     }
