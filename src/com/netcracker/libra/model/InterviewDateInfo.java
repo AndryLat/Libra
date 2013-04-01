@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * Model for showing free places and time on interview 
  * @author Sashenka
  */
 public class InterviewDateInfo 

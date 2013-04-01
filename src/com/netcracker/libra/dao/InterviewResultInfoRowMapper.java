@@ -21,8 +21,8 @@ public class InterviewResultInfoRowMapper implements RowMapper<InterviewResultsI
         interviewResults.setAppId(rs.getInt("appId"));
         interviewResults.setAvgMark(rs.getDouble("avgMark"));
         interviewResults.setFio(rs.getString("fio"));
-        interviewResults.setiDate(rs.getString("iDate"));
-        interviewResults.setInterviewId(rs.getInt("interviewId"));
+        interviewResults.setR(rs.getInt("r"));
+        interviewResults.setEmail(rs.getString("email"));
         return interviewResults;
     }
 }

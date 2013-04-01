@@ -5,7 +5,8 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ *  Model for types such as integerType,
+ *  which contains maximum and minimum value
  * @author Sashenka
  */
 public class IntegerDefinition extends abstractType

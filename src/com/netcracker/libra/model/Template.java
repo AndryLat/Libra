@@ -4,10 +4,9 @@
  */
 package com.netcracker.libra.model;
 
-import java.util.List;
 
 /**
- *
+ *  Model for showing, editing templates
  * @author Sashenka
  */
 public class Template 

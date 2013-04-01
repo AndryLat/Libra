@@ -5,7 +5,9 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * Model which contains information about students
+ * whoes application form will be changed 
+ * if we delete template, column or type
  * @author Sashenka
  */
 public class InfoForDelete 

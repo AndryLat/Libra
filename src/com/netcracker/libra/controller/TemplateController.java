@@ -16,28 +16,33 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.netcracker.libra.service.TemplateService;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.netcracker.libra.model.InfoForDelete;
+import com.netcracker.libra.util.security.SessionToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 /**
  *
  * @author Sashenka
  */
 @Controller
+@SessionAttributes({"regForm", "LOGGEDIN_USER"})
 public class TemplateController
 {    
     TemplateJDBC templateJDBC=new TemplateJDBC();
     
-    @Autowired
-    UserPreferences userPreferences;
+    //@Autowired
+    //UserPreferences userPreferences;
     /**
      * Метод обрабатывает запрос по добавлению нового шаблона.
      * @param name имя нового шаблона
      */
     @RequestMapping(value="SubmitTemplate", method= RequestMethod.POST)
-    public ModelAndView addPost(@RequestParam("name") String name)
+    public ModelAndView addPost(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("name") String name)
     {
         ModelAndView mv = new ModelAndView();
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             mv.setViewName("messageView");
             String message=TemplateService.checkTemplate(name);
@@ -59,9 +64,10 @@ public class TemplateController
      * @param activeTemplate номер шаблона, который мы хотим установить активным
      */
     @RequestMapping(value="ActiveTemplate", method= RequestMethod.POST)
-    public ModelAndView addActivePost(@RequestParam("activeTemplate") int activeTemplate)
+    public ModelAndView addActivePost(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("activeTemplate") int activeTemplate)
     {
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             templateJDBC.setActive(activeTemplate);
             return new ModelAndView("redirect:showTemplates.html");
@@ -76,9 +82,9 @@ public class TemplateController
      * При введение ссылки showTemplates.html вызывается этот метод.
      */
     @RequestMapping("showTemplates")
-    public ModelAndView showTemplate()
+    public ModelAndView showTemplate(@ModelAttribute("LOGGEDIN_USER") SessionToken token)
     {
-       if(userPreferences.accessLevel==1)
+       if(token.getUserAccessLevel()==1)
         { 
             ModelAndView mav = new ModelAndView();
             mav.setViewName("showTemplatesView");
@@ -99,11 +105,12 @@ public class TemplateController
      * который передается POST запросом
      */
     @RequestMapping(value="showTemplates", method= RequestMethod.POST)
-    public ModelAndView editPost(@RequestParam("name") String name,
+    public ModelAndView editPost(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("name") String name,
     @RequestParam("selTemplate") int selTemplate)
     {
         ModelAndView mav = new ModelAndView();
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             mav.setViewName("messageView");
             String message=TemplateService.checkTemplate(name);
@@ -127,13 +134,14 @@ public class TemplateController
     
     @RequestMapping(value="delTemplate", method= RequestMethod.POST)
     public String delTemplate(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam(value="templates[]",required=false ) int[] delete)  
     {
         if(delete==null)
         {
             return "redirect:showTemplates.html";
         }
-        if(userPreferences.accessLevel==1)
+        if(token.getUserAccessLevel()==1)
         {
             List<InfoForDelete> info=templateJDBC.getInfoForDelete(delete);
             int infoSize=info.size();
@@ -192,18 +200,12 @@ public class TemplateController
      * @param templateId номер шаблона, который удаляется. передается POST запросом 
      */
      @RequestMapping(value="delSubmitTemplate", method= RequestMethod.POST)
-    public ModelAndView delSubmitTemplate(@RequestParam("delete[]") int[] delete)
+    public ModelAndView delSubmitTemplate(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("delete[]") int[] delete)
     {
-        if(userPreferences.accessLevel==1)
-        {
-            for(int i=0;i<delete.length;i++)
-            {
-                if(templateJDBC.existTemplate(delete[i])==0)
-                {
-                    return message("<a href='showTemplates.html'>Посмотреть все типы</a>", "Такого шаблона нету", "Ошибка"); 
-                }
-                templateJDBC.delete(delete[i]);
-            }
+        if(token.getUserAccessLevel()==1)
+        {              
+                templateJDBC.delete(delete);
             return new ModelAndView("redirect:showTemplates.html");
         } 
          else

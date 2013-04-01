@@ -31,7 +31,8 @@
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
-<form class="well-template span8" method="POST" action="SubmitColumn.html">
+                        <div class="well-template span8">
+<form  method="POST" action="SubmitColumn.html">
             Введите имя колонки <input class="span-table" type="text" name="name" /></br>
             Выберите тип колонки<select class="span-table" name="selType">
                 <option value="0">Колонка для инфорации</option>
@@ -45,13 +46,14 @@
                     <option value="${c.getColumnId()}"><c:out value="${c.getName()}" /></option>
                 </c:forEach>
             </select></br>
+            <input type="hidden" name="templateId" value="${templateId}"/>
            <input class="btn btn-primary "   type="submit" value="OK"/>
 </form>
-                     
+       </div>              
           <%--  <form class="well-template span8" action="delColumns.html" method="POST">--%>
           <div class="well-template span8">
-    <table class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
-        <caption>Информация о колонках</caption>
+    <table  class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
+                <caption>Информация о колонках</caption>
         <thead>
         <tr>
             <th>
@@ -68,40 +70,21 @@
         </thead>
         <tbody>  
             <c:forEach items="${columns}" var="c">
-                <c:set var="showSwop" value="${false}"/>
+
             
             <tr>
                 <td class="checkbox-shift">
                <input  type="checkbox" class="checkbox" name="delete[]" value="<c:out value='${c.getColumnId()}'/>"/>        
                 </td>
                 <td>${c.getNumbers()}</td>
-                <td>${c.getName()}</td>
+                <td>${c.getNameWithIndent()}</td>
                 <td> 
-                    <c:forEach items="${columns}" var="list">  
-                        <c:if test="${(c.getParentColumn()==list.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}" >
-                            <c:set var="showSwop" value="${true}"/>
-                            
-                        </c:if>
-                     </c:forEach>
-                    <c:if test="${showSwop==true}">
-                    <form action="changeColumn.html" method="POST">
-                        <input name="column1" type="hidden" value="${c.getColumnId()}">
-                      
-                      
-                <select class="select-change" name="column2" size="1">
-                <c:forEach items="${columns}" var="list">  
-                <c:if test="${(list.getParentColumn()==c.getParentColumn())&&(list.getColumnId()!=c.getColumnId())}">
-                        <option value="${list.getColumnId()}">${list.getName()}</option>
-                </c:if>
-                </c:forEach>
-                </select>  
-               
-                    <input class="btn btn-primary pull-right"  type="submit" value="OK"/>
-                    </form>
-                         </c:if>
-                    <c:if test="${showSwop==false}">
-                        Ее не с кем менять
-                    </c:if>
+                    <c:if test="${c.getColumnUpp()!=0}"> 
+                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnUpp()}&templateId=${templateId}"> <img src="resources/images/admin/arrow_up.png"/></a>
+                     </c:if>
+                    <c:if test="${c.getColumnDown()!=0}">
+                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnDown()}&templateId=${templateId}"><img src="resources/images/admin/arrow_down.png"/></a> 
+                     </c:if>   
                 </td>
                 <td>
                     <c:if test="${c.getTypeId()!=0}">
@@ -111,7 +94,7 @@
                         Нету значений
                     </c:if>
                 </td>
-                <td class="align-center"><a href="editColumn.html?columnId=<c:out value='${c.getColumnId()}'/>"><img class="_img-size" src="resources/images/edit.png"  title="внести изменения"/></a></td>
+                <td class="align-center"><a href="editColumn.html?columnId=<c:out value='${c.getColumnId()}'/>&templateId=<c:out value='${templateId}'/>"><img class="_img-size" src="resources/images/edit.png"  title="внести изменения"/></a></td>
             </tr>
             </c:forEach>
         </tbody>

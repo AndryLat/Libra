@@ -43,11 +43,11 @@
             <select class="span-table" name="parentColumn">
                 <option value="0">Нету родителя</option>
                 <c:forEach items="${columns}" var="c">
-                    <c:if test="${current.getColumnId()!=c.getColumnId()}">
-                    <option <c:if test="${current.getParentColumn()==c.getColumnId()}">selected</c:if> value="${c.getColumnId()}"><c:out value="${c.getName()}" /></option>
-                    </c:if> 
+                   <option <c:if test="${current.getParentColumn()==c.getColumnId()}">selected</c:if> value="${c.getColumnId()}"><c:out value="${c.getName()}" /></option>
                 </c:forEach>
             </select></br>
+            
+            <input type="hidden" name="templateId" value="${templateId}"/>
             <input type="hidden" name="columnId" value="${columnId}"/>
             <input class="btn btn-primary" type="submit" value="OK"/>
     </form>

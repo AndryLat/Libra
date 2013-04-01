@@ -5,28 +5,55 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * We need this object for showing information about columns
  * @author Sashenka
  */
 public class ColumnInfo extends Column
 {
     private String typeDescription;
+    private String nameWithIndent;
     private String parentName;
     private int parentColumn;
     private int typeId;
     private String numbers;
-    private int level;
-
-    public void setLevel(int level) 
+    private Integer columnUpp;
+    private Integer columnDown;
+    
+    public ColumnInfo()
     {
-        this.level = level;
+        this.columnDown=0;
+        this.columnUpp=0;
+    }
+    public void setColumnUpp(Integer columnUpp) 
+    {
+        this.columnUpp = columnUpp;
     }
 
-    public int getLevel() 
+    public Integer getColumnDown() 
     {
-        return level;
+        return columnDown;
+    }
+
+    public void setColumnDown(Integer columnDown) 
+    {
+        this.columnDown = columnDown;
     }
     
+    public int getColumnUpp() 
+    {
+        return columnUpp;
+    }    
+    
+    public String getNameWithIndent() 
+    {
+        return nameWithIndent;
+    }
+
+    public void setNameWithIndent(String nameWithIndent) 
+    {
+        this.nameWithIndent = nameWithIndent;
+    }
+ 
     public void setNumbers(String numbers) 
     {
         this.numbers = numbers;

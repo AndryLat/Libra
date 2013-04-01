@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * Model for columns without type 
  * @author Sashenka
  */
 public class abstractType 

@@ -5,7 +5,8 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ *  Model for types such as selectenum,radioenum and checkboxenum,
+ *  which contains array with allowed answers
  * @author Sashenka
  */
 public class EnumDefinition  extends abstractType

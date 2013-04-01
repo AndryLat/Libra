@@ -32,9 +32,10 @@
 			</div>
 			<c:if test="${existsComment==0}">
                         <form class="well-template span8" method="POST" action="addResultSubmit.html">
-                            <label>Оценка:</label><input onkeypress="javascript:number_control()" id="quantity" type="text" name="mark"/>
+                            <input type="hidden" name="appId" value="${appId}"/>
+                            <label>Оценка:</label><input class="width96" onkeypress="javascript:number_control()" id="quantity" type="text" name="mark"/>
                             </br>
-                            <label>Комментарий:</label><textarea name="comment"></textarea>
+                            <label>Комментарий:</label><textarea name="comment" ></textarea>
                             </br>
                             <input type="submit" value="Добавить"/>
                         </form>   
@@ -45,6 +46,7 @@
             <h3>${ir.getFio()}</h3>
         <c:if test="${userId==ir.getUserId()}">
         <form method="POST" action="updateResultSubmit.html">
+            <input type="hidden" name="appId" value="${appId}"/>
         </c:if>
             <p>Оценка: </p>
                 <div class="nya<c:out value='${ir.getUserId()}'/>">${ir.getMark()}</div>
@@ -72,7 +74,7 @@
         </form>   
         </c:if>
             <c:if test="${userId==ir.getUserId()}">
-                <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${userId}'/>');">Редактировать</a> <a href="deleteResult.html?interviewId=<c:out value='${InterviewId}'/>">Удалить</a>              
+                <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${userId}'/>');">Редактировать</a> <a href="deleteResult.html?appId=<c:out value='${appId}'/>">Удалить</a>              
             </c:if>
             </div>    
         </c:forEach>

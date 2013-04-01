@@ -118,8 +118,8 @@
             <div class="nya<c:out value='${t.getTemplateId()}'/>">${t.getName()}</div>
                 <div class="nya<c:out value='${t.getTemplateId()}'/>" style="display:none">
                     
-                    <input type="text" name="name" value="<c:out value='${t.getName()}'/>"/>
-                        <input type="submit" value="OK"/>
+                    <input class="width96" type="text" name="name" value="<c:out value='${t.getName()}'/>"/>
+                    <input class="btn btn-primary pull-right" type="submit" value="OK"/>
                 </div>    
             </td>
             <td>

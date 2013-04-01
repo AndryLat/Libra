@@ -85,20 +85,17 @@ public class TypeJDBC implements TypeDAO
     }
 
     @Override
-    public void delete(int id) 
+    public void delete(int[] type) 
     {
-        String SQL = "Delete from Types where TypeId = ?";
-       jdbcTemplateObject.update(SQL, id);
+        String SQL = "Delete from Types where ";
+        for(int i=0;i<type.length-1;i++)
+        {
+            SQL+= " TypeId="+type[i]+" or";
+        }
+                 SQL+= "  TypeId="+type[type.length-1];
+       jdbcTemplateObject.update(SQL);
     }
     
-    // Уже не надо!
-    public int getOtherType()
-    {
-        String SQL = "select typeId from types where (description) =("+
-                        "select max(description) from types where name='string' "+
-                        ")";
-       return jdbcTemplateObject.queryForInt(SQL);
-    }
     public List<InfoForDelete> getInfoForDelete(int[] type)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+

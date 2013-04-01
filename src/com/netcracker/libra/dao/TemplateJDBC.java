@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.netcracker.libra.model.Template;
-import com.netcracker.libra.model.Topic;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
@@ -89,10 +88,15 @@ public class TemplateJDBC implements TemplateDAO
      * 
      * @param id id of temaplate, which we wand delete
      */
-    public void delete(int id)
+    public void delete(int[] templates)
     {
-       String SQL = "delete from Template where templateId = ?";
-       jdbcTemplateObject.update(SQL, id);
+       String SQL = "delete from Template where ";
+                for(int i=0;i<templates.length-1;i++)
+                {
+                                       SQL+= " templateId="+templates[i]+" or";
+                }
+                 SQL+= " templateId="+templates[templates.length-1];
+       jdbcTemplateObject.update(SQL);
     }
 
     /**

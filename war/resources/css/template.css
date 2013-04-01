@@ -35,10 +35,13 @@ root {
     display: inline-block;
     width: 50%;
 }
-
+.templateSpan8
+{
+    width: 620px;
+}
 .table-template
 {
-    width: 100%;
+    width: 750px;
 }
 
 .span-table
@@ -79,4 +82,24 @@ root {
     padding-left: 60px;
     width: 500px;
     margin-left: 100px;
+}
+
+.position-right
+{
+    text-align: right;
+}
+
+.trReques
+{
+    background: #FFB3BE;
+}
+
+.trDate
+{
+    background: lavender;
+}
+
+.width96
+{
+    width: 96%;
 }

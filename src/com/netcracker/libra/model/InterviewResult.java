@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * We need this object for showing results of fixed interview
  * @author Sashenka
  */
 public class InterviewResult 

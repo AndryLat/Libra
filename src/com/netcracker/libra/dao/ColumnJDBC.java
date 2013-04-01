@@ -8,14 +8,12 @@ import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.Column;
 import com.netcracker.libra.model.ColumnForEdit;
 import com.netcracker.libra.model.ColumnInfo;
-import com.netcracker.libra.model.ColumnLevel;
 import com.netcracker.libra.model.InfoForDelete;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.ListIterator;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,8 +42,9 @@ public class ColumnJDBC
     
     public List<ColumnInfo> getColumnsInfo(int templateId) 
     {
-        String SQL = "select  c.ColumnId,  c.Name, NVL(c.TypeId,0) TypeId, NVL(c.ParentColumn,0) ParentColumn,  "
-                +"Decode(t.Name, 'textstring','Однострочное текстовое поле с максимальной длиной '||t.Description||' символов',"
+        String SQL = "select  c.ColumnId, c.Name , NVL(c.TypeId,0) TypeId, NVL(c.ParentColumn,0) ParentColumn,  "
+                +" lpad('.', 8*(level-1), '.') ||c.Name NameWithIndent,"
+                +" Decode(t.Name, 'textstring','Однострочное текстовое поле с максимальной длиной '||t.Description||' символов',"
                 +" 'areastring','Многострочный текст с максимальной длиной '||t.Description||' символов',"
                 + "'integer',regexp_replace(t.Description,'(\\d+)(;)(\\d+)','Число в диапазоне: от \\1 до \\3'),"
                 + " 'radioenum','Переключатели со значениями :'||t.Description,"
@@ -59,47 +58,94 @@ public class ColumnJDBC
 		+"CONNECT BY  prior  c.columnId =  c.ParentColumn "
                 +"order siblings by c.OrderId ASC ";
         List<ColumnInfo> list = jdbcColumnObject.query(SQL,new ColumnInfoRowMapper(),templateId); 
-        int plevel=0;
-        int maxLevel=1000;
-    int[] mas=new int[maxLevel];
+        setNum(list);
+        int maxLvl = maxLevel(list);
+        int[] dir = new int[maxLvl+1];
 
-    for(ColumnInfo item: list)
-    {
-            if (item.getLevel()>plevel)
-            {	
-                    mas[plevel]=1;
-                    plevel++;
-            }
-            else if (item.getLevel()<plevel)
-            {
-                    while (item.getLevel()<plevel)
-                    {
-                            plevel--;
-                            mas[plevel]++;
-                    }
-                    mas[plevel-1]++;
-            }
-            else
-            {
-                mas[plevel-1]++;
-            }
-            String s=String.valueOf(mas[0]);
-
-            for (int i=1;i<item.getLevel();i++)
-                    s=s+"."+mas[i];
-            item.setNumbers(s);
-    }
+        int prevLvl=0;
+        for(ColumnInfo item : list)
+        {
+            int curLvl = item.getLevel();
+            
+            if (curLvl<=prevLvl)
+                item.setColumnUpp(dir[curLvl]);
+            dir[curLvl] = item.getColumnId();
+            prevLvl = curLvl;
+        }
+        
+        for (int i=0;i<=maxLvl;i++)
+            dir[i]=0;
+            
+        prevLvl = maxLvl+1;
+        
+        ListIterator it = list.listIterator(list.size());
+        while (it.hasPrevious())
+        {
+            ColumnInfo item = (ColumnInfo)it.previous();
+            int curLvl = item.getLevel();
+            if (curLvl<=prevLvl && dir[curLvl]!=0)
+                item.setColumnDown(dir[curLvl]);
+            dir[curLvl] = item.getColumnId();
+            prevLvl = curLvl;
+        }        
+        
         return list;
     }
-    public List<Column> getColumns(int templateId)
+    private void setNum(List<ColumnInfo> list)
+    {
+        int plevel=0;
+        int maxLevel=1000;
+        int[] mas=new int[maxLevel];
+
+        for(ColumnInfo item: list)
+        {
+                if (item.getLevel()>plevel)
+                {	
+                        mas[plevel]=1;
+                        plevel++;
+                }
+                else if (item.getLevel()<plevel)
+                {
+                        while (item.getLevel()<plevel)
+                        {
+                                plevel--;
+                                mas[plevel]++;
+                        }
+                        mas[plevel-1]++;
+                }
+                else
+                {
+                    mas[plevel-1]++;
+                }
+                String s=String.valueOf(mas[0]);
+
+                for (int i=1;i<item.getLevel();i++)
+                        s=s+"."+mas[i];
+                item.setNumbers(s);
+        }
+    }
+    private int maxLevel(List<ColumnInfo> list)
+    {
+        int max=1;
+        for (ColumnInfo item: list)
+        {
+            if(item.getLevel()>max)
+            {
+                max=item.getLevel();
+            }
+        }
+        return max;
+    }
+    public List<Column> getColumns(int templateId,int columnId)
     {
         String SQL="select  c.columnId, c.name, c.parentColumn "
                     +" from newColumns c "
-                    +"where  c.templateId=?  "
-                    +"START WITH  c.parentColumn is null "		    
-		    +"CONNECT BY  prior  c.columnId =  c.ParentColumn "
-                    +"order siblings by c.OrderId ASC ";
-        List<Column> appList=jdbcColumnObject.query(SQL, new ColumnRowMapper(),templateId);
+                    +"where  c.templateId=?  and c.columnId not in ("
+			+"select  columnId "
+			+"from newColumns "
+			+"START WITH  columnId=? "  		    
+			+"CONNECT BY  prior  columnId =ParentColumn )";
+        List<Column> appList=jdbcColumnObject.query(SQL, new ColumnRowMapper(),templateId,columnId);
         return appList;
     }
         
@@ -179,10 +225,15 @@ public class ColumnJDBC
         return listOfInfo;
     }
      
-    public void delete(int columnId)
+    public void delete(int[] columns)
     {
-        String SQL = "delete from NewColumns where columnId = ?";
-        jdbcColumnObject.update(SQL, columnId);
+        String SQL = "delete from NewColumns where ";
+                for(int i=0;i<columns.length-1;i++)
+                {
+                    SQL+= " columnId="+columns[i]+" or";
+                }
+                    SQL+= " columnId="+columns[columns.length-1];;
+        jdbcColumnObject.update(SQL);
     }
     
     public List<AppFormColumns> getAppFormColumns(int id)

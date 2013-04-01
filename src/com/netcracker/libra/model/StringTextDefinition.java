@@ -5,7 +5,8 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ *  Model for types such as areastring and textstring,
+ *  which contains maximum length of answer
  * @author Sashenka
  */
 public class StringTextDefinition extends abstractType
