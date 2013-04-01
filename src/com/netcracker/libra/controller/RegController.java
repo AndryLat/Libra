@@ -1,3 +1,9 @@
+/*
+ * This class is responsible for handling user registration and application form submitting and processing.
+ * All methods are self-explanatory, i guess.
+ * 
+ * @author Konstantin Kuyun
+ */
 package com.netcracker.libra.controller;
 
 import java.io.File;
@@ -7,6 +13,7 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,6 +35,8 @@ import com.netcracker.libra.util.security.SessionToken;
 @RequestMapping("register")
 @SessionAttributes({"regForm", "LOGGEDIN_USER"})
 public class RegController {
+	
+	Logger log = Logger.getLogger(RegController.class);
 	
 	@ModelAttribute("regForm")
 	public RegisterForm createForm() {
@@ -55,6 +64,7 @@ public class RegController {
 			form.setAppId(RegformService.getAppformId());
 			RegformService.registerUser(form);
 			request.getSession().setAttribute("LOGGEDIN_USER", LoginService.login(form.getEmail(), form.getPassword()));
+			log.info("Created new user with Email: " + form.getEmail());
 			return "redirect:/register/welcome.html";
 		}
 	}
@@ -67,13 +77,14 @@ public class RegController {
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String showAppForm(@ModelAttribute("LOGGEDIN_USER") SessionToken token, 
 			@ModelAttribute("regForm") RegisterForm form, ModelMap model) {
-		if (RegformService.isAppFormPresent(token.getUserId())) {
+		if (!RegformService.isAppFormPresent(token.getUserId())) {
 			model.addAttribute("columns", RegformService.getActiveTemplate());
 			model.put("regForm", form);
 			return "signup/showAppForm";
 			}
 		else
 			token.setAppFormFlag(true);
+			log.info("Appform is already present for userID "+token.getUserId());
 			return "signup/welcome";
 	}
 	
@@ -106,6 +117,8 @@ public class RegController {
 			form.setGeneratedCode(ConfirmationCodeGenerator.generateCode());
 			form.setTemplateId(RegformService.getActiveTemplateId());
 			MailService.sendConfirmRegistrationMessage(token.getUserEmail(), token.getUserId().toString(), form.getGeneratedCode());
+			log.info("Confirmation code for userID "+token.getUserId()+"is " + form.getGeneratedCode());
+			log.info("Email send to " + token.getUserEmail());
 			model.put("regForm", form);
 			return "signup/review";
 		}
@@ -116,12 +129,15 @@ public class RegController {
 			@ModelAttribute("LOGGEDIN_USER") SessionToken token) throws SQLException {
 		
 		if (form.getEnteredCode().equals(form.getGeneratedCode())) {
+			log.info("Inserting application form answers...");
 			RegformService.insertAppformAnswers(form, token.getUserId());
+			log.info("Done.");
 			return "signup/success";
 		}
 
 		else {
 			model.addAttribute("message", "Введенный код не совпадает с кодом из письма");
+			log.error("Invalid confirmation code");
 			return "signup/review";
 		}
 	}

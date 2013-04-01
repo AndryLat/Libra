@@ -1,14 +1,13 @@
 /*
- * This is a main controller of entire application. It serves as router for requests.
- * Also implements some security checks such as user access level.
+ * @author Konstantin Kuyun
  */
-
 package com.netcracker.libra.controller;
 
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,12 +31,19 @@ public class LoginController {
 
 	@Autowired
 	UserPreferences userPreferences;
+	
+	Logger log = Logger.getLogger(LoginController.class);
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String showAppform() {
 		return "login/login";
 	}
-
+	
+	
+	/*
+	 * After successful login populates POJO object with values from persistent 
+	 * storage and puts it into current session as @ModelAttribute
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(@RequestParam("email") String email, 
 			@RequestParam("password") String password,
@@ -55,11 +61,13 @@ public class LoginController {
 		if (userData == null) {
 			mav.getModel().put("loginFailedError",
 					"Проверьте правильность вводимых значений");
+			log.warn("Login failed. User not found in DB");
 		} else {
 			viewName = "redirect:welcome.html";
 			if (userData.getUserAccessLevel()==0)
 				userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
 			request.getSession().setAttribute("LOGGEDIN_USER", userData);
+			log.info("Login successful. UserID is " + userData.getUserId());
 		}
 		mav.setViewName(viewName);
 		return mav;

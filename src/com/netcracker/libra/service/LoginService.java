@@ -1,3 +1,7 @@
+/*
+ * @author Konstantin Kuyun
+ */
+
 package com.netcracker.libra.service;
 
 import javax.sql.DataSource;

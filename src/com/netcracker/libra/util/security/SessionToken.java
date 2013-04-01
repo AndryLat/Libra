@@ -1,3 +1,8 @@
+/*
+ * Simple POJO object for storing details of logged in user. Usually is populated from DB
+ * after successful login
+ */
+
 package com.netcracker.libra.util.security;
 
 public class SessionToken {

@@ -1,3 +1,9 @@
+/*
+ * Contains methods for retrieving and updating values from persistence.
+ * 
+ * @author Konstantin Kuyun
+ */
+
 package com.netcracker.libra.dao;
 
 import java.sql.SQLException;
@@ -23,24 +29,29 @@ public class AppFormJDBC {
 		jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
 	
+	//@return ID for current active template
 	public int queryForActiveTemplateId() {
 		return jdbcTemplateObject.queryForInt("select templateid from template where active=1");
 	}
-
+	
+	//@return Next value for appform from DB sequence
 	public Integer getAppformNextVal() {
 		return jdbcTemplateObject
 				.queryForInt("select AppForm_seq.NEXTVAL from dual");
 	}
-
+	
+	//@return Next value for user from DB sequence
 	public Integer getUserNextVal() {
 		return jdbcTemplateObject
 				.queryForInt("select User_seq.NEXTVAL from dual");
 	}
 	
+	//insert records in DB for new user
 	public void createNewUserAsStudent(Integer userid, String name, String lastName, String password, String email) {
 		jdbcTemplateObject.update("insert into users values (?,?,?,?,?,1)", userid, name, lastName, email, password);
 	}
 	
+	//insert user's details
 	public void insertAppFormDetails(Integer appId, Integer userId, String patronymic, 
 			String phoneNumber, Long deptId, int adId, int course, Long graduated, int templateId) {
 		jdbcTemplateObject.update("insert into appform(appid, userid,patronymic,phonenumber,departmentid,advertisingid,course,graduated,datacreation,templateid) " +
@@ -49,6 +60,7 @@ public class AppFormJDBC {
 					deptId, adId, course, graduated, templateId);
 	}
 	
+	//insert user's appform answers
 	public void fillAppForm(RegisterForm form, Integer userId) throws SQLException {
 		Integer appId = jdbcTemplateObject.queryForInt("select appid from appform where userid=?", userId);
 		System.out.println(appId);
@@ -64,6 +76,8 @@ public class AppFormJDBC {
 		return;
 	}
 	
+	
+	//check for filled appform
 	public boolean isAppFormPresent(Integer userId) {
 		Integer result = 
 				jdbcTemplateObject.queryForInt(
@@ -76,6 +90,8 @@ public class AppFormJDBC {
 			return false;
 	}
 	
+	
+	//check for duplicate emails
 	public boolean isEmailAlreadyExist(String email) {
 		Integer result = 
 				jdbcTemplateObject.queryForInt("select userid from users where email=?", email);
