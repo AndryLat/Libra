@@ -35,10 +35,13 @@ root {
     display: inline-block;
     width: 50%;
 }
-
+.templateSpan8
+{
+    width: 620px;
+}
 .table-template
 {
-    width: 100%;
+    width: 750px;
 }
 
 .span-table
@@ -94,4 +97,9 @@ root {
 .trDate
 {
     background: lavender;
+}
+
+.width96
+{
+    width: 96%;
 }

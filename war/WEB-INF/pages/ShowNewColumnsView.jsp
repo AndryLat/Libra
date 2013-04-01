@@ -31,7 +31,8 @@
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
-<form class="well-template span8" method="POST" action="SubmitColumn.html">
+                        <div class="well-template span8">
+<form  method="POST" action="SubmitColumn.html">
             Введите имя колонки <input class="span-table" type="text" name="name" /></br>
             Выберите тип колонки<select class="span-table" name="selType">
                 <option value="0">Колонка для инфорации</option>
@@ -48,11 +49,11 @@
             <input type="hidden" name="templateId" value="${templateId}"/>
            <input class="btn btn-primary "   type="submit" value="OK"/>
 </form>
-                     
+       </div>              
           <%--  <form class="well-template span8" action="delColumns.html" method="POST">--%>
           <div class="well-template span8">
-    <table class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
-        <caption>Информация о колонках</caption>
+    <table  class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
+                <caption>Информация о колонках</caption>
         <thead>
         <tr>
             <th>
@@ -69,7 +70,7 @@
         </thead>
         <tbody>  
             <c:forEach items="${columns}" var="c">
-                <c:set var="showSwop" value="${false}"/>
+
             
             <tr>
                 <td class="checkbox-shift">

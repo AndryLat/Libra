@@ -87,8 +87,8 @@
                 <input type="hidden" name="selType" value="<c:out value='${t.getTypeId()}  '/>"/>
                 <div class="nya<c:out value='${t.getTypeId()}'/>">${t.getInfoDescription()}</div>
                 <div class="nya<c:out value='${t.getTypeId()}'/>" style="display:none">
-                        <input type="text" name="description" value="<c:out value='${t.getDescription()}'/>"/>
-                        <input type="submit" value="OK" title="внести изменения" />           
+                        <input class="width96" type="text" name="description" value="<c:out value='${t.getDescription()}'/>"/>
+                        <input class="btn btn-primary pull-right" type="submit" value="OK" title="внести изменения" />           
                 </form>
                 </div>  
                <%-- ${t.getDescription()}--%>

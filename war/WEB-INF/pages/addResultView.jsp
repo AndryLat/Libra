@@ -33,9 +33,9 @@
 			<c:if test="${existsComment==0}">
                         <form class="well-template span8" method="POST" action="addResultSubmit.html">
                             <input type="hidden" name="appId" value="${appId}"/>
-                            <label>Оценка:</label><input onkeypress="javascript:number_control()" id="quantity" type="text" name="mark"/>
+                            <label>Оценка:</label><input class="width96" onkeypress="javascript:number_control()" id="quantity" type="text" name="mark"/>
                             </br>
-                            <label>Комментарий:</label><textarea name="comment"></textarea>
+                            <label>Комментарий:</label><textarea name="comment" ></textarea>
                             </br>
                             <input type="submit" value="Добавить"/>
                         </form>   
