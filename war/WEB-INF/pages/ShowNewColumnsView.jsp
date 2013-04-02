@@ -57,7 +57,7 @@
         <thead>
         <tr>
             <th>
-             <a href="#" onclick="submitDelete('delColumns.html',':checkbox[name^=delete]')"><img src="resources/images/del.png" width="25" height="25" title="Удалить" /></a>
+             <a href="#" onclick="submitDelete('delColumns.html?templateId=<c:out value='${templateId}'/>',':checkbox[name^=delete]')"><img src="resources/images/del.png" width="25" height="25" title="Удалить" /></a>
              </br><input id="one" type="checkbox" name="one" value="all" onclick="cbToggle();" />
            
             </th>

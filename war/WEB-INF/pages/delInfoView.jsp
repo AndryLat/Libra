@@ -53,6 +53,7 @@
                 <td colspan="3">
                     
                     <form action="<c:out value='${submit}'/>.html" method="POST">
+                         <input type="hidden" name="templateId" value="<c:out value='${templateId}'/>"/>
                         <c:forEach items="${delete}" var="d">
                             <input type="hidden" name="delete[]" value="<c:out value='${d}'/>"/>
                         </c:forEach>
@@ -66,6 +67,7 @@
         </c:if>
          <c:if test="${infoSize == 0  }">
              <form action="<c:out value='${submit}'/>.html" method="POST">
+                 <input type="hidden" name="templateId" value="<c:out value='${templateId}'/>"/>
                         <c:forEach items="${delete}" var="d">
                             <input type="hidden" name="delete[]" value="<c:out value='${d}'/>"/>
                         </c:forEach>

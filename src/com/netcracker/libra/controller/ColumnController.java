@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.netcracker.libra.dao.TypeJDBC;
-import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.ColumnFieldsModel;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.service.TemplateService;
 import com.netcracker.libra.util.security.SessionToken;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 /**
  *
  * @author Sashenka
@@ -167,7 +166,8 @@ public class ColumnController
     @RequestMapping(value="delColumns",method = RequestMethod.POST)
     public String delColumns(ModelMap model,
     @ModelAttribute("LOGGEDIN_USER") SessionToken token,
-    @RequestParam(value="delete[]",required=false) int[] delete)  
+    @RequestParam(value="delete[]",required=false) int[] delete,
+    @RequestParam("templateId") int templateId) 
     {
         if(delete==null)
         {
@@ -182,8 +182,9 @@ public class ColumnController
             model.addAttribute("infoSize",infoSize);
             model.addAttribute("title","Удалить колонки");
             model.addAttribute("h1","Вы действительно хотите удалить эти колонки?");
-            model.addAttribute("submit","delSubmitColumns");
-            model.addAttribute("location","redirect:showTemplates.html");            
+            model.addAttribute("submit","delSubmitColumns");   
+            model.addAttribute("templateId",templateId);   
+            model.addAttribute("location","showColumn.html?templateId="+templateId);            
             return "delInfoView";
         }
         model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
@@ -195,12 +196,13 @@ public class ColumnController
     @RequestMapping(value="delSubmitColumns",method = RequestMethod.POST)
     public String delSubmiteColumns(ModelMap model,
     @ModelAttribute("LOGGEDIN_USER") SessionToken token,
-    @RequestParam("delete[]") int[] delete)  
+    @RequestParam("delete[]") int[] delete,
+    @RequestParam("templateId") int templateId)  
     {
         if(token.getUserAccessLevel()==1)
         {   
             columnJDBC.delete(delete);          
-            return "redirect:showTemplates.html";
+            return "redirect:showColumn.html?templateId="+templateId;
         }
         model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
         model.addAttribute("message", "У вас нету прав на эту страницу");

@@ -4,6 +4,10 @@
 <div class="well span3">
 	<ul class="nav  nav-pills nav-stacked">
 
+                <c:if test="${LOGGEDIN_USER!=null}">	
+			<li><a href="/Libra/editLogin.html">Изменить пароль</a></li>
+		</c:if>
+                                
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==0}">
 			<li class="nav-header">Собеседования</li>
 				<c:if test="${LOGGEDIN_USER.appFormFlag}"><li><a href="#">Открыть анкету</a></li></c:if>
@@ -27,7 +31,6 @@
 				собеседований</a></li>
 			<li class="nav-header">Управление шаблонами</li>
 				<li><a href="/Libra/showTemplates.html">Шаблоны</a></li>
-				<li><a href="/Libra/addType.html">Добавить тип</a></li>
 				<li><a href="/Libra/showTypes.html">Просмотреть типы</a></li>
 
 			<li class="nav-header">Управление университетами</li>
