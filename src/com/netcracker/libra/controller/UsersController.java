@@ -42,7 +42,7 @@ public class UsersController {
     String selected;    //selected value in the sorting by first name/last name/email etc.
     String text;        //value in the text field
     boolean order;      //value of ascending or descending order; true when ascending
-    Integer currentUserId;
+    int currentUserId;
     
     @Autowired
     UserPreferences user;   // contains ID and access level
@@ -67,7 +67,8 @@ public class UsersController {
             mv.addObject("employees", employees);
             mv.addObject(checked, "checked");
             mv.addObject(selected, "selected");
-            mv.addObject("roleOrder", "<img  src=\"../resources/images/admin/arrow_left.png\" width=\"12\" height=\"12\" title=\"Редактировать\"/>");
+            mv.addObject("roleOrder", "<img  src=\"../resources/images/admin/arrow_up.png\" width=\"12\" height=\"12\" title=\"по убыванию\"/>");
+            order = false;
             mv.addObject("currentUserId", currentUserId);
             return mv;
         }
@@ -226,18 +227,12 @@ public class UsersController {
         String down = "<img  src=\"../resources/images/admin/arrow_up.png\" width=\"12\" height=\"12\" title=\"по убыванию\"/>";
         
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/employees");
-        mv.addObject("currentUserId", currentUserId);
-        mv.addObject(selected, "selected");
-        mv.addObject(checked, "checked");
-        mv.addObject("text", text);
         
         if(employees.size() > 1) {
             switch(orderBy) {
             case "ROLE":
-                Collections.sort(employees, new UsersController.RoleComparator(order));
-                String roleOrder = (order) ? "<img  src=\"../resources/images/admin/arrow_left.png\" width=\"12\" height=\"12\"/>" 
-                                           : "<img  src=\"../resources/images/admin/arrow_right.png\" width=\"12\" height=\"12\"/>";
+                Collections.sort(employees, new UsersController.RoleComparator(order)); //sort by role id (2,3,4)
+                String roleOrder = (order) ? down : up;
                 mv.addObject("roleOrder", roleOrder);
                 break;
                 
@@ -268,6 +263,12 @@ public class UsersController {
         }
         //switch to ascending or descending order
         order = (order) ? false : true;
+        
+        mv.setViewName("admin/employees");
+        mv.addObject("currentUserId", currentUserId);
+        mv.addObject(selected, "selected");
+        mv.addObject(checked, "checked");
+        mv.addObject("text", text);
         mv.addObject("employees", employees);
         return mv;
     }
