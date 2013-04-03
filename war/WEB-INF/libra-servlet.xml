@@ -73,6 +73,11 @@
 		<property name="servletContext" ref="servletcontext" />
 	</bean>
 
+        <bean id="SendMailService" class="com.netcracker.libra.util.mail.SendMailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="servletContext" ref="servletcontext" />
+	</bean>
 	<bean id="velocityEngine"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="resourceLoaderPath" value="WEB-INF/templates/" />
