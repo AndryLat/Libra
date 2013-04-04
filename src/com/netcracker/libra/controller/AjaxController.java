@@ -1,3 +1,9 @@
+/*
+ * Handles requests from AJAX select forms on pages. Contains methods for retrieving Lists of Universities, 
+ * faculties and departments from persistent storage
+ * 
+ * @author Konstantin Kuyun
+ */
 package com.netcracker.libra.controller;
 
 import org.springframework.stereotype.Controller;

@@ -1,5 +1,13 @@
+/*
+ * This is a main controller of entire application. It serves as router for requests.
+ * Also implements some security checks such as user access level.
+ * 
+ * @author Konstantin Kuyun
+ */
+
 package com.netcracker.libra.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,18 +23,24 @@ import com.netcracker.libra.util.security.SessionToken;
 @SessionAttributes("LOGGEDIN_USER")
 public class MainController {
 	
+	Logger log = Logger.getLogger(MainController.class);
+	
 	@RequestMapping("/welcome")
 	public String redirect(@ModelAttribute("LOGGEDIN_USER") SessionToken token) {
 		if(token.getUserAccessLevel()==1) {
+			log.info("Logged as HR");
 			return "hr/index";
 		}
 		if(token.getUserAccessLevel()==2) {
+			log.info("Logged as Tech");
 			return "tech/index";
 		}
 		if(token.getUserAccessLevel()==3) {
+			log.info("Logged as Admin");
 			return "admin/index";
 		}
 		if(token.getUserAccessLevel()==0) {
+			log.info("Logged as Student");
 			return "forward:/register/welcome.html";
 		}
 		else

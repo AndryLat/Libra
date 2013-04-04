@@ -1,5 +1,7 @@
 /*
  * This class stores values submitted by users during registration, and handles their validation
+ * 
+ * @author Konstantin Kuyun
  */
 
 package com.netcracker.libra.model;

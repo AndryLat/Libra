@@ -1,3 +1,7 @@
+/*
+ * If user not logged in - redirect to login page
+ */
+
 package com.netcracker.libra.util.security;
 
 import javax.servlet.http.HttpServletRequest;

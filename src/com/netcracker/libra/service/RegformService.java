@@ -1,3 +1,7 @@
+/*
+ * @author Konstantin Kuyun
+ */
+
 package com.netcracker.libra.service;
 
 import java.sql.SQLException;
@@ -22,14 +26,17 @@ public class RegformService {
 	private static ColumnJDBC cjdbc = new ColumnJDBC();
 	private static HrJDBC hjdbc = new HrJDBC();
 	
+	//@return List of all universities defined in the system
 	public static List<University> getUniversityList() {
 		return hjdbc.getAllUniversity();
 	}
 	
+	//@return List of all faculties defined in the system
 	public static List<Faculty> getFacultyListByUniversityID(int univerId) {
 		return hjdbc.getAllFaculties(univerId);
 	}
 	
+	//@return List of all departments defined in the system
 	public static List<Department> getDepartmentListByFacultyID(int facultyId) {
 		return hjdbc.getAllDepartments("f.facultyid", facultyId);
 	}	
