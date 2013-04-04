@@ -60,7 +60,9 @@ public class ColumnController
         return "messageView";
     }
     
-
+    /**
+     * 
+     */
     @RequestMapping(value="SubmitColumn",method = RequestMethod.POST)
     public String addColumn(ModelMap model,
     @ModelAttribute("LOGGEDIN_USER") SessionToken token,

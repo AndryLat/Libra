@@ -10,6 +10,10 @@ root {
     display: block;
 }
 
+.mincontainer
+{
+    min-width: 1000px;
+}
 .well-template {
 	min-height: 20px;
 	padding: 19px;

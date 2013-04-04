@@ -71,7 +71,8 @@ href="<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${cur
 						<div id="dropdown" class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                                                     <form onsubmit="format_submit();return false;">
                                                         <div id="order">
-                                                            
+                                                            <input type="hidden"  name="order" value="results"/>
+                                                            <input type="hidden"  name="desc" value='true' />
                                                         </div>
                                                               <input style="margin-bottom: 15px;" type="text" placeholder="Количество строк на экране" name="count">
                                                               <input class="btn btn-primary btn-block" type="submit" id="sign-in-twitter" value="Применить" >

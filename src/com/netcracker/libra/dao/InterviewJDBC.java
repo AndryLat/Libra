@@ -130,5 +130,27 @@ public class InterviewJDBC
                 + "where af.UserId=? and i.status=0 and r.AccessLevel=?";
         return jdbcTemplateObject.queryForInt(SQL,userId,role);
     }
-       
+    public String getTime()
+    {
+        String SQL="select to_char(SYSDATE+NVL((select distinct TIMEZONEDIFFERENCE from libraconfigs),0)/24, 'yyyy/mm/dd HH24:mi') from dual";
+        return jdbcTemplateObject.queryForObject(SQL, String.class);
+    }
+
+    public String getServerTime()
+    {
+        String SQL="select to_char(SYSDATE, 'yyyy/mm/dd HH24:mi:ss') from dual";
+        return jdbcTemplateObject.queryForObject(SQL, String.class);
+    }
+    public void updateTimeZone(int diff)
+    {
+        String SQL="MERGE INTO libraconfigs l1 "
+                    +"USING (select count(*) c from libraconfigs) l2 "
+                    +"ON (l2.c>0) "
+                    +"WHEN MATCHED THEN "
+                    +"UPDATE SET l1.TIMEZONEDIFFERENCE = ? " 
+                    +" WHEN NOT MATCHED THEN "
+                    +"INSERT (l1.TIMEZONEDIFFERENCE) "
+                    +"VALUES (?)";
+        jdbcTemplateObject.update(SQL,diff,diff);
+    }
 }

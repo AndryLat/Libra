@@ -13,6 +13,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,12 +28,48 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes({"regForm", "LOGGEDIN_USER"})
 public class InterviewController
 {
+    /**
+     * Return page, where administrator can configurate server  time 
+     */
     InterviewDateJDBC interviewDateJDBC=new InterviewDateJDBC();
-    InterviewJDBC interviewJDBC=new InterviewJDBC();
+    InterviewJDBC interviewJDBC=new InterviewJDBC();  
+    @RequestMapping(value="admin/timeZone")
+    public String index(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token)  
+    {
+        if(token.getUserAccessLevel()==3)
+        {
+            model.addAttribute("time", interviewJDBC.getTime());
+            model.addAttribute("serverTime", interviewJDBC.getServerTime());
+            return "admin/timeZoneView";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
+    }
+    /**
+     * Configurate server  time 
+     */
+    @RequestMapping(value="admin/editTimeZoneDiff", method= RequestMethod.POST)
+    public String editTimeZoneDiff(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    int diff)  
+    {
+        if(token.getUserAccessLevel()==3)
+        {
+            interviewJDBC.updateTimeZone(diff);
+            return "redirect:timeZone.html";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
+    }
     
-   // @Autowired
-   // UserPreferences userPreferences;
-        
+    /**
+     * Display page, where student can choose time of interviews
+     */
     @RequestMapping("showInterviewDate")
     public ModelAndView showInterviewDate(@ModelAttribute("LOGGEDIN_USER") SessionToken token)
     {
@@ -91,7 +128,9 @@ public class InterviewController
             return mav;
         }
     }
-    
+    /**
+     * Processes a request to add date od interview for current student 
+     */
     @RequestMapping(value="chooseDate", method= RequestMethod.POST)
     public ModelAndView chooseDatePost(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("selDate") int selDate)
@@ -125,6 +164,9 @@ public class InterviewController
         }
     }
     
+    /**
+     * Processes a request to change date od interview for current student 
+     */
     @RequestMapping(value="changeDate", method= RequestMethod.POST)
     public ModelAndView changeDatePost(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("selDate") int selDate)
