@@ -1,14 +1,24 @@
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.dao.oldNew.OldNewAdvertisingRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewCourseRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewDynamicFieldRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewEducationRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewFirstNameRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewGraduatedRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewInterviewTimeRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewLastNameRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewPatronynicRowMapper;
+import com.netcracker.libra.dao.oldNew.OldNewPhoneNumberRowMapper;
+import com.netcracker.libra.model.ApplicationChange;
 import com.netcracker.libra.model.DateAndInterviewer;
 import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
-import com.netcracker.libra.model.OldNewInterviewTime;
+import com.netcracker.libra.model.InterviewerResult;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
 import com.netcracker.libra.model.User;
-import com.netcracker.libra.model.UserResult;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
@@ -609,7 +619,7 @@ public class HrJDBC implements HrDAO {
     
     
     /**
-     * Returns interview's ID by application's form ID
+     * @return interviews ID by application's form ID
      * @author Alexander Lebed
      */
     public Integer getInterviewId (Integer appId) {
@@ -626,7 +636,7 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * Returns interview's IDs by app.form ID
+     * @return interviews IDs by app.form ID
      * @author Alexander Lebed
      */
     public List <Integer> getInterviewIds (Integer appId) {
@@ -636,7 +646,7 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * Retutns a string of interview's finish date and time
+     * @return a string of interviews finish date and time
      */
     public String getInterviewFinishDate(Integer interviewId) {
         String SQL = "SELECT to_char(d.dateFinish,'DD.MM.YYYY HH24:MI') FROM InterviewDate d, Interview i "+
@@ -655,7 +665,7 @@ public class HrJDBC implements HrDAO {
     
     
     /**
-     * Returns a List of interviewers who were assigned to a certain time
+     * @return a List of interviewers who were assigned to a certain time
      */
     public List <User> getInterviewersFromInterviewerList(Integer interviewDateId) {
         String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE userId IN (SELECT userId FROM InterviewerList WHERE interviewDateId = ?)";
@@ -673,7 +683,7 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * Returns true if a student was interviewed
+     * @return true if a student was interviewed
      */
     public boolean getInterviewResults(Integer interviewId) {
         String SQL = "SELECT DISTINCT(1) FROM InterviewResults WHERE interviewId = ?";
@@ -689,17 +699,17 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * Returns a List of UserResult (interviewer's data and his or her assessment of interview) of certain interview 
+     * @return a List of InterviewerResult (interviewer's data and his or her assessment of interview) of certain interview 
      */
-    public List <UserResult> getUserResults(Integer interviewId) {
+    public List <InterviewerResult> getUserResults(Integer interviewId) {
         String SQL = "SELECT u.userId, u.firstName, u.lastName, u.roleId, r.mark, r.comments FROM Users u, InterviewResults r WHERE u.userId = r.userId AND r.interviewId = ?";
-        List <UserResult> userResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new UserResultRowMapper());
+        List <InterviewerResult> userResults = jdbcTemplateObject.query(SQL, new Object[] {interviewId}, new InterviewerResultRowMapper());
         return userResults;
     }
     
     /**
-     * Returns a List with information of application's form ID, date and time of certain interview, 
-     * assigned interviewers and their assessment of the theinterview by interview's ID
+     * @return a List with information of application's form ID, date and time of certain interview, 
+     * assigned interviewers and their assessment of the interview by interviews ID
      */
     public List <DateAndInterviewerResults> getDateAndInterviewerResults (Integer interviewId) {
         String SQL = "SELECT i.AppId, to_char(d.dateStart,'dd.mm.yyyy') interviewDate, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') interviewTime, "+
@@ -711,8 +721,8 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * Returns a List with information of application's form ID, date and time of certain interview, 
-     * assigned interviewers by interview's ID
+     * @return a List with information of application's form ID, date and time of certain interview, 
+     * assigned interviewers by interviews ID
      */
     public List <DateAndInterviewer> getDateAndInterviewer (Integer interviewId) {
         String SQL = "SELECT i.AppId, to_char(d.dateStart,'dd.mm.yyyy') interviewDate, to_char(d.dateStart,'hh24:mi')||' - '||  to_char(d.dateFinish,'hh24:mi') interviewTime, "+
@@ -723,24 +733,116 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * Return general info about the student and 
+     * @return general info about the student and 
      * the date and time of interview that student is assigned first
      * and the date ant time that student changed
      */
-    public List <OldNewInterviewTime> getAllOldNewInterviewTime() {
+    public List <ApplicationChange> getAllOldNewInterviewTime() {
         String SQL = "SELECT oldInt.appId, u.firstName, u.lastName, u.email, "+
-                             "TO_CHAR(oldDate.dateStart,'hh24:mi')||' - '|| TO_CHAR(oldDate.dateFinish,'hh24:mi') oldTimeInterview, TO_CHAR(oldDate.dateFinish,'dd.mm.yyyy') oldDateInterview, "+
-                             "TO_CHAR(newDate.dateStart,'hh24:mi')||' - '||TO_CHAR(newDate.dateFinish,'hh24:mi') newTimeInterview, TO_CHAR(newDate.dateFinish,'dd.mm.yyyy') newDateInterview, oldInt.interviewId oldInterviewId, newInt.interviewId newInterviewId "+
+                             "TO_CHAR(oldDate.dateStart,'hh24:mi')||' - '|| TO_CHAR(oldDate.dateFinish,'hh24:mi')||' '||TO_CHAR(oldDate.dateFinish,'dd.mm.yyyy') oldValue, "+
+                             "TO_CHAR(newDate.dateStart,'hh24:mi')||' - '||TO_CHAR(newDate.dateFinish,'hh24:mi')||' '|| TO_CHAR(newDate.dateFinish,'dd.mm.yyyy') newValue, oldInt.interviewId oldId, newInt.interviewId newId "+
                      "FROM InterviewDate oldDate, InterviewDate newDate, Interview oldInt, Interview newInt, Users u, AppForm a "+
                      "WHERE oldDate.InterviewDateId = oldInt.InterviewDateId AND newDate.InterviewDateId = newInt.InterviewDateId "+
-                     "AND oldInt.appId = newInt.appId AND oldInt.appId = a.appId AND a.userId = u.userId AND oldInt.status = 1 AND newInt.status = 0";
-        
-        List <OldNewInterviewTime> resultList = jdbcTemplateObject.query(SQL, new OldNewInterviewTimeRowMapper());
+                     "AND oldInt.appId = newInt.appId AND oldInt.appId = a.appId AND a.userId = u.userId AND oldInt.status = 1 AND newInt.status = 0 ORDER BY appId DESC";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewInterviewTimeRowMapper());
         return resultList;
     }
     
     /**
-     * Delete the interview
+     * @return old(status=1) and new(status=0) columnFileds, and general info about the student
+     */
+    public List <ApplicationChange> getAllOldNewDynamicFields() {
+        String SQL = "SELECT a.appId, u.firstName, u.lastName, u.email, c.name fieldName, oldField.value oldValue, newField.value newValue, oldField.columnFieldId oldId, newField.columnFieldId newId "+
+                     "FROM appForm a, Users u, NewColumns c, ColumnFields oldField, ColumnFields newField "+
+                     "WHERE a.userId = u.userId AND a.appId = oldField.appId AND a.appId = newField.appId "+
+                     "AND c.columnId = oldField.columnId AND c.columnId = newField.columnId AND oldField.status = 1 AND newField.status = 0";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewDynamicFieldRowMapper());
+        return resultList;
+    }
+
+    public List <ApplicationChange> getOldNewPatronymics() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, af.patronymic oldValue, ar.patronymic newValue, af.appId oldId, ar.appRequestId newId "+
+                     "FROM AppForm af, AppRequest ar, Users u WHERE af.userId = ar.userId AND af.userId = u.userId AND af.patronymic <> ar.patronymic";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewPatronynicRowMapper());
+        return resultList;
+    }
+    
+    public List <ApplicationChange> getOldNewPhoneNumbers() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, af.phoneNumber oldValue, ar.phoneNumber newValue, af.appId oldId, ar.appRequestId newId "+
+                      "FROM AppForm af, AppRequest ar, Users u WHERE af.userId = ar.userId AND af.userId = u.userId AND af.phoneNumber <> ar.phoneNumber";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewPhoneNumberRowMapper());
+        return resultList;
+    }
+    
+    public List <ApplicationChange> getOldNewEducation() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, 'Универститет: '||univAppReq.universityName||'<br> Факультет: '||facAppReq.facultyName||'<br> Кафедра: '||depAppReq.departmentName||'<br>' oldValue, "+
+                            "'Универститет: '||univAppForm.universityName||'<br> Факультет: '||facAppForm.facultyName||'<br> Кафедра: '||depAppForm.departmentName||'<br>' newValue, af.appId oldId, ar.appRequestId newId "+
+                     "FROM AppForm af, AppRequest ar, Users u, Department depAppReq, Faculty facAppReq, University univAppReq, Department depAppForm, Faculty facAppForm, University univAppForm "+
+                     "WHERE af.userId = ar.userId AND af.userId = u.userId AND depAppReq.departmentId = ar.departmentId AND facAppReq.facultyId = depAppReq.facultyId AND univAppReq.universityId = facAppReq.universityId "+
+                     "AND depAppForm.departmentId = af.departmentId AND facAppForm.facultyId = depAppForm.facultyId AND univAppForm.universityId = facAppForm.universityId AND af.departmentId <> ar.departmentId";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewEducationRowMapper());
+        return resultList;
+    }
+    
+    public List <ApplicationChange> getOldNewAdvertising() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, 'Узнал от: '||advAppForm.advertisingTitle||'<br> Отзыв: '||NVL(af.advertisingComment, '-') oldValue, "+
+                            "'Узнал от: '||advAppReq.advertisingTitle||'<br> Отзыв: '||NVL(ar.advertisingComment, '-') newValue, af.appId oldId, ar.appRequestId newId "+
+                     "FROM AppForm af, AppRequest ar, Users u, Advertising advAppForm, Advertising advAppReq WHERE af.userId = ar.userId AND af.userId = u.userId "+
+                     "AND advAppForm.advertisingId = af.advertisingId AND advAppReq.advertisingId = ar.advertisingId AND NVL(af.advertisingComment, 0) <> NVL(ar.advertisingComment, 0)";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewAdvertisingRowMapper());
+        return resultList;
+    }
+    
+    public List <ApplicationChange> getOldNewCourses() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, af.course oldValue, ar.course newValue, af.appId oldId, ar.appRequestId newId "+
+                     "FROM AppForm af, AppRequest ar, Users u WHERE af.userId = ar.userId AND af.userId = u.userId AND af.course <> ar.course";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewCourseRowMapper());
+        return resultList;
+    }
+    
+    public List <ApplicationChange> getOldNewGraduatedYears() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, af.graduated oldValue, ar.graduated newValue, af.appId oldId, ar.appRequestId newId "+
+                     "FROM AppForm af, AppRequest ar, Users u WHERE af.userId = ar.userId AND af.userId = u.userId AND af.graduated <> ar.graduated";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewGraduatedRowMapper());
+        return resultList;
+    }
+    
+    public List <ApplicationChange> getOldNewFirstNames() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, u.firstName oldValue, ar.firstName newValue, u.userId oldId, ar.appRequestId newId "+
+                     "FROM AppRequest ar, AppForm af, Users u WHERE af.userId = u.userId AND ar.userId = u.userId AND ar.firstName <> u.firstName";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewFirstNameRowMapper());
+        return resultList;
+    }
+    
+    public List <ApplicationChange> getOldNewLastNames() {
+        String SQL = "SELECT af.appId, u.firstName, u.lastName, u.email, u.lastName oldValue, ar.lastName newValue, u.userId oldId, ar.appRequestId newId "+
+                     "FROM AppRequest ar, AppForm af, Users u WHERE af.userId = u.userId AND ar.userId = u.userId AND ar.lastName <> u.lastName";
+        List <ApplicationChange> resultList = jdbcTemplateObject.query(SQL, new OldNewLastNameRowMapper());
+        return resultList;
+    }
+    
+    /**
+     * update info from AppRequest to AppForm
+     */
+    public void confirmMainAppInfo(String columnName, Integer appRequestId, Integer id) {
+        
+        String SQL = columnName.equals("firstName")||columnName.equals("lastName") 
+                        ? "UPDATE Users SET "+columnName+" = (SELECT "+columnName+" FROM AppRequest WHERE appRequestId = ?) WHERE userId = ?"
+                        : "UPDATE AppForm SET "+columnName+" = (SELECT "+columnName+" FROM AppRequest WHERE appRequestId = ?) WHERE appId = ?";
+        
+        jdbcTemplateObject.update(SQL, new Object[]{appRequestId, id});
+    }
+    
+    /**
+     * update interview to status 1
+     */
+    public void confirmInterviewTime(Integer id) {
+        String SQL = "UPDATE Interview SET status = 1 WHERE interviewId = ?";
+        jdbcTemplateObject.update(SQL, id);
+    }
+    
+    /**
+     * delete interview
      */
     public void deleteInterview(Integer interviewId) {
         String SQL = "DELETE FROM Interview WHERE interviewId = ?";
@@ -748,11 +850,33 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * Confirm the interview by HR
+     * delete few interviews
      */
-    public void congirmInterview(Integer interviewId) {
-        String SQL = "UPDATE Interview SET status = 1 WHERE interviewId = ?";
-        jdbcTemplateObject.update(SQL, interviewId);
+    public void deleteFewInterview(int [] ids) {
+        StringBuilder str = new StringBuilder("DELETE FROM Interview WHERE interviewId = " + ids[0]);
+        
+        for(int i=1; i < ids.length; i++) {
+            str.append(" AND interviewId = " + String.valueOf(ids[i]));
+        }
+        
+        String SQL = str.toString();
+        jdbcTemplateObject.update(SQL);
+    }
+    
+    /**
+     * update columnField to status 1
+     */
+    public void confirmDynamicField(Integer id) {
+        String SQL = "UPDATE ColumnFields SET status = 1 WHERE columnFieldId = ?";
+        jdbcTemplateObject.update(SQL, id);
+    }
+    
+    /**
+     * delete columnField
+     */
+    public void deleteDynamicField(Integer columnFieldId) {
+        String SQL = "DELETE FROM ColumnFields WHERE columnFieldId = ?";
+        jdbcTemplateObject.update(SQL, columnFieldId);
     }
 
 }

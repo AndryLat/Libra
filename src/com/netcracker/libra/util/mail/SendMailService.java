@@ -4,6 +4,7 @@
  */
 package com.netcracker.libra.util.mail;
 
+import com.netcracker.libra.dao.VMTemplateJDBC;
 import java.io.File;
 import java.util.Map;
 import javax.mail.internet.MimeMessage;
@@ -60,7 +61,7 @@ public class SendMailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage,"UTF-8");
             message.setTo(adress);
             String text = VelocityEngineUtils.mergeTemplateIntoString(
-               velocityEngine, "/" + template + ".vm", "UTF-8", model);
+               velocityEngine,VMTemplateJDBC.getContentVMTemplate(template), "UTF-8", model);
             message.setText(text, true);
          }
       };
@@ -80,7 +81,7 @@ public class SendMailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true,"UTF-8");
             message.setTo(adress);
             String text = VelocityEngineUtils.mergeTemplateIntoString(
-               velocityEngine, "/" + template + ".vm", "UTF-8", model);
+               velocityEngine,VMTemplateJDBC.getContentVMTemplate(template), "UTF-8", model);
             message.setText(text, true);
             File file = new  File(servletContext.getRealPath("WEB-INF/files/"+FileName));
             message.addAttachment(FileName,file) ;
@@ -101,8 +102,7 @@ public class SendMailService {
          public void prepare(MimeMessage mimeMessage) throws Exception {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage,"UTF-8");
             message.setTo(adress);
-            String text = VelocityEngineUtils.mergeTemplateIntoString(
-               velocityEngine, "/" + template + ".vm", "UTF-8", model);
+            String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,VMTemplateJDBC.getContentVMTemplate(template), "UTF-8", model);
             message.setText(text, true);
          }
       };

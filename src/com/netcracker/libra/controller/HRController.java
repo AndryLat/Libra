@@ -2,6 +2,7 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.HrJDBC;
+import com.netcracker.libra.model.ApplicationChange;
 import com.netcracker.libra.model.DateAndInterviewer;
 import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
@@ -17,7 +18,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.stereotype.Controller;
@@ -36,9 +36,7 @@ public class HRController {
      HrJDBC hr=new HrJDBC();
      Student s=new Student();
      
-     //list contain general info about the student, date and time of his/her interview
-     //(that were before student's wishes to change and after it)
-     List <OldNewInterviewTime> oldNewInterviewTimeList; 
+     List <ApplicationChange> appChangeList;
      boolean order; //value of ascending or descending order; true when ascending
      
      /*
@@ -295,124 +293,275 @@ public class HRController {
        * Go to page with general info about the student, date and time of his/her interview
        * (that were before student's wishes to change and after it) 
        */
-      @RequestMapping("/hr/сonfirmEditing")
+      @RequestMapping("hr/confirmChanges")
       public ModelAndView showConfirmEditing() {
           ModelAndView mv = new ModelAndView();
           
-          oldNewInterviewTimeList = hr.getAllOldNewInterviewTime();
+          appChangeList = getOldNewList();
+          Collections.sort(appChangeList, new IdComparator(true));
           
-          mv.setViewName("hr/showConfirmEditing");
-          mv.addObject("timeList", oldNewInterviewTimeList);
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("list", appChangeList);
+          mv.addObject("idOrder", "<img  src=\"../resources/images/admin/arrow_down.png\" width=\"12\" height=\"12\" title=\"по убыванию\"/>");
           return mv;
       }
       
       /**
-       * Sort in ascending or descending order 
+       * Sort in ascending or descending order the table of old and new date and time
        * by the app.form ID, first name, last name, email and field name
        */
-      @RequestMapping("hr/sortOldNewInterview")
+      @RequestMapping("hr/sortOldNewValues")
       public ModelAndView sortByLink(@RequestParam("orderBy") String orderBy) {
           
+          //arrows uo and down when sorting
           String up = "<img  src=\"../resources/images/admin/arrow_down.png\" width=\"12\" height=\"12\" title=\"по возрастанию\"/>";
           String down = "<img  src=\"../resources/images/admin/arrow_up.png\" width=\"12\" height=\"12\" title=\"по убыванию\"/>";
           
            ModelAndView mv = new ModelAndView();
-           mv.setViewName("hr/showConfirmEditing");
+           mv.setViewName("hr/showApplicationChanges");
            
            switch(orderBy) {
                
                case "APP_ID":
-                    Collections.sort(oldNewInterviewTimeList, new IdComparator(order));
+                    Collections.sort(appChangeList, new IdComparator(order));
                     String idOrder = (order) ? up : down;
                     mv.addObject("idOrder", idOrder);
                     break;
                    
                case "FIRST_NAME":
-                    Collections.sort(oldNewInterviewTimeList, new FirstNameComparator(order));
+                    Collections.sort(appChangeList, new FirstNameComparator(order));
                     String nameOrder = (order) ? up : down;
                     mv.addObject("nameOrder", nameOrder);
                     break;
                    
                case "LAST_NAME":
-                    Collections.sort(oldNewInterviewTimeList, new LastNameComparator(order));
+                    Collections.sort(appChangeList, new LastNameComparator(order));
                     nameOrder = (order) ? up : down;
                     mv.addObject("nameOrder", nameOrder);
                     break;
                 
                case "EMAIL":
-                    Collections.sort(oldNewInterviewTimeList, new EmailComparator(order));
+                    Collections.sort(appChangeList, new EmailComparator(order));
                     String emailOrder = (order) ? up : down;
                     mv.addObject("emailOrder", emailOrder);
                     break;
                    
                case "FIELD_NAME":
-                    Collections.sort(oldNewInterviewTimeList, new FieldNameComparator(order));
+                    Collections.sort(appChangeList, new FieldNameComparator(order));
                     String fieldNameOrder = (order) ? up : down;
                     mv.addObject("fieldNameOrder", fieldNameOrder);
                     break;
            }
            //switch to ascending or descending order
            order = (order) ? false : true;
-           mv.addObject("timeList", oldNewInterviewTimeList);
+           mv.addObject("list", appChangeList);
            return mv;
       }
       
       /**
-       * Cancel the changes with new date and time of interview
+       * apply student's changes of interview time
        */
-      @RequestMapping("hr/cancelConfirmEditingInterviewTime")
-      public ModelAndView cancelConfirmEditingInterviewTime(@RequestParam("newInterviewId") int newInterviewId) {
+      @RequestMapping("hr/doneConfirmInterviewTime")
+      public ModelAndView doneConfirmInterviewTime(@RequestParam("oldId") int oldId,
+                                                   @RequestParam("newId") int newId,
+                                                   @RequestParam("objectId") int objectId) {
+          hr.deleteInterview(oldId);
+          hr.confirmInterviewTime(newId);
           
-          hr.deleteInterview(newInterviewId);
-          
-          for(ListIterator <OldNewInterviewTime> i = oldNewInterviewTimeList.listIterator(); i.hasNext(); ) {
-              OldNewInterviewTime obj = i.next();
-              if(obj.getNewInterviewId() == newInterviewId) {
+          for(ListIterator <ApplicationChange> i = appChangeList.listIterator(); i.hasNext(); ) {
+              ApplicationChange obj = i.next();
+              if(obj.getObjectId() == objectId) {
                   i.remove();
               }
           }
           
           ModelAndView mv = new ModelAndView();
-          mv.setViewName("hr/showConfirmEditing");
-          mv.addObject("message", "Изменение успешно отменено");
-          mv.addObject("timeList", oldNewInterviewTimeList);
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("message", "Изменения сохранены");
+          mv.addObject("list", appChangeList);
           return mv;
       }
       
       /**
-       * Change interview to new date and time
+       * undo student's changes of interview time
        */
-      @RequestMapping("hr/doneConfirmEditingInterviewTime")
-      public ModelAndView doneConfirmEditingInterviewTime(@RequestParam("oldInterviewId") int oldInterviewId,
-                                                          @RequestParam("newInterviewId") int newInterviewId) {
-          hr.deleteInterview(oldInterviewId);
-          hr.congirmInterview(newInterviewId);
+      @RequestMapping("hr/cancelConfirmInterviewTime")
+      public ModelAndView cancelConfirmInterviewTime(@RequestParam("newId") int newId,
+                                                     @RequestParam("objectId") int objectId) {
+          hr.deleteInterview(newId);
           
-          for(ListIterator <OldNewInterviewTime> i = oldNewInterviewTimeList.listIterator(); i.hasNext(); ) {
-              OldNewInterviewTime obj = i.next();
-              if(obj.getOldInterviewId() == oldInterviewId) {
+          for(ListIterator <ApplicationChange> i = appChangeList.listIterator(); i.hasNext(); ) {
+              ApplicationChange obj = i.next();
+              if(obj.getObjectId() == objectId) {
                   i.remove();
               }
           }
           
           ModelAndView mv = new ModelAndView();
-          mv.setViewName("hr/showConfirmEditing");
-          mv.addObject("message", "Изменения сохранены");
-          mv.addObject("timeList", oldNewInterviewTimeList);
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("message", "Изменение успешно отменено");
+          mv.addObject("list", appChangeList);
           return mv;
+      }
+      
+      /**
+       * apply student's changes of dynamic field in database
+       */
+      @RequestMapping("hr/doneConfirmDynamicField")
+      public ModelAndView doneConfirmDynamicField(@RequestParam("oldId") int oldId,
+                                                  @RequestParam("newId") int newId,
+                                                  @RequestParam("objectId") int objectId) {
+          hr.deleteDynamicField(oldId);
+          hr.confirmDynamicField(newId);
+          
+          for(ListIterator <ApplicationChange> i = appChangeList.listIterator(); i.hasNext(); ) {
+              ApplicationChange obj = i.next();
+              if(obj.getObjectId() == objectId) {
+                  i.remove();
+              }
+          }
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("message", "Изменения сохранены");
+          mv.addObject("list", appChangeList);
+          return mv;
+      }
+      
+      /**
+       * undo student's changes of dynamic field in database
+       */
+      @RequestMapping("hr/cancelConfirmDynamicField")
+      public ModelAndView cancelConfirmDynamicField(@RequestParam("newId") int newId,
+                                                    @RequestParam("objectId") int objectId) {
+          hr.deleteDynamicField(newId);
+          
+          for(ListIterator <ApplicationChange> i = appChangeList.listIterator(); i.hasNext(); ) {
+              ApplicationChange obj = i.next();
+              if(obj.getObjectId() == objectId) {
+                  i.remove();
+              }
+          }
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("message", "Изменение успешно отменено");
+          mv.addObject("list", appChangeList);
+          return mv;
+      }
+      
+      
+      /**
+       * apply student's changes of application fields 
+       * stored in AppRequest table
+       */
+      @RequestMapping("hr/doneConfirmMainAppInfo")
+      public ModelAndView doneConfirmMainAppInfo(@RequestParam("oldId") int oldId,
+                                                 @RequestParam("newId") int newId,
+                                                 @RequestParam("objectId") int objectId,
+                                                 @RequestParam("columnName") String columnName) {
+          hr.confirmMainAppInfo(columnName, newId, oldId);
+          
+          for(ListIterator <ApplicationChange> i = appChangeList.listIterator(); i.hasNext(); ) {
+              ApplicationChange obj = i.next();
+              if(obj.getObjectId() == objectId) {
+                  i.remove();
+              }
+          }
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("message", "Изменения сохранены");
+          mv.addObject("list", appChangeList);
+          return mv;
+      }
+      
+      /**
+       * undo student's changes of application fields 
+       * stored in AppRequest table
+       */
+      @RequestMapping("hr/cancelConfirmMainAppInfo")
+      public ModelAndView cancelConfirmMainAppInfo(@RequestParam("objectId") int objectId) {
+          
+          for(ListIterator <ApplicationChange> i = appChangeList.listIterator(); i.hasNext(); ) {
+              ApplicationChange obj = i.next();
+              if(obj.getObjectId() == objectId) {
+                  i.remove();
+              }
+          }
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("message", "Изменение успешно отменено");
+          mv.addObject("list", appChangeList);
+          return mv;
+      }
+      
+      /**
+       * undo or apply all marked student's changes of application fields 
+       * @param action - name of pressed button
+       */
+      @RequestMapping("hr/deleteOrConfirmAllChanges")
+      public ModelAndView deleteOrConfirmAllChanges(@RequestParam("action") String action) {
+          
+          if(action.equals("Y")) {
+              //confirm action in datebase and arrayList
+              System.out.println("Confirm all in action");
+              
+          }
+          else if(action.equals("N")) {
+              //delete action in datebase and arrayList
+              System.out.println("Delete all in action");
+              
+          }
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("list", appChangeList);
+          return mv;
+      }
+      
+      /**
+       * returns all fields with the changes
+       */
+      public List <ApplicationChange> getOldNewList() {
+          List <ApplicationChange> appChangeList = new ArrayList <ApplicationChange> ();
+          List <ApplicationChange> interviewTimeList = hr.getAllOldNewInterviewTime();
+          List <ApplicationChange> dynamicList = hr.getAllOldNewDynamicFields();
+          List <ApplicationChange> patronymicList = hr.getOldNewPatronymics();
+          List <ApplicationChange> phoneNumbersList = hr.getOldNewPhoneNumbers();
+          List <ApplicationChange> educationList = hr.getOldNewEducation();
+          List <ApplicationChange> advertisingList = hr.getOldNewAdvertising();
+          List <ApplicationChange> coursesList = hr.getOldNewCourses();
+          List <ApplicationChange> graduatedYearsList = hr.getOldNewGraduatedYears();
+          List <ApplicationChange> firstNamesList = hr.getOldNewFirstNames();
+          List <ApplicationChange> lastNamesList = hr.getOldNewLastNames();
+          
+          appChangeList.addAll(interviewTimeList);
+          appChangeList.addAll(dynamicList);
+          appChangeList.addAll(patronymicList);
+          appChangeList.addAll(phoneNumbersList);
+          appChangeList.addAll(educationList);
+          appChangeList.addAll(advertisingList);
+          appChangeList.addAll(coursesList);
+          appChangeList.addAll(graduatedYearsList);
+          appChangeList.addAll(firstNamesList);
+          appChangeList.addAll(lastNamesList);
+          
+          return appChangeList;
       }
       
     /**
      * Comparator has been created to be passed to a method Collections.sort 
      * to sort of objects list in ascending or descending order by the ID
      */
-    public static class IdComparator implements Comparator <OldNewInterviewTime> {
+    public static class IdComparator implements Comparator <ApplicationChange> {
         private boolean asc; // true - sorts in ascending order, fasle - descending
         public IdComparator(boolean asc) {
             this.asc = asc;
         }
         @Override
-        public int compare(OldNewInterviewTime obj1, OldNewInterviewTime obj2) {
+        public int compare(ApplicationChange obj1, ApplicationChange obj2) {
             if(asc) {
                 return (obj1.getAppId() > obj2.getAppId()) ? 1 
                     : (obj1.getAppId() == obj2.getAppId()) ? 0 : -1;
@@ -428,13 +577,13 @@ public class HRController {
      * Comparator has been created to be passed to a method Collections.sort 
      * to sort of objects list in ascending or descending order by the first name
      */
-    public static class FirstNameComparator implements Comparator <OldNewInterviewTime> {
+    public static class FirstNameComparator implements Comparator <ApplicationChange> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
         public FirstNameComparator(boolean asc) {
             this.asc = asc;
         }
         @Override
-        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+        public int compare(ApplicationChange o1, ApplicationChange o2) {
             return asc ? (o1.getFirstName().compareToIgnoreCase(o2.getFirstName())) 
                        : (o2.getFirstName().compareToIgnoreCase(o1.getFirstName()));
         }
@@ -444,13 +593,13 @@ public class HRController {
      * Comparator has been created to be passed to a method Collections.sort 
      * to sort of objects list in ascending or descending order by the last name
      */
-    public static class LastNameComparator implements Comparator <OldNewInterviewTime> {
+    public static class LastNameComparator implements Comparator <ApplicationChange> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
         public LastNameComparator(boolean asc) {
             this.asc = asc;
         }
         @Override
-        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+        public int compare(ApplicationChange o1, ApplicationChange o2) {
             return asc ? (o1.getLastName().compareToIgnoreCase(o2.getLastName())) 
                        : (o2.getLastName().compareToIgnoreCase(o1.getLastName()));
         }
@@ -460,13 +609,13 @@ public class HRController {
      * Comparator has been created to be passed to a method Collections.sort 
      * to sort of objects list in ascending or descending order by the email
      */
-    public static class EmailComparator implements Comparator <OldNewInterviewTime> {
+    public static class EmailComparator implements Comparator <ApplicationChange> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
         public EmailComparator(boolean asc) {
             this.asc = asc;
         }
         @Override
-        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+        public int compare(ApplicationChange o1, ApplicationChange o2) {
             return asc ? (o1.getEmail().compareToIgnoreCase(o2.getEmail())) 
                        : (o2.getEmail().compareToIgnoreCase(o1.getEmail()));
         }
@@ -476,13 +625,13 @@ public class HRController {
      * Comparator has been created to be passed to a method Collections.sort 
      * to sort of objects list in ascending or descending order by the email
      */
-    public static class FieldNameComparator implements Comparator <OldNewInterviewTime> {
+    public static class FieldNameComparator implements Comparator <ApplicationChange> {
         private boolean asc; //true - sorts in ascending order, fasle - descending
         public FieldNameComparator(boolean asc) {
             this.asc = asc;
         }
         @Override
-        public int compare(OldNewInterviewTime o1, OldNewInterviewTime o2) {
+        public int compare(ApplicationChange o1, ApplicationChange o2) {
             return asc ? (o1.getFieldName().compareToIgnoreCase(o2.getFieldName())) 
                        : (o2.getFieldName().compareToIgnoreCase(o1.getFieldName()));
         }

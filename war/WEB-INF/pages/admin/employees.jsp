@@ -79,7 +79,7 @@
                 </select>
              </td>
              <td><input type="text" placeholder="Введите значение" name="textValue" value="${text}"></td>
-             <td><button class="btn btn-primary"><img  src="../resources/images/admin/search-icon-white-one-hi.png" width="15" height="15"/> Поиск &nbsp;</button></td>
+             <td><button class="btn btn-primary"><img  src="../resources/images/admin/search-icon-white-one-hi.png" width="12" height="12"/> Поиск &nbsp;</button></td>
         </tr>
         </div>
         </form>
@@ -88,13 +88,13 @@
         <div align="center"><c:if test="${employees.isEmpty()}"> ${noResults} </c:if></div>
         
         <c:if test="${employees.isEmpty() == false}">
-        <table class="bordered">
+        <table class="bordered" style="margin-left: auto; margin-right: auto;">
             <caption><div class="alert alert-info">Сотрудники</div></caption>
         <tr>
-            <th><a href="sortEmployees.html?orderBy=FIRST_NAME">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME">фамилия</a></th>
-            <th><a href="sortEmployees.html?orderBy=ID">id</a></th>
-            <th><a href="sortEmployees.html?orderBy=ROLE">должность</a></th>
-            <th><a href="sortEmployees.html?orderBy=EMAIL">email</a></th>
+            <th><a href="sortEmployees.html?orderBy=FIRST_NAME">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME">фамилия</a> &nbsp; ${nameOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=ID">id</a> &nbsp; ${idOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=ROLE">должность</a> &nbsp; ${roleOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=EMAIL">email</a> &nbsp; ${emailOrder}</th>
             <th>пароль</th>
             <th>редактировать</th>
             <th>удалить</th>
