@@ -41,7 +41,7 @@
                     <option value="${t.getTypeId()}"><c:out value="${t.getInfoDescription()}" /></option>
                 </c:forEach>
             </select></br>
-            Выберите тип колонки<select class="span-table" name="parentColumn">
+            Выберите родителя колонки<select class="span-table" name="parentColumn">
                 <option value="0">Нету родителя</option>
                 <c:forEach items="${columns}" var="c">
                     <option value="${c.getColumnId()}"><c:out value="${c.getName()}" /></option>
