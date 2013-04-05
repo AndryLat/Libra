@@ -18,19 +18,20 @@
 <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="resources/js/template.js"></script>
-
+ <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
     </head>
     <body>
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
 	
-	<div class="container-fluid">
-		<div class="row-fluid">
+	<div class="container">
+		<div class="row">
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
- <div class="well-template span8"> 
+ <div class="well span8"> 
      <div class="div-left">
          <div >
         <form action="SubmitTemplate.html" method="POST">
@@ -70,10 +71,10 @@
         
 
         <!--<table border="1" cellspacing="0" cellpadding="4">-->
-        <div class="well-template span8">
+        <div class="span8">
       <%--  <form class="well-template span8" action="delTemplate.html" method="POST">--%>
         
-        <table  class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
+        <table  class="bordered width100">
         <caption>Информация о существующих шаблонах</caption>
         <thead>
         <tr>
@@ -131,13 +132,13 @@
                 </c:if>
             </td>
             <td class="checkbox-shift">
-                <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${t.getTemplateId()}'/>');"><img class="_img-size" src="resources/images/edit.png"  title="внести изменения"/></a>                        
+                <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${t.getTemplateId()}'/>');"><img src="resources/images/icons/glyphicons_137_cogwheels.png"  title="внести изменения"/></a>                        
             <%--
 <input type="image"  src="resources/images/edit.png" width="25" height="25" title="внести изменения" onclick="location.href='showTemplates.html'"/>
             --%>
 
-                <a href="showColumn.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img class="_img-size" src="resources/images/columns.png"  title="редактировать колонки"/></a>
-               <a href="showAppForm.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img class="_img-size" src="resources/images/show.png"  title="просмотреть шаблон"/></a>
+                <a href="showColumn.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img  src="resources/images/icons/glyphicons_119_table.png"  title="редактировать колонки"/></a>
+               <a href="showAppForm.html?templateId=<c:out value='${t.getTemplateId()}'/>"><img  src="resources/images/icons/glyphicons_051_eye_open.png"  title="просмотреть шаблон"/></a>
             
             </td>
             </form>
@@ -151,6 +152,7 @@
 		</div>
 	</div>
         </div>  
+                </div>
     </body>
 </html>
 

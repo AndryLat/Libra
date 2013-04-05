@@ -15,6 +15,7 @@
         <title>Отредактировать колонку</title>
     </head>
     <body>
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -24,7 +25,7 @@
 				<jsp:include page="sidebar.jsp" />
 			</div>
                             
-                         <form  class="well-template span8" method="POST" action="editSubmitColumn.html">
+                         <form  class="well span8" method="POST" action="editSubmitColumn.html">
             
    <h4>Редактировать колонку </h4>
    <hr>
@@ -54,6 +55,6 @@
 			</div>
 		</div>
 	</div>
-    
+    </div>
     </body>
 </html>

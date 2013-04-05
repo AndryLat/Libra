@@ -31,7 +31,7 @@
 				<jsp:include page="sidebar.jsp" />
 			</div>
 			<c:if test="${existsComment==0}">
-                        <form class="well-template span8" method="POST" action="addResultSubmit.html">
+                        <form class="well span8" method="POST" action="addResultSubmit.html">
                             <input type="hidden" name="appId" value="${appId}"/>
                             <label>Оценка:</label><input class="width96" onclick="javascript:number_control()" id="quantity" type="text" name="mark"/>
                             </br>

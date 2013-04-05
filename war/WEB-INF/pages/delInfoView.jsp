@@ -10,9 +10,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${title}</title>
           <link href="resources/css/template.css" rel="stylesheet">	
+          <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
         <jsp:include page="resources.jsp" />
     </head>
     <body>
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -22,7 +24,7 @@
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
-<div class="well-template span8">
+<div class="span8">
            
 				<h4>${h1}</h4>
         <c:if test="${infoSize == 0  }">
@@ -30,7 +32,7 @@
         </c:if>
         <c:if test="${infoSize > 0  }">
             <p>При это будут изменены анкеты ${infoSize} студентов</p>
-            <table class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
+            <table class="bordered width100">
                 <thead>
                 <tr>
                     <th>номер анкеты</th>
@@ -79,6 +81,6 @@
             </div>
 		</div>
 	</div>
-        
+      </div>  
     </body>
 </html>

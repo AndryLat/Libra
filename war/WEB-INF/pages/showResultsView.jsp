@@ -12,6 +12,8 @@
     <link href="resources/css/docs.css" rel="stylesheet">
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="resources/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
+       
      <script src="resources/css/bootstrap.jsp"></script>
     <script src="resources/css/bootstrap.mini.jsp"></script>    
     
@@ -25,7 +27,8 @@
 <script src="resources/js/template.js"></script>
         <jsp:include page="resources.jsp" />
     </head>
-    <body onload="ajax_result(null,null,null,null,null)">
+    <body onload="ajax_result(1,10,null,null,null)">
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -36,7 +39,7 @@
 				<jsp:include page="sidebar.jsp" />
 			</div>
                         
-                        <div class="well-template span8">
+                        <div class="span8">
                         
                             
                             <div class="navbar">
@@ -58,10 +61,10 @@
 --%><%--
 href="<c:if test='${currentpage!=null && count!=null}'>&page=<c:out value='${currentpage}'/>&count=<c:out value='${count}'/></c:if><c:if test="${order=='results'}">&desc=<c:out value='${!desc}'/></c:if>"
 --%>
-              <li id="serch_results"><a onclick="change_order(null,null,null,'results',false)" >По результатам</a></li>
-              <li id="serch_appId"><a onclick="change_order(null,null,null,'appId',true)" >По номеру анкеты</a></li>
-              <li id="serch_email"><a onclick="change_order(null,null,null,'email',true)" >По email</a></li>
-              <li id="serch_lastname"><a  onclick="change_order(null,null,null,'lastname',true)" >По фамилии</a></li>            
+              <li id="serch_results"><a onclick="change_order(1,10,null,'results',false)" >По результатам</a></li>
+              <li id="serch_appId"><a onclick="change_order(1,10,null,'appId',true)" >По номеру анкеты</a></li>
+              <li id="serch_email"><a onclick="change_order(1,10,null,'email',true)" >По email</a></li>
+              <li id="serch_lastname"><a  onclick="change_order(1,10,null,'lastname',true)" >По фамилии</a></li>            
 
 </ul>
           </li>     
@@ -115,7 +118,7 @@ $(document).ready(function()
     
   <h4 id="serch_info" class="align-center"></h4> 
 
-			<table class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
+			<table class="bordered width100">
             <thead>
                 <tr>
                     
@@ -192,6 +195,6 @@ $(document).ready(function()
             </div>
 		</div>
 	</div>
-        
+        </div>
     </body>
 </html>

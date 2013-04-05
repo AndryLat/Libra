@@ -292,7 +292,7 @@ public class InterviewDateJDBC implements InterviewDateDAO {
                 "TO_CHAR(idate.datefinish,'dd.mm.yyyy') day, "+
                 "TO_CHAR(idate.datestart,'hh24:mi')||'-'||TO_CHAR(idate.datefinish,'hh24:mi') hTime, "+
                 "Count(*)*(idate.datefinish-idate.datestart)*24*60/idate.InterviewDuration -NVL(i.c,0) freePlaces, "+
-                "sign(idate.datefinish+(SYSDATE+NVL((select distinct TIMEZONEDIFFERENCE from libraconfigs),0)/24)) correct "+
+                "sign(idate.datefinish-(SYSDATE+NVL((select distinct TIMEZONEDIFFERENCE from libraconfigs),0)/24)) correct "+
 		"from InterviewerList ilist join InterviewDate idate "+
 		"on  idate.interviewDateId=ilist.interviewdateId "+	
 		"left join "+ 
