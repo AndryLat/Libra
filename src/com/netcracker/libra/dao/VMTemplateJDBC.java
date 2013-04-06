@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 /**
- *
+ * Class provides methods for manipulating the templates in the database
  * @author MorrisDeck
  */
 @Repository
@@ -23,10 +23,13 @@ public class VMTemplateJDBC {
         jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
     
-    public static boolean InsertNewVMTemplate(String content,String name, String describe, String author){
+    /*
+     * Insert new template
+     */
+    public static boolean InsertNewVMTemplate(String name, String content, String describe, String author){
         String SQL = "INSERT INTO VMTemplates "
                 + "VALUES (VMTemplate_id.NEXTVAL,?,?,?,?)";
-        if (jdbcTemplateObject.update(SQL, content, name, describe,author) != 0){
+        if (jdbcTemplateObject.update(SQL, content, name, describe, author) != 0){
             return true;
         } else {
             return false;
@@ -34,9 +37,14 @@ public class VMTemplateJDBC {
 
     }
     
+//    public static String getPathVMTemplate(String name){
+//        String SQL = "SELECT path FROM VMTemplates WHERE t_name = ?";
+//         return jdbcTemplateObject.queryForObject(SQL,String.class, name);
+//    }
+    
     public static String getContentVMTemplate(String name){
-        String SQL = "SELECT content FROM VMTemplates WHERE t_name = ?";
-         return jdbcTemplateObject.queryForObject(SQL,String.class, name);
+        String SQL = "SELECT content FROM VMTemplates WHERE t_name = ? ";
+        return jdbcTemplateObject.queryForObject(SQL, String.class, name);
     }
     
 }
