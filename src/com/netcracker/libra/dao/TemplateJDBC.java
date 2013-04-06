@@ -70,16 +70,15 @@ public class TemplateJDBC implements TemplateDAO
     public int add(String name) 
     {
         int i=getCurVal();
-        if(count()>0)
-        {    
-            String SQL ="INSERT INTO Template VALUES(?,?,0)";
-            jdbcTemplateObject.update(SQL,i,name);
-        }
-        else
-        {
-            String SQL ="INSERT INTO Template VALUES(?,?,1)";
-            jdbcTemplateObject.update(SQL,i,name);
-        }
+           
+            String SQL ="INSERT INTO Template "
+                        +"VALUES( "
+                        +"?, "
+                        +"?, "
+                        +"Decode(?,0,1,0) "
+                	+")";
+            jdbcTemplateObject.update(SQL,i,name,count());
+        
         return i;
     }
     

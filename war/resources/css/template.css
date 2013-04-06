@@ -10,6 +10,10 @@ root {
     display: block;
 }
 
+.mincontainer
+{
+    min-width: 1100px;
+}
 .well-template {
 	min-height: 20px;
 	padding: 19px;
@@ -41,7 +45,8 @@ root {
 }
 .table-template
 {
-    width: 750px;
+    width: 99%;
+    /*width: 750px;*/
 }
 
 .span-table

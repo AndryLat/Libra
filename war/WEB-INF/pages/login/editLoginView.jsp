@@ -17,7 +17,7 @@
 <jsp:include page="../resources.jsp" />
 <link href="../Libra/resources/css/template.css" rel="stylesheet">
     
-<title>Вход</title>
+<title>Изменить пароль</title>
 </head>
 
 <body>

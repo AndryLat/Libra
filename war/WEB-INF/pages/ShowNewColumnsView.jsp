@@ -14,6 +14,7 @@
     <link href="resources/css/docs.css" rel="stylesheet">
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="resources/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
     	       <script src="resources/js/template.js"></script>
         <jsp:include page="resources.jsp" />
 
@@ -21,7 +22,7 @@
   </style>
     </head>
     <body>
-        
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -31,7 +32,7 @@
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
-                        <div class="well-template span8">
+                        <div class="well span8">
 <form  method="POST" action="SubmitColumn.html">
             Введите имя колонки <input class="span-table" type="text" name="name" /></br>
             Выберите тип колонки<select class="span-table" name="selType">
@@ -40,7 +41,7 @@
                     <option value="${t.getTypeId()}"><c:out value="${t.getInfoDescription()}" /></option>
                 </c:forEach>
             </select></br>
-            Выберите тип колонки<select class="span-table" name="parentColumn">
+            Выберите родителя колонки<select class="span-table" name="parentColumn">
                 <option value="0">Нету родителя</option>
                 <c:forEach items="${columns}" var="c">
                     <option value="${c.getColumnId()}"><c:out value="${c.getName()}" /></option>
@@ -51,13 +52,13 @@
 </form>
        </div>              
           <%--  <form class="well-template span8" action="delColumns.html" method="POST">--%>
-          <div class="well-template span8">
-    <table  class="table-striped table-condensed table-template" border="1" cellspacing="0" cellpadding="4">
+          <div class=" span8">
+    <table  class="bordered width100">
                 <caption>Информация о колонках</caption>
         <thead>
         <tr>
             <th>
-             <a href="#" onclick="submitDelete('delColumns.html',':checkbox[name^=delete]')"><img src="resources/images/del.png" width="25" height="25" title="Удалить" /></a>
+             <a href="#" onclick="submitDelete('delColumns.html?templateId=<c:out value='${templateId}'/>',':checkbox[name^=delete]')"><img src="resources/images/del.png" width="25" height="25" title="Удалить" /></a>
              </br><input id="one" type="checkbox" name="one" value="all" onclick="cbToggle();" />
            
             </th>
@@ -80,10 +81,10 @@
                 <td>${c.getNameWithIndent()}</td>
                 <td> 
                     <c:if test="${c.getColumnUpp()!=0}"> 
-                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnUpp()}&templateId=${templateId}"> <img src="resources/images/admin/arrow_up.png"/></a>
+                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnUpp()}&templateId=${templateId}"> <img src="resources/images/icons/arrow_up.png"/></a>
                      </c:if>
                     <c:if test="${c.getColumnDown()!=0}">
-                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnDown()}&templateId=${templateId}"><img src="resources/images/admin/arrow_down.png"/></a> 
+                        <a href="changeColumn.html?column1=${c.getColumnId()}&column2=${c.getColumnDown()}&templateId=${templateId}"><img src="resources/images/icons/arrow_down.png"/></a> 
                      </c:if>   
                 </td>
                 <td>
@@ -94,7 +95,7 @@
                         Нету значений
                     </c:if>
                 </td>
-                <td class="align-center"><a href="editColumn.html?columnId=<c:out value='${c.getColumnId()}'/>&templateId=<c:out value='${templateId}'/>"><img class="_img-size" src="resources/images/edit.png"  title="внести изменения"/></a></td>
+                <td class="align-center"><a href="editColumn.html?columnId=<c:out value='${c.getColumnId()}'/>&templateId=<c:out value='${templateId}'/>"><img  src="resources/images/admin/glyphicons_137_cogwheels.png"  title="внести изменения"/></a></td>
             </tr>
             </c:forEach>
         </tbody>
@@ -103,6 +104,6 @@
             <%--    </form>--%>
 		</div>
 	</div>
-    
+    </div>
     </body>
 </html>
