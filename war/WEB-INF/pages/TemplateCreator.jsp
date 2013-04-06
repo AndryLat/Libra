@@ -17,7 +17,7 @@
     <head>
         <jsp:include page="resources.jsp" />
         <script type="text/javascript" src="resources/js/tiny_mce/tiny_mce.js"></script>
-        <title><!-- YOUR PAGE TITLE HERE --></title>
+        <title>Libra: Конструктор шаблонов</title>
     </head>
 
     <body>
@@ -66,14 +66,25 @@
                                 <br> <strong>Результат:</strong> Привет, Вася!!
                             </div>
                         </div>
-                        <center><form:textarea path="content" rows="5" cols="30" style="width:80%; height:60%"/></center>
+                        <center><form:textarea path="content" rows="5" cols="30" style="width:100%; height:60%"/></center>
                         <br>
-                        <center><label class="label" for="templateName">Название шаблона:</label><form:input type="text" path="templateName"/><span class="label label-info">Обязательно!</span></center>
-                        <br>
-                        <center><label class="label" for="templateName">Автор:</label><form:input type="text" path="author"/><span class="label label-info">Обязательно!</span></center>
-                        <br>
-                        <center><label class="label" for="templateName">Описание:</label><form:input type="text" path="describe"/><span class="label label-info">Обязательно!</span></center>
-                        <br>
+                        <center><table border="0">
+                                <tbody>
+                                    <tr>
+                                        <td align="right"><label class="label" for="templateName">Название шаблона:</label></td>
+                                        <td align="left"><form:input type="text" path="templateName"/><span class="label label-info">Обязательно!</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><label class="label" for="templateName">Автор:</label></td>
+                                        <td align="left"><form:input type="text" path="author"/><span class="label label-info">Обязательно!</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><label class="label" for="templateName">Описание:</label></td>
+                                        <td align="left"><form:input type="text" path="describe"/><span class="label label-info">Обязательно!</span></td>
+                                    </tr>
+                                </tbody>
+                            </table></center>
+                                    <br>
                         <center><button class="btn btn-primary" type="submit" onclick="sendToServer()" >Сохранить шаблон</button></center> 
                         </form:form>
 
@@ -90,3 +101,5 @@
                         }
     </script>
 </html>
+
+

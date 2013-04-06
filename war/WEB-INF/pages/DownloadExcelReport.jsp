@@ -16,7 +16,7 @@
 <head>
 	<jsp:include page="resources.jsp" />
 	
-	<title><!-- YOUR PAGE TITLE HERE --></title>
+	<title>Libra: Список всех студентов</title>
 </head>
 
 <body>
@@ -43,7 +43,7 @@
 </body>
 <script>
     function getFile() {
-        location.href = "/Libra/getExcelReport.html";
+        location.href = "/Libra/hr/getExcelReport.html";
     }
 </script>
 </html>

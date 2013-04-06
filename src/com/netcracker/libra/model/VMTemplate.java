@@ -5,7 +5,7 @@
 package com.netcracker.libra.model;
 
 /**
- *
+ * POJO object for VMtemplate
  * @author MorrisDeck
  */
 public class VMTemplate {

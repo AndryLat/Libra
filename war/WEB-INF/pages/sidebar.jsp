@@ -29,7 +29,8 @@
 				<li><a href="/Libra/hr/showAdvertise.html">Эффективность рекламы</a></li>
 				<li><a href="/Libra/hr/showStudentActivity.html">Посещаемость
 				собеседований</a></li>
-                                <li><a href="/Libra/TemplateCreator.html">Конструктор шаблонов</a></li>
+                                <li><a href="/Libra/hr/StudentList.html">Экспорт списка студентов</a></li>
+                                <li><a href="/Libra/TemplateCreator.html">Конструктор VM шаблонов</a></li>
 			<li class="nav-header">Управление шаблонами</li>
 				<li><a href="/Libra/showTemplates.html">Шаблоны</a></li>
 				<li><a href="/Libra/showTypes.html">Типы</a></li>
