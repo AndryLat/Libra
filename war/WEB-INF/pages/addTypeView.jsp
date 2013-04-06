@@ -12,7 +12,8 @@
     <link href="resources/css/docs.css" rel="stylesheet">
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="resources/css/template.css" rel="stylesheet">	
-    <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/template.css" />
         <jsp:include page="resources.jsp" />
         	<%--<link href="http://bootsnipp.com/bundles/bootstrapper/css/bootstrap.min.css" media="all" type="text/css" rel="stylesheet">
 <link href="http://bootsnipp.com/bundles/bootstrapper/css/bootstrap-responsive.min.css" media="all" type="text/css" rel="stylesheet">
@@ -40,34 +41,34 @@
                 </tr>
                 <tr>
                     <td><input checked name="name" type="radio" value="textstring"/></td>
-                    <td>Однострочное текстовое поле(введите максимальную длину)</td>
+                    <td class="align-left">Однострочное текстовое поле(введите максимальную длину)</td>
                     <td rowspan="6">
                         <textarea rows="9" name="description"></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td><input  name="name" type="radio" value="areastring"/></td>
-                    <td>Многострочный текст(введите максимальную длину)</td>                    
+                    <td class="align-left">Многострочный текст(введите максимальную длину)</td>                    
                 </tr>
                 <tr>
                     <td><input  name="name" type="radio" value="integer"/></td>
-                    <td>Поле для числа(введите максимальное и минимальное значение через ";")</td>                  
+                    <td class="align-left">Поле для числа(введите максимальное и минимальное значение через ";")</td>                  
                 </tr>
                 <tr>
                     <td><input  name="name" type="radio" value="radioenum"/></td>
-                    <td>Переключатели(введите через зарятую)</td>                    
+                    <td class="align-left">Переключатели(введите через зарятую)</td>                    
                 </tr>
                 <tr>
                     <td><input  name="name" type="radio" value="checkboxenum"/></td>
-                    <td>Флажки(введите через зарятую)</td>                    
+                    <td class="align-left">Флажки(введите через зарятую)</td>                    
                 </tr>
                 <tr>
                     <td><input  name="name" type="radio" value="selectenum"/></td>
-                    <td>Выпадающий список(введите через зарятую)</td>                    
+                    <td class="align-left">Выпадающий список(введите через зарятую)</td>                    
                 </tr>
                 <tr >
                     <td colspan="3">
-                        <input class="btn btn-primary pull-right" type="submit" value="OK">
+                        <input class="btn btn-primary pull-right width100" type="submit" value="OK">
                     </td>
                     
                 </tr>

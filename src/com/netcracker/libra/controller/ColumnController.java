@@ -18,6 +18,7 @@ import com.netcracker.libra.model.DisplayCF;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.service.TemplateService;
 import com.netcracker.libra.util.security.SessionToken;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import org.springframework.ui.ModelMap;
@@ -247,29 +248,57 @@ public class ColumnController
     
     @RequestMapping(value="showAppForm",method = RequestMethod.GET)
     public String showAppForm(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("templateId") int templateId)  
-    {
-        ColumnFieldsModel columnFields = new ColumnFieldsModel();
-        List<AppFormColumns> appList=columnJDBC.getAppFormColumns(templateId);
-        model.addAttribute("columns", appList);
-        model.addAttribute("columnFields", columnFields);
-        return "appFormView";
+    {  
+        if(token.getUserAccessLevel()==1)
+        {
+            ColumnFieldsModel columnFields = new ColumnFieldsModel();
+            List<AppFormColumns> appList=columnJDBC.getAppFormColumns(templateId);
+            model.addAttribute("columns", appList);
+            model.addAttribute("columnFields", columnFields);
+            return "appFormView";
+        }
+        model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
+        model.addAttribute("message", "У вас нету прав на эту страницу");
+        model.addAttribute("title", "Ошибка");
+        return "messageView";
     }
     
     @RequestMapping(value="displayAppForm",method = RequestMethod.GET)
     public String displayAppForm(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("appId") int appId)  
     {
         DisplayAF map=columnJDBC.getAppColums(appId);
+        File file = new File("/"+appId+".png");
+        if (file.exists() && file.isFile()) 
+        {
+            model.addAttribute("path", "/"+appId+".png");
+        }
+        else
+        {
+            model.addAttribute("path","http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo");
+        }
         model.addAttribute("columnFields", map);
         return "displayAppFormView";
     }
     
      @RequestMapping(value="printPdf",method = RequestMethod.GET)
     public String AppFormPDF(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("appId") int appId)  
     {
         DisplayAF map=columnJDBC.getAppColums(appId);
+        File file = new File("/"+appId+".png");
+        if (file.exists() && file.isFile()) 
+        {
+            model.addAttribute("path", "/"+appId+".png");
+        }
+        else
+        {
+            model.addAttribute("path","http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo");
+        }
         model.addAttribute("columnFields", map);
         return "printPdf";
     }

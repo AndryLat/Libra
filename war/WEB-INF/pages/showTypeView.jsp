@@ -14,7 +14,7 @@
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="resources/css/template.css" rel="stylesheet">		
     <script src="resources/js/template.js"></script>
-    <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
     
     <jsp:include page="resources.jsp" />
         	<%--<link href="http://bootsnipp.com/bundles/bootstrapper/css/bootstrap.min.css" media="all" type="text/css" rel="stylesheet">
@@ -63,16 +63,16 @@
                 <input  type="checkbox" class="case" name="types[]" value="<c:out value='${t.getTypeId()}'/>"/>        
             </td>
 
-            <td>
+            <td class="align-left">
                 <%=i%>
                 <%--${t.getTypeId()} --%>
                 
             </td>
             <c:if test="${t.getTypeName()=='textstring'}">
-            <td>Однострочное текстовое поле </td>
+            <td class="align-left">Однострочное текстовое поле </td>
             </c:if>
             <c:if test="${t.getTypeName()=='areastring'}">
-            <td>Многострочный текст </td>
+            <td class="align-left">Многострочный текст </td>
             </c:if>
             <c:if test="${t.getTypeName()=='integer'}">
             <td>Поле для числа </td>

@@ -23,8 +23,7 @@
   <div class="span12">
     <div class="row span10">
       <div class="span3 thumbnail" style="width: 150px; height: 200px;">
-        
-            <img style="width: 150px; height: 200px;" src="http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo" alt="">
+            <img style="width: 150px; height: 200px;" src=src="<c:out value='${path}'/>" alt="">
       </div>
       <div class="span6">    
           

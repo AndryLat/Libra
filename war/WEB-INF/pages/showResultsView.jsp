@@ -153,19 +153,19 @@ $(document).ready(function()
             <tbody id="studentTable" >
             <c:forEach items="${showStudents}" var="student">
             <tr>
-                <td>
+                <td >
                     ${student.getR()}
                 </td>
                 <td class="align-center">
                     ${student.getAppId()}
                 </td>
-                <td>
+                <td class="align-left">
                     ${student.getFio()}
                 </td>
-                <td>
+                <td class="align-left">
                     ${student.getEmail()}
                 </td>
-                <td>
+                <td class="align-left">
                     ${student.getAvgMark()}
                 </td>
                 <td>

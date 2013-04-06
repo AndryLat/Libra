@@ -25,8 +25,7 @@ table {
 .bordered td, .bordered th {
     border-left: 1px solid #ccc;
     border-top: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;    
+    padding: 10px;  
 }
 
 .bordered th {

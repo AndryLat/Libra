@@ -13,9 +13,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Анкета ${columnFields.getAppId()}</title>
         <link href="resources/css/template.css" rel="stylesheet">
-         <jsp:include page="resources.jsp" />
+        <jsp:include page="resources.jsp" />
     </head>
     <body>
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -33,7 +34,7 @@
     <div class="row span12">
       <div class="span3 thumbnail" style="width: 150px; height: 210px;">
         
-            <img style="width: 150px; height: 200px;" src="http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo" alt="">
+          <img style="width: 150px; height: 200px;" src="<c:out value='${path}'/>" alt="">
       </div>
       <div class="span9">    
           
@@ -133,6 +134,6 @@
                         </div>
 		</div>
 	</div>
-        
+        </div>
     </body>
 </html>

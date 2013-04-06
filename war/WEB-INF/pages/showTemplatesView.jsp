@@ -19,6 +19,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="resources/js/template.js"></script>
  <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
+ <link rel="stylesheet" type="text/css" href="resources/css/template.css" />
     </head>
     <body>
         <div class="mincontainer">
@@ -110,12 +111,12 @@
                 </c:if>
             </td>
             <form action="showTemplates.html"  method="POST">
-            <td>
+            <td class="align-left">
                 <%=i%>
                 <%--${t.getTemplateId()} --%>
                 <input type="hidden" name="selTemplate" value="<c:out value='${t.getTemplateId()}  '/>"/>
             </td>
-            <td>
+            <td class="align-left">
             <div class="nya<c:out value='${t.getTemplateId()}'/>">${t.getName()}</div>
                 <div class="nya<c:out value='${t.getTemplateId()}'/>" style="display:none">
                     
@@ -123,7 +124,7 @@
                     <input class="btn btn-primary pull-right" type="submit" value="OK"/>
                 </div>    
             </td>
-            <td>
+            <td class="align-left">
             <c:if test="${t.getActive() == 1}">
                     <b>Активный</b>
                 </c:if>
