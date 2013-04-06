@@ -11,7 +11,6 @@ package com.netcracker.libra.model;
 public class ColumnInfo extends Column
 {
     private String typeDescription;
-    private String nameWithIndent;
     private String parentName;
     private int parentColumn;
     private int typeId;
@@ -44,16 +43,6 @@ public class ColumnInfo extends Column
         return columnUpp;
     }    
     
-    public String getNameWithIndent() 
-    {
-        return nameWithIndent;
-    }
-
-    public void setNameWithIndent(String nameWithIndent) 
-    {
-        this.nameWithIndent = nameWithIndent;
-    }
- 
     public void setNumbers(String numbers) 
     {
         this.numbers = numbers;

@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.netcracker.libra.dao.TypeJDBC;
 import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.ColumnFieldsModel;
+import com.netcracker.libra.model.DisplayAF;
+import com.netcracker.libra.model.DisplayCF;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.service.TemplateService;
 import com.netcracker.libra.util.security.SessionToken;
 import java.util.List;
+import java.util.Map;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -173,7 +176,7 @@ public class ColumnController
     {
         if(delete==null)
         {
-            return "redirect:showTemplates.html";
+            return "redirect:showColumn.html?templateId="+templateId;
         }
         if(token.getUserAccessLevel()==1)
         {
@@ -253,6 +256,23 @@ public class ColumnController
         return "appFormView";
     }
     
+    @RequestMapping(value="displayAppForm",method = RequestMethod.GET)
+    public String displayAppForm(ModelMap model,
+    @RequestParam("appId") int appId)  
+    {
+        DisplayAF map=columnJDBC.getAppColums(appId);
+        model.addAttribute("columnFields", map);
+        return "displayAppFormView";
+    }
+    
+     @RequestMapping(value="printPdf",method = RequestMethod.GET)
+    public String AppFormPDF(ModelMap model,
+    @RequestParam("appId") int appId)  
+    {
+        DisplayAF map=columnJDBC.getAppColums(appId);
+        model.addAttribute("columnFields", map);
+        return "printPdf";
+    }
     //submitForm
 /*
     @RequestMapping(value="submitForm",method = RequestMethod.POST)

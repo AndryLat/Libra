@@ -108,3 +108,56 @@ root {
 {
     width: 96%;
 }
+
+.title-color
+{
+   color: #08c;
+}
+
+.appForm-format
+{
+    margin-top: 20px;
+    width: 800px;
+    margin-left: 200px;
+    font: 18pt;     
+}
+
+
+ .line 
+ {
+     margin-top: 25px;
+    text-align: center; /* Выравниваем текст по центру */
+    border-top: 1px  #000; /* Параметры линии  */
+    border-top-style: solid;
+    height: 20px; /* Высота блока */
+   }
+   .line:after 
+   { 
+    content: "(ФИО, подпись)"; 
+    font-family: Arial, sans-serif; /* Рубленый шрифт для надписи */
+    font-size: 12px; /* Размер шрифта */
+    vertical-align: top; /* Выравнивание по верхнему краю */
+   }
+   .shift20
+   {
+       padding-left: 20px;
+   }
+   
+   .table-int
+   {
+       width: 100%;
+       border: 1px solid black;
+       border-collapse: collapse;
+   }
+   
+   .table-int td
+   {
+       border: 1px solid black;
+       height: 20px;
+   }
+   
+   .table-int th
+   {
+       border: 1px solid black;
+       height: 20px;
+   }

@@ -18,7 +18,7 @@
 <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="resources/js/template.js"></script>
- <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
+ <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
     </head>
     <body>
         <div class="mincontainer">

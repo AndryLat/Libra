@@ -13,7 +13,7 @@
         <title>Записаться на собеседование</title>
         <jsp:include page="resources.jsp" />
         <link href="resources/css/template.css" rel="stylesheet">	
-    <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
     
         <script src="http://bootsnipp.com/bundles/bootstrapper/js/bootstrap.min.js"></script>
 

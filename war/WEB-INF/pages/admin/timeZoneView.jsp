@@ -36,7 +36,7 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
                 </div>              
-                <div class="span8 well-template align-center">
+                <div class="span8 well align-center">
                     <h4>Радактировать разницу во времени с сервером</h4>
                     <hr>
                     <p>Текущее время на сервере: ${time}</p>

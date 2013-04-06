@@ -6,14 +6,11 @@ package com.netcracker.libra.dao;
 
 
 import com.netcracker.libra.model.InfoForDelete;
-import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.netcracker.libra.model.Template;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import org.springframework.jdbc.core.RowMapper;
+import java.util.List;
 import org.springframework.stereotype.Repository;
 /**
  *
@@ -140,8 +137,7 @@ public class TemplateJDBC implements TemplateDAO
     public List<InfoForDelete> getInfoForDelete(int[] templates)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
-                      "from template temp join topic top on temp.templateId=top.templateId "+
-					"join columns c on c.topicId=top.topicId "+
+                      "from template temp join NewColumns c on temp.templateId=c.templateId "+
 					"join columnFields cf on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+

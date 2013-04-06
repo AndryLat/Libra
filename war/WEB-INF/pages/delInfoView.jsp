@@ -10,7 +10,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${title}</title>
           <link href="resources/css/template.css" rel="stylesheet">	
-          <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
+          <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
         <jsp:include page="resources.jsp" />
     </head>
     <body>
@@ -48,7 +48,7 @@
                     <c:out value="${i.getPatronymic()} " />
                     <c:out value="${i.getLastname()}" />
                 </td>
-                <td> <c:out value="Пока номер ${i.getUserId()}" /></td>
+                <td> <a href="displayAppForm.html?appId=${i.getAppId()}"><img src="resources/images/appForm.png"/></a></td>
             </tr>
            </c:forEach>
             <tr>

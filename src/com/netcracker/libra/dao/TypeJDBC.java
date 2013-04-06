@@ -99,7 +99,7 @@ public class TypeJDBC implements TypeDAO
     public List<InfoForDelete> getInfoForDelete(int[] type)
     {
         String sql = "select distinct u.userId, u.firstname, u. lastname, af.patronymic, af.appId "+
-                      "from columnFields cf join columns c on cf.columnId=c.columnId "+
+                      "from columnFields cf join NewColumns c on cf.columnId=c.columnId "+
 					"join appForm  af on af.appId=cf.appId "+
 					"join users u on u.userId=af.userId "+
                                         "join types on types.TypeId=c.TypeId where ";

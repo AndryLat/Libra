@@ -12,7 +12,7 @@
     <link href="resources/css/docs.css" rel="stylesheet">
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="resources/css/template.css" rel="stylesheet">	
-    <link rel="stylesheet" type="text/css" href="resources/css/table.css" />
+    <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
        
      <script src="resources/css/bootstrap.jsp"></script>
     <script src="resources/css/bootstrap.mini.jsp"></script>    
