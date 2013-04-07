@@ -548,7 +548,6 @@ public class HRController {
            return mv;
       }
       
-      
       /**
        * undo or apply all marked changes of application fields
        */
@@ -666,6 +665,30 @@ public class HRController {
           String message = action.equals("confirm") ? "Подтвердить изменение?" : "Отклонить изменение?";
           mv.addObject("message", message);
           mv.setViewName("hr/message");
+          mv.addObject("action", action);
+          return mv;
+      }
+      
+      /**
+       * Delete from confirm or undo list
+       */
+      @RequestMapping("hr/deleteFromAppChangesList")
+      public ModelAndView deleteFromAppChangesList(@RequestParam("objectId") int objectId,
+                                                    @RequestParam("action") String action) {
+          
+          for(ListIterator <ApplicationChange> i = checkedList.listIterator(); i.hasNext(); ) {
+              ApplicationChange obj = i.next();
+              if(obj.getObjectId() == objectId) {
+                  i.remove();
+              }
+          }
+          
+          String message = action.equals("Y") ? "Подтвердить выбранные изменения?" : "Отменить выбранные изменения?";
+          
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/checkAllMessage");
+          mv.addObject("list", checkedList);
+          mv.addObject("message", message);
           mv.addObject("action", action);
           return mv;
       }

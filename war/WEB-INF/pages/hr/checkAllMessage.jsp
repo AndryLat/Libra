@@ -60,17 +60,18 @@
                                     <th><a href="sortOldNewValues.html?orderBy=FIELD_NAME">полe</a> &nbsp; ${fieldNameOrder}</th>
                                     <th>до</th>
                                     <th>после</th>
-                                    <th>delete from list</th>
+                                    <th>удалить из списка</th>
                                 </tr>
                                     <c:forEach items="${list}" var="o">
                                         <tr>
                                         <td style="width: 3%">${o.getAppId()}</td>
-                                        <td style="width: 10%">${o.getFirstName()} ${o.getLastName()}</td>
-                                        <td style="width: 15%">${o.getEmail()}</td>
-                                        <td style="width: 20%">${o.getFieldName()}</td>
+                                        <td>${o.getFirstName()} ${o.getLastName()}</td>
+                                        <td>${o.getEmail()}</td>
+                                        <td style="width: 15%">${o.getFieldName()}</td>
                                         <td style="width: 20%">${o.getOldValue()}</td>
                                         <td style="width: 20%">${o.getNewValue()}</td>
-                                        <td>delete</td>
+                                        <td style="width: 5%"><a href="deleteFromAppChangesList.html.html?objectId=<c:out value='${o.getObjectId()}'/>&action=<c:out value='${action}'/>">
+                                                    <img  src="../resources/images/admin/glyphicons_199_ban.png" width="15" height="15" title="Удалить из списка"/></a></td>
                                         </tr>
                                     </c:forEach>
                                 </form>
