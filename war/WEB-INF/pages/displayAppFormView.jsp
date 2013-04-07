@@ -39,6 +39,8 @@
       <div class="span9">    
           
         <h3><strong class="title-color">${columnFields.getFio()} </strong></h3>
+        <p>${interview}</p>
+        <p>${hr}</p>
         <p>
             № анкеты: ${columnFields.getAppId()}
         </p>

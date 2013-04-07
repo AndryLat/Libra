@@ -5,6 +5,8 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.ColumnJDBC;
+import com.netcracker.libra.dao.InterviewJDBC;
+import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.dao.TemplateJDBC;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +45,8 @@ public class ColumnController
     TypeJDBC typeJDBC=new TypeJDBC();
     TemplateJDBC templateJDBC=new TemplateJDBC();
     ColumnJDBC columnJDBC=new ColumnJDBC();
+    InterviewJDBC interviewJDBC=new InterviewJDBC();
+    StudentJDBC studentJDBC=new StudentJDBC();
     //@Autowired
     //UserPreferences userPreferences;
    // int templateId;
@@ -270,6 +274,8 @@ public class ColumnController
     @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("appId") int appId)  
     {
+        if(token.getUserAccessLevel()==1||token.getUserAccessLevel()==2||(studentJDBC.getAppIdByUserId(token.getUserId())==appId))
+        {
         DisplayAF map=columnJDBC.getAppColums(appId);
         File file = new File("/"+appId+".png");
         if (file.exists() && file.isFile()) 
@@ -280,8 +286,29 @@ public class ColumnController
         {
             model.addAttribute("path","http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo");
         }
+        
+        try
+        {
+            model.addAttribute("hr",interviewJDBC.getInterviewForApp(1,appId));
+        }
+        catch(Exception e)
+        {
+            model.addAttribute("hr","Не записан на hr интервью");
+        }
+        try
+        {
+             model.addAttribute("interview",interviewJDBC.getInterviewForApp(2,appId));
+        }
+        catch(Exception e)
+        {
+           
+            model.addAttribute("interview","Не записан на техническое интервью");
+        
+        }
         model.addAttribute("columnFields", map);
         return "displayAppFormView";
+        }
+        return "redirect:/";
     }
     
      @RequestMapping(value="printPdf",method = RequestMethod.GET)
@@ -289,6 +316,9 @@ public class ColumnController
     @ModelAttribute("LOGGEDIN_USER") SessionToken token,
     @RequestParam("appId") int appId)  
     {
+         if(token.getUserAccessLevel()==1||token.getUserAccessLevel()==2||(studentJDBC.getAppIdByUserId(token.getUserId())==appId))
+        {
+        
         DisplayAF map=columnJDBC.getAppColums(appId);
         File file = new File("/"+appId+".png");
         if (file.exists() && file.isFile()) 
@@ -299,8 +329,28 @@ public class ColumnController
         {
             model.addAttribute("path","http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo");
         }
+        try
+        {
+            model.addAttribute("hr",interviewJDBC.getInterviewForApp(1,appId));
+        }
+        catch(Exception e)
+        {
+            model.addAttribute("hr","Не записан на hr интервью");
+        }
+        try
+        {
+             model.addAttribute("interview",interviewJDBC.getInterviewForApp(2,appId));
+        }
+        catch(Exception e)
+        {
+           
+            model.addAttribute("interview","Не записан на техническое интервью");
+        
+        }
         model.addAttribute("columnFields", map);
         return "printPdf";
+        }
+        return "redirect:/";
     }
     //submitForm
 /*
