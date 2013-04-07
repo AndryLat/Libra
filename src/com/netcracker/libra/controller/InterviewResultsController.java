@@ -106,9 +106,6 @@ public class InterviewResultsController
           mav.setViewName("resultAjax");
             return mav;
         }
-        mav.addObject("json", "");
-          mav.setViewName("resultAjax");
-
             return mav;    
     }
     @RequestMapping(value="addResult", method= RequestMethod.GET)
