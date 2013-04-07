@@ -31,11 +31,11 @@
 				<jsp:include page="sidebar.jsp" />
 			</div>
 			<c:if test="${existsComment==0}">
-                        <form class="well-template span8" method="POST" action="addResultSubmit.html">
+                        <form class="well span8" method="POST" action="addResultSubmit.html">
                             <input type="hidden" name="appId" value="${appId}"/>
-                            <label>Оценка:</label><input class="width96" onkeypress="javascript:number_control()" id="quantity" type="text" name="mark"/>
+                            <label>Оценка:</label><input class="width96" onclick="javascript:number_control()" id="quantity" type="text" name="mark"/>
                             </br>
-                            <label>Комментарий:</label><textarea name="comment" ></textarea>
+                            <label>Комментарий:</label><textarea rows="5" class="width96" name="comment" ></textarea>
                             </br>
                             <input type="submit" value="Добавить"/>
                         </form>   
@@ -52,7 +52,7 @@
                 <div class="nya<c:out value='${ir.getUserId()}'/>">${ir.getMark()}</div>
                 <div class="nya<c:out value='${ir.getUserId()}'/>" style="display:none">
                     <c:if test="${userId==ir.getUserId()}">
-                        <input type="text" name="mark" value="<c:out value='${ir.getMark()}'/>"/>
+                        <input type="text" class="width96" name="mark" value="<c:out value='${ir.getMark()}'/>"/>
                     </c:if>
                 </div>
             
@@ -63,7 +63,7 @@
                 </div>
                 <div class="nya<c:out value='${ir.getUserId()}'/>" style="display:none">
                     <c:if test="${userId==ir.getUserId()}">
-                        <textarea name="comment">${ir.getComments()}</textarea>
+                        <textarea class="width96" rows="5" name="comment">${ir.getComments()}</textarea>
                     </c:if>
                 </div>
             

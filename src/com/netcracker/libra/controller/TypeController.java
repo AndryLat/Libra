@@ -5,13 +5,11 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.TypeJDBC;
-import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.model.Type;
 import com.netcracker.libra.service.TemplateService;
 import com.netcracker.libra.util.security.SessionToken;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,13 +28,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class TypeController 
 {
     TypeJDBC typeJDBC=new TypeJDBC();
-    
-    //@Autowired
-    //UserPreferences userPreferences;
-    
     /**
-     * Обрабатывает запрос по добавлению нового типа.
-     * @param name имя типа, который мы хотим добавить. Передается в POST запросе.
+     * Processes a request to add new type of answer 
+     * @param name name of type, which hr wants add.
      */
     @RequestMapping(value="SubmitType", method= RequestMethod.POST)
     public ModelAndView processPost(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
@@ -60,8 +54,7 @@ public class TypeController
     }
     
     /**
-     * Метод передает данные о существующих типах
-     * Вызывается при запросе по ссылке "showTypes.html"
+     * Display exists types
      */
     @RequestMapping("showTypes")
     public ModelAndView showTypes(@ModelAttribute("LOGGEDIN_USER") SessionToken token)
@@ -80,9 +73,9 @@ public class TypeController
         }
     }
     /**
-     * Обрабатывает запрос по редактированию типа
-     * @param name новое имя типа
-     * @param selType номер типа, который мы хотим отредактировать. передается POST запросом.
+     * Processes a request to edit type of answer 
+     * @param name new name
+     * @param selType number of type, which hr want edit.
      */
     @RequestMapping(value="showTypes", method= RequestMethod.POST)
     public ModelAndView editSummitPost(
@@ -106,6 +99,11 @@ public class TypeController
             return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
+    
+    /**
+     * Show page whith informaying about deleting 
+     * @param delete array whith numbers of types, which we want delete  
+     */
     @RequestMapping(value="delType", method= RequestMethod.POST)
     public String delType(ModelMap model,
     @ModelAttribute("LOGGEDIN_USER") SessionToken token,
@@ -134,42 +132,6 @@ public class TypeController
         return "messageView";
     }
     /**
-     * Передается информацию на страницу для
-     * предварительного просмотра типа перед удалением.
-     * @param type номер типа
-     */
-    /*@RequestMapping(value="delType", method= RequestMethod.POST)
-   public ModelAndView delType(@RequestParam("types[]") int[] types)
-    {
-        ModelAndView mav = new ModelAndView();
-        if(userPreferences.accessLevel==1)
-        {
-           // List<InfoForDelete> info=new LinkedList<InfoForDelete>();
-            for(int i=0;i<types.length;i++)
-            {
-                if(typeJDBC.existType(types[i])==0)
-                {                
-                    return message("<a href='showTypes.html'>Посмотреть все типы</a>", "Нету такого типа", "Ошибка"); 
-                }                                    
-            }
-               // info=typeJDBC.getInfoForDelete(types); 
-                mav.addObject("types", types);
-                mav.setViewName("delTypeView");
-                
-                //getInfoUsers
-                List<InfoForDelete> info=typeJDBC.getInfoForDelete(types);
-
-                mav.addObject("info", info);
-                    
-                mav.addObject("infoSize",info.size());
-                return mav;
-        } 
-        else
-        {
-            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
-        }
-    }*/
-    /**
      * Обрабатывает запрос по удалению типа
      * @param typeId номер типа, который удаляем. Он передается POST запросм
      */
@@ -197,9 +159,19 @@ public class TypeController
          mav.addObject("title",title);
          return mav;
      }
+     /**
+      * Display page, where hr can add new type of answer
+      */
     @RequestMapping(value="addType")
-    public String index(ModelMap model)  
+    public ModelAndView index(@ModelAttribute("LOGGEDIN_USER") SessionToken token)  
     {
-        return "addTypeView";
+        if(token.getUserAccessLevel()==1)
+        {
+            return new ModelAndView("addTypeView");
+        } 
+        else
+        {
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
+        }
     }
 }

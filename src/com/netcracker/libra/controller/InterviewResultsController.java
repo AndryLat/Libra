@@ -177,12 +177,7 @@ public class InterviewResultsController
     }
     
     @RequestMapping("showResults")
-    public ModelAndView showResults(@RequestParam(required=false,value="page") Integer page,
-    @ModelAttribute("LOGGEDIN_USER") SessionToken token,
-    @RequestParam(required=false,value="count") Integer count,
-    @RequestParam(required=false,value="serch") String serch,
-    @RequestParam(required=false,value="order") String order,
-    @RequestParam(required=false,value="desc") Boolean desc)
+    public ModelAndView showResults(@ModelAttribute("LOGGEDIN_USER") SessionToken token)
     {
         if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2)
         {

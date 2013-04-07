@@ -14,6 +14,8 @@
     <link href="resources/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="resources/css/template.css" rel="stylesheet">		
     <script src="resources/js/template.js"></script>
+    <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
+    
     <jsp:include page="resources.jsp" />
         	<%--<link href="http://bootsnipp.com/bundles/bootstrapper/css/bootstrap.min.css" media="all" type="text/css" rel="stylesheet">
 <link href="http://bootsnipp.com/bundles/bootstrapper/css/bootstrap-responsive.min.css" media="all" type="text/css" rel="stylesheet">
@@ -22,6 +24,8 @@
 
     </head>
     <body>
+         <div class="mincontainer">
+       
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -34,10 +38,10 @@
 
         <% int i=1; %>
         <%--<form class="well-template span8" action="delType.html" method="POST">--%>
-        <div class="well-template span8">
+        <div class="span8">
             <h4><a href="addType.html">Добавить тип</a></h4>
             <hr>
-        <table class="table-striped table-condensed table-font" border="1" cellspacing="0" cellpadding="4">
+        <table class="bordered width100" >
         <caption>Информация о типах данных</caption>
         <tr>
             <th class="checkbox-shift">
@@ -59,16 +63,16 @@
                 <input  type="checkbox" class="case" name="types[]" value="<c:out value='${t.getTypeId()}'/>"/>        
             </td>
 
-            <td>
+            <td class="align-left">
                 <%=i%>
                 <%--${t.getTypeId()} --%>
                 
             </td>
             <c:if test="${t.getTypeName()=='textstring'}">
-            <td>Однострочное текстовое поле </td>
+            <td class="align-left">Однострочное текстовое поле </td>
             </c:if>
             <c:if test="${t.getTypeName()=='areastring'}">
-            <td>Многострочный текст </td>
+            <td class="align-left">Многострочный текст </td>
             </c:if>
             <c:if test="${t.getTypeName()=='integer'}">
             <td>Поле для числа </td>
@@ -101,7 +105,7 @@
             <%-- <input type="image"  src="resources/images/edit.png" width="25" height="25" title="внести изменения" onclick="location.href='showTypes.html'"/>
 --%>
 
-<a href="javascript:$('.nya<c:out value='${t.getTypeId()}'/>').toggle()"><img src="resources/images/edit.png" width="25" height="25" title="внести изменения"/></a>                        
+<a href="javascript:$('.nya<c:out value='${t.getTypeId()}'/>').toggle()"><img src="resources/images/icons/glyphicons_137_cogwheels.png" width="25" height="25" title="внести изменения"/></a>                        
     
              <%--  <a href="showTypes.html"><img src="../../resources/images/edit.png"/></a> --%>
             </td>
@@ -117,6 +121,6 @@
            </div>
 		</div>
 	</div>
-        
+         </div>
     </body>
 </html>

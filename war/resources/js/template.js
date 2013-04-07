@@ -47,28 +47,6 @@ function submitDelete(dAction,dSelector)
     form.submit();*/
     return false;
 }
-/*
-function checkAll(obj) 
-{
-  'use strict';
-  // Получаем NodeList дочерних элементов input формы: 
-  var items = obj.form.getElementsByTagName("input"), 
-      len, i;
-  // Здесь, увы цикл по элементам формы:
-  for (i = 0, len = items.length; i < len; i += 1) {
-    // Если текущий элемент является чекбоксом...
-    if (items.item(i).type && items.item(i).type === "checkbox") {
-      // Дальше логика простая: если checkbox "Выбрать всё" - отмечен            
-      if (obj.checked) {
-        // Отмечаем все чекбоксы...
-        items.item(i).checked = true;
-      } else {
-        // Иначе снимаем отметки со всех чекбоксов:
-        items.item(i).checked = false;
-      }       
-    }
-  }
-}*/
 
 function number_control()
 {
@@ -180,6 +158,8 @@ function number_control()
                 $("<td></td>").append("<a href='addResult.html?appId="+val.appId+"'>Комментарий</a>").appendTo(tr)
                 tr.appendTo("#studentTable");
             });
+            
+            //Make pages
             var pages=data.pages;
             currentpage=data.currentpage;
             count=data.count;
@@ -305,10 +285,13 @@ function number_control()
        desc=$(":hidden[name=desc]");
       cval = val.val();
       orderval=order.val();
-      descval=desc.val();
-      if(orderval=="")
+      if(desc.val()=='false')
       {
-          orderval=null;
+          descval=false;
+      }  
+      else
+      {
+          descval=true;
       }
       var orders=['appId','results','email','lastname'];
       var links = new Array(orders.length);
