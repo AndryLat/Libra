@@ -50,9 +50,9 @@
 		</c:if>
 
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==3}">
-			<li class="nav-header">Действия</li>
-				<li><a href="/Libra/admin/employees.html">Панель админа</a></li>
-                                <li><a href="/Libra/admin/timeZone.html">Настройки времени</a></li>
+			<li class="nav-header">Панель</li>
+				<li><a href="/Libra/admin/employees.html">Сотрудники</a></li>
+                                <li><a href="/Libra/admin/timeZone.html">Время</a></li>
 		</c:if>
 
 		<c:if test="${LOGGEDIN_USER==null}">

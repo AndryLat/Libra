@@ -36,12 +36,13 @@
                                     <div class="alert alert-error" align="center">
                                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
                                         ${message}
+                                        <p align="center">${link}</p>
                                     </div>
                                 </span>
                             </c:if>
                                     <br>
                                     
-                                    <p align="center">${link}</p>
+                                    
                                 
 			</div>
 		</div>
