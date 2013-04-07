@@ -153,4 +153,16 @@ public class InterviewJDBC
                     +"VALUES (?)";
         jdbcTemplateObject.update(SQL,diff,diff);
     }
+    
+    public String getInterviewForApp(int accessLevel,int appId)
+    {
+        String SQL="select DECODE(?,1,'Hr собеседование:','Техническое собеседование:')||TO_CHAR(id.datefinish,' dd.mm.yyyy ') ||  TO_CHAR(id.datestart,'hh24:mi')||'-'||TO_CHAR(id.datefinish,'hh24:mi') hTime "
+	+"from interview i "
+	+"join interviewdate id on id.interviewDateId=i.interviewDateId "
+	+"join interviewerList il on il.interviewDateId=id.interviewDateId "
+	+"join users u on u.UserId=il.userId "
+	+"join roles r on r.roleId=u.roleId "
+	+"where i.appId=? and i.status=1 and r.accessLevel=?";
+        return jdbcTemplateObject.queryForObject(SQL, String.class,accessLevel,appId,accessLevel);
+    }
 }
