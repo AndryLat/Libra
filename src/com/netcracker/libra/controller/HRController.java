@@ -613,6 +613,7 @@ public class HRController {
           }
           
           if(action.equals("Y")) {
+              
               if(dynamic) {
                   hr.deleteDynamicField(dynamicOldIds);
                   hr.confirmDynamicField(dynamicNewIds);
@@ -632,6 +633,7 @@ public class HRController {
               mv.addObject("message", "Изменения сохранены");
           }
           else if(action.equals("N")) {
+              
               if(dynamic) {
                   hr.deleteDynamicField(dynamicNewIds);
               }
