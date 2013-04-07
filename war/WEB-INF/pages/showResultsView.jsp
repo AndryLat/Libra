@@ -17,13 +17,14 @@
      <script src="resources/css/bootstrap.jsp"></script>
     <script src="resources/css/bootstrap.mini.jsp"></script>    
     
-    <script src="http://bootsnipp.com/js/jquery.js"></script>
+    <%--<script src="http://bootsnipp.com/js/jquery.js"></script>--%>
+    <script src="resources/js/jquery.js"></script>
 	<script src="http://bootsnipp.com/js/bootstrap.min.js"></script>
 
     <script src="http://bootsnipp.com/js/prettify.js"></script>
     <script src="http://bootsnipp.com/js/codemirror.js"></script>
 <script src="http://bootsnipp.com/js/humane.min.js"></script>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
+<%--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  --%>
 <script src="resources/js/template.js"></script>
         <jsp:include page="resources.jsp" />
     </head>
@@ -49,7 +50,7 @@
                     <a class="brand" href="#" onclick="empty_all();return false;"  name="top">Все</a>
 			<div class="nav-collapse collapse">
 				<ul class="nav">
-                                    <li><a href="#">Отправить письмо</a></li>
+                                    <li><a onclick="send_mail()">Отправить письмо</a></li>
 					<li class="divider-vertical"></li>
                                     <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Сортировать <b class="caret"></b></a>

@@ -42,14 +42,18 @@ public class InterviewResultsController
     String order="results";
     boolean desc=true;*/    
     @RequestMapping("resultAjax")
-    public ModelAndView ajax(@RequestParam(required=false,value="page") Integer page,
+    public ModelAndView ajax(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+            @RequestParam(required=false,value="page") Integer page,
     @RequestParam(required=false,value="count") Integer count,
     @RequestParam(required=false,value="serch") String serch,
     @RequestParam(required=false,value="order") String order,
     @RequestParam(required=false,value="desc") Boolean desc)
     {
-        ModelAndView mav = new ModelAndView();
-        List<InterviewResultsInfo> list=new ArrayList<InterviewResultsInfo>();
+         ModelAndView mav = new ModelAndView();
+        
+        if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2 )
+        {
+       List<InterviewResultsInfo> list=new ArrayList<InterviewResultsInfo>();
         JSONObject resultJson = new JSONObject();  
           JSONArray students = new JSONArray();   
         if(serch!=null)
@@ -100,14 +104,9 @@ public class InterviewResultsController
           String jsonText = JSONValue.toJSONString(resultJson);
           mav.addObject("json", jsonText);
           mav.setViewName("resultAjax");
-             /*   mav.addObject("showStudents", );
-                mav.setViewName("resultAjax"); 
-                mav.addObject("count", null);
-                mav.addObject("page", null);
-                 return mav;*/
             return mav;
-                
-            
+        }
+            return mav;    
     }
     @RequestMapping(value="addResult", method= RequestMethod.GET)
     public ModelAndView addResult(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
@@ -249,7 +248,27 @@ public class InterviewResultsController
             return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
         }
     }
+    //sendMailToStudent.html
     
+    @RequestMapping(value="sendMailToStudent", method= RequestMethod.POST)
+    public ModelAndView sendMailToStudent(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
+    @RequestParam("emails[]") String[] emails)
+    {
+        if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2)
+        {
+            ModelAndView mav = new ModelAndView();
+            mav.setViewName("resultAjax");
+            JSONObject j = new JSONObject(); 
+            j.put("count", 11);
+            String jsonText = JSONValue.toJSONString(j);
+            mav.addObject("json", jsonText);
+            return mav; 
+        }
+        else
+        {
+            return message("<a href='/Libra/'>Вернуться назад</a>","У Вас нету прав на эту страницу","Ошибка");
+        }
+    }
     public ModelAndView message(String link,String message,String title)
     {
          ModelAndView mav=new ModelAndView();

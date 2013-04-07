@@ -394,3 +394,20 @@ function number_control()
             set_serch_div(order,page,serch,!desc,link,count);
          ajax_result(page,count,serch,order,desc);   
   }
+  
+function send_mail()
+{
+    checkbox=$(":checkbox[name^=emails]:checked").map(function () { return $(this).val(); }).get();
+    dat = {"emails" : checkbox};
+    $.ajax({
+    type: "POST",
+    url: "sendMailToStudent.html",
+    data: dat,
+    dataType : "json",
+    success: function(data,textStatus)
+    {
+         $("#serch_info").append("Вы отправили "+data.count+" писем");
+    }
+    });
+    return false;
+}

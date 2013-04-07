@@ -30,7 +30,12 @@
 				<li><a href="/Libra/hr/showStudentActivity.html">Посещаемость
 				собеседований</a></li>
                                 <li><a href="/Libra/hr/StudentList.html">Экспорт списка студентов</a></li>
+                                
+                        <li class="nav-header">Сервисы</li>
                                 <li><a href="/Libra/TemplateCreator.html">Конструктор VM шаблонов</a></li>
+                                <li><a href="/Libra/VMTemplateManager.html">Менеджер VM шаблонов</a></li>
+                                <li><a href="/Libra/ShowReportOnError.html">Список найденных ошибок</a></li>
+                                
 			<li class="nav-header">Управление шаблонами</li>
 				<li><a href="/Libra/showTemplates.html">Шаблоны</a></li>
 				<li><a href="/Libra/showTypes.html">Типы</a></li>

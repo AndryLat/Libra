@@ -1,7 +1,7 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.VMTemplateJDBC;
-import com.netcracker.libra.model.VMTemplate;
+import com.netcracker.libra.model.VMTemplates.VMTemplate;
 import com.netcracker.libra.util.mail.SendMailService;
 import java.io.IOException;
 import java.util.HashMap;
@@ -67,6 +67,9 @@ public class TemplateCreatorController {
         return mav;
     }
     
+    /**
+     * temp test method
+     */
     @RequestMapping(value = "/testingsend", method = RequestMethod.GET)
     public static void testSend(){
         Map map = new HashMap();
