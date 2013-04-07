@@ -4,6 +4,8 @@
  */
 package com.netcracker.libra.dao;
 
+import com.netcracker.libra.model.VMTemplates.VMTemplateManager;
+import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,15 +38,34 @@ public class VMTemplateJDBC {
         }
 
     }
-    
-//    public static String getPathVMTemplate(String name){
-//        String SQL = "SELECT path FROM VMTemplates WHERE t_name = ?";
-//         return jdbcTemplateObject.queryForObject(SQL,String.class, name);
-//    }
-    
+
+    /**
+     * THis method return content choosen template
+     * @param name
+     * @return 
+     */
     public static String getContentVMTemplate(String name){
         String SQL = "SELECT content FROM VMTemplates WHERE t_name = ? ";
         return jdbcTemplateObject.queryForObject(SQL, String.class, name);
+    }
+    
+    /**
+     * This method return data about all Templates
+     * @return 
+     */
+    public static List<VMTemplateManager> getVMTemplateData(){
+        String SQL = "SELECT id, t_name, t_describe, author FROM VMTemplates";
+        return jdbcTemplateObject.query(SQL, new VMTemplateManager.VMTemplateManagerMapper() );
+    }
+    
+    /**
+     * This method delete choosen template
+     * @param name
+     * @return 
+     */
+    public static int deleteVMTemplate(String name){
+        String SQL = "DELETE VMTemplates WHERE t_name = ?";
+        return jdbcTemplateObject.update(SQL, name);
     }
     
 }

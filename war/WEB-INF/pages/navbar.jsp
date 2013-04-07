@@ -11,7 +11,7 @@
 					<li><a href="#">Контакты</a></li>
 				</ul>
             </div>
-                <c:if test="${LOGGEDIN_USER.userId!=null}"><a type="button" href="/Libra/logout.html" class="btn pull-right">Logout</a></c:if>
+                <c:if test="${LOGGEDIN_USER.userId!=null}"><a type="button" href="/Libra/logout.html" class="btn pull-right">Logout</a>&nbsp&nbsp&nbsp&nbsp<a type="button" href="/Libra/ReportOnError.html" class="btn pull-right">Сообщить об ошибке</a></c:if>
         </div>
     </div>
 </div>

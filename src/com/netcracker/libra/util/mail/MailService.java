@@ -18,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
 /**
- *
+ * OLD VERSION!
+ * Class that contains methods for working with mail
  * @author MorrDeck
  */
 @Service("mailService")
@@ -52,7 +53,12 @@ public class MailService  {
         this.mailSender = mailSender;
     }
     
-    
+    /**
+     * The method of sending a message to confirm your registration
+     * @param adress
+     * @param user
+     * @param code 
+     */
     public static void sendConfirmRegistrationMessage(String adress, String user, String code){
         Map model = new HashMap();
         model.put("index",0);
@@ -64,6 +70,11 @@ public class MailService  {
         mailSender.send(preparator);        
     }
     
+    /**
+     * The method of sending a message about successful registration
+     * @param adress
+     * @param user 
+     */
     public static void sendSuccessRegistrationMessage(String adress, String user){
         Map model = new HashMap();
         model.put("index",1);
@@ -74,6 +85,12 @@ public class MailService  {
         mailSender.send(preparator); 
     }
     
+    /**
+     * The method of sending a letter with a completed application form
+     * @param adress
+     * @param user
+     * @param id 
+     */
     public static void sendFormMessage(String adress, String user, int id){
         Map model = new HashMap();
         model.put("index",2);
@@ -84,6 +101,10 @@ public class MailService  {
         mailSender.send(preparator); 
     }
     
+    /**
+     * The method of sending a message to alert the interviewer to conduct the interview
+     * @param id 
+     */
     public static void sendNotificationMessageForInterviewers(int id[]){
         Map model = new HashMap();
         String adress[]= null;
@@ -102,6 +123,12 @@ public class MailService  {
         
     }
     
+    /**
+     * Get content template
+     * @param index
+     * @param model
+     * @return 
+     */
     private static String getTemplateText(int index, Map model){
         switch (index) {
             case 0: 
@@ -117,7 +144,9 @@ public class MailService  {
         }        
     }
     
-    
+    /**
+     * helper class to create a message
+     */
     private static class message implements  MimeMessagePreparator {
         Map model = null;
 
@@ -134,6 +163,9 @@ public class MailService  {
         }        
     }
     
+    /**
+     * helper class to create a message With Attachment
+     */
     private static class messageWithAttachment implements  MimeMessagePreparator {
         Map model = null;
 
@@ -151,6 +183,9 @@ public class MailService  {
         }        
     }
     
+    /**
+     * helper class to create a message for interviews
+     */
     private static class messageForInterviewers implements MimeMessagePreparator{
         Map model = null;
 

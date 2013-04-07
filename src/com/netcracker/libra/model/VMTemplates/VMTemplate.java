@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.netcracker.libra.model;
+package com.netcracker.libra.model.VMTemplates;
 
 /**
- * POJO object for VMtemplate
+ * POJO object is to get danyh the template with forms
  * @author MorrisDeck
  */
 public class VMTemplate {

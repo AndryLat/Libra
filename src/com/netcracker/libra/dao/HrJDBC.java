@@ -834,11 +834,48 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
+     * 
+     * @param columnName
+     * @param appRequestId
+     * @param id 
+     */
+//    public void confirmMainAppInfo(List <String> columnNames, List <Integer> appRequestIds, List <Integer> ids) {
+//        StringBuilder str = new StringBuilder();
+//        
+//        if(columnNames.get(0).equals("firstName")||columnNames.get(0).equals("lastName")) {
+//            str.append("UPDATE Users SET "+columnNames.get(0)+" = (SELECT "+columnNames.get(0)+" FROM AppRequest WHERE appRequestId = "+appRequestIds.get(0) +") WHERE userId = "+ids.get(0));
+//            
+//            for(int i=1; i < columnNames.size(); i++) {
+//                if(columnNames.get(i).equals("firstName")||columnNames.get(i).equals("lastName")) {
+//                    str.append("AND SET "+columnNames.get(i)+" = (SELECT "+columnNames.get(i)+" FROM AppRequest WHERE appRequestId = ?) WHERE userId = ?");
+//                }
+//            }
+//            
+//        }
+//        String SQL = str.toString();
+//        jdbcTemplateObject.update(SQL);
+//    }
+    
+    /**
      * update interview to status 1
      */
     public void confirmInterviewTime(Integer id) {
         String SQL = "UPDATE Interview SET status = 1 WHERE interviewId = ?";
         jdbcTemplateObject.update(SQL, id);
+    }
+    
+    /**
+     * update a few interviews to status 1
+     * @param ids the ids list of interviewId
+     */
+    public void confirmInterviewTime(List <Integer> ids) {
+        StringBuilder str = new StringBuilder("UPDATE Interview SET status = 1 WHERE interviewId = " + ids.get(0));
+        
+        for(int i=1; i < ids.size(); i++) {
+            str.append(" AND interviewId = " + String.valueOf(ids.get(i)));
+        }
+        String SQL = str.toString();
+        jdbcTemplateObject.update(SQL);
     }
     
     /**
@@ -850,15 +887,15 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * delete few interviews
+     * delete a few interviews
+     * @param ids the ids list of interviewId
      */
-    public void deleteFewInterview(int [] ids) {
-        StringBuilder str = new StringBuilder("DELETE FROM Interview WHERE interviewId = " + ids[0]);
+    public void deleteInterview(List <Integer> ids) {
+        StringBuilder str = new StringBuilder("DELETE FROM Interview WHERE interviewId = " + ids.get(0));
         
-        for(int i=1; i < ids.length; i++) {
-            str.append(" AND interviewId = " + String.valueOf(ids[i]));
+        for(int i=1; i < ids.size(); i++) {
+            str.append(" AND interviewId = " + String.valueOf(ids.get(i)));
         }
-        
         String SQL = str.toString();
         jdbcTemplateObject.update(SQL);
     }
@@ -872,11 +909,39 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
+     * update a few columnField to status 1
+     * @param ids the ids list of columnFieldId
+     */
+    public void confirmDynamicField(List <Integer> ids) {
+        StringBuilder str = new StringBuilder("UPDATE ColumnFields SET status = 1 WHERE columnFieldId = " + ids.get(0));
+        
+        for(int i=1; i < ids.size(); i++) {
+            str.append(" AND columnFieldId = " + String.valueOf(ids.get(i)));
+        }
+        String SQL = str.toString();
+        jdbcTemplateObject.update(SQL);
+    }
+    
+    /**
      * delete columnField
      */
     public void deleteDynamicField(Integer columnFieldId) {
         String SQL = "DELETE FROM ColumnFields WHERE columnFieldId = ?";
         jdbcTemplateObject.update(SQL, columnFieldId);
+    }
+    
+    /**
+     * delete a few columnField
+     * @param ids the ids list of columnFieldId
+     */
+    public void deleteDynamicField(List <Integer> ids) {
+        StringBuilder str = new StringBuilder("DELETE FROM ColumnFields WHERE columnFieldId = " + ids.get(0));
+        
+        for(int i=1; i < ids.size(); i++) {
+            str.append(" AND columnFieldId = " + String.valueOf(ids.get(i)));
+        }
+        String SQL = str.toString();
+        jdbcTemplateObject.update(SQL);
     }
 
 }

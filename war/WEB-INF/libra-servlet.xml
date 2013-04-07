@@ -88,8 +88,9 @@
 		<property name="basename" value="messages" />
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
+        
 
-	<!-- <bean id="PDFCreator" class="com.netcracker.libra.util.pdf.PDFCreatorTest"> 
-		<property name="servletContext" ref="servletcontext"/> </bean> -->
+	 <bean id="PDFService" class="com.netcracker.libra.util.pdf.PDFCreator"> 
+		<property name="servletContext" ref="servletcontext"/> </bean>
 
 </beans>

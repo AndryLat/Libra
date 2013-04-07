@@ -111,7 +111,7 @@ public class SendMailService {
     }
     
     /**
-     *get the contents of the template
+     * get the contents of the template
      * @param templateName template name
      * @param model model with data for templater
      * @return
