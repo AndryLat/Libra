@@ -79,7 +79,7 @@
                                                                     <label class="radio">
 									<form:radiobutton class="radio" path="map[${c.getColumnId()}]" value="${t}" />${t}
                                                                     </label>
-                                                                </c:forEach>
+                                                                  </c:forEach>
 						</c:if>
 
 						<c:if test="${c.getTypeName()=='integer'}">

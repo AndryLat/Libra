@@ -97,7 +97,7 @@
        
             <c:if test="${contactMap.getLevel()==1}">
                 <div class="align-center">
-                <h4><strong class="title-color">${contactMap.getName()}</strong></h4>${contactMap.getValue()}
+                <h4><strong class="title-color">${contactMap.getName()}</strong></h4>
                 </div>
             </c:if>
             <c:if test="${contactMap.getLevel()!=1}">
