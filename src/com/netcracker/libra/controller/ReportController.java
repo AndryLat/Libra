@@ -10,13 +10,10 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import jxl.Workbook;
-import jxl.WorkbookSettings;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
@@ -53,20 +50,29 @@ public class ReportController {
         ModelAndView mav = new ModelAndView("StudentRecordsView");
         String data = "";
         List<StudRecReportPOJO> list = ReportJDBC.getStudRecValues();
-        int[] val = new int[list.size()];
-        String[] date = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            StudRecReportPOJO obj = list.get(i);
-            date[i] = obj.getDate();
-            val[i] = obj.getValue();
-        }
-        data = "[";
-        for (int i = 0; i < val.length; i++) {
-            data += "['" + date[i] + "'," + val[i] + "],";
-        }
-        data = data.substring(1, data.length() - 1);
+        if (list != null) {
+            int[] val = new int[list.size()];
+            String[] date = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                StudRecReportPOJO obj = list.get(i);
+                date[i] = obj.getDate();
+                val[i] = obj.getValue();
+            }
+            data = "[";
+            for (int i = 0; i < val.length; i++) {
+                data += "['" + date[i] + "'," + val[i] + "],";
+            }
+            data = data.substring(1, data.length() - 1);
 
-        mav.addObject("data", data);
+            mav.addObject("data", data);
+        } else {
+            mav.setViewName("ErrorPage");
+            String text = "<div class=\"alert alert-error\">\n"
+                    + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
+                    + "  Ошибка базы данных при попытке отображения графика записи студентов \n"
+                    + "</div>";
+            mav.addObject("errorText", text);
+        }
         return mav;
     }
 
@@ -79,8 +85,17 @@ public class ReportController {
     public ModelAndView RegReport() {
         ModelAndView mav = new ModelAndView("RegReportView");
         Map map = ReportJDBC.getRegReportData();
-        String data2 = "['Зарегестрировались'," + map.get("value1") + "],['Пришли'," + map.get("value2") + "]";
-        mav.addObject("data", data2);
+        if (map != null) {
+            String data2 = "['Зарегестрировались'," + map.get("value1") + "],['Пришли'," + map.get("value2") + "]";
+            mav.addObject("data", data2);
+        } else {
+            mav.setViewName("ErrorPage");
+            String text = "<div class=\"alert alert-error\">\n"
+                    + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
+                    + "  Ошибка базы данных при попытке отображения отчета зарегестрировались/пришли. \n"
+                    + "</div>";
+            mav.addObject("errorText", text);
+        }
         return mav;
     }
 
@@ -93,19 +108,29 @@ public class ReportController {
     public ModelAndView AdvertiseView() {
         ModelAndView mav = new ModelAndView("AdvertiseActivity");
         List<AdvertisePOJO> list = ReportJDBC.getAdvertiseActivity();
-        int val[] = new int[list.size()];
-        String lab[] = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            AdvertisePOJO obj = list.get(i);
-            val[i] = obj.getValue();
-            lab[i] = obj.getName();
+        if (list != null) {
+            int val[] = new int[list.size()];
+            String lab[] = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                AdvertisePOJO obj = list.get(i);
+                val[i] = obj.getValue();
+                lab[i] = obj.getName();
+            }
+            String data = "[";
+            for (int i = 0; i < lab.length; i++) {
+                data += "['" + lab[i] + "'," + val[i] + "],";
+            }
+            data = data.substring(1, data.length() - 1);
+            mav.addObject("data", data);
+        } else {
+            mav.setViewName("ErrorPage");
+            String text = "<div class=\"alert alert-error\">\n"
+                    + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
+                    + "  Ошибка базы данных при попытке отображения отчета эффективности рекламы. \n"
+                    + "</div>";
+            mav.addObject("errorText", text);
         }
-        String data = "[";
-        for (int i = 0; i < lab.length; i++) {
-            data += "['" + lab[i] + "'," + val[i] + "],";
-        }
-        data = data.substring(1, data.length() - 1);
-        mav.addObject("data", data);
+
 
         return mav;
     }
@@ -119,14 +144,24 @@ public class ReportController {
     public ModelAndView StudentsActivity() {
         ModelAndView mav = new ModelAndView("StudentsActivityView");
         Map map = ReportJDBC.getStudentsActivityData();
-        String data2 = "['Записалось', " + map.get("value1") + "],['Пришло', " + map.get("value2") + "]";
-        mav.addObject("data", data2);
+        if (map != null) {
+            String data2 = "['Записалось', " + map.get("value1") + "],['Пришло', " + map.get("value2") + "]";
+            mav.addObject("data", data2);
+        } else {
+            mav.setViewName("ErrorPage");
+            String text = "<div class=\"alert alert-error\">\n"
+                    + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
+                    + "  Ошибка базы данных при попытке отображения графика активности посещения студентов. \n"
+                    + "</div>";
+            mav.addObject("errorText", text);
+        }
         return mav;
     }
 
     /**
      * Show JSP with a button to download the report
-     * @return 
+     *
+     * @return
      */
     @RequestMapping(value = "/StudentList", method = RequestMethod.GET)
     public ModelAndView getDownloadExcelJSP() {
@@ -145,7 +180,7 @@ public class ReportController {
     public ModelAndView getExcelReport(HttpServletRequest request, HttpServletResponse response) {
         try {
             Date date = new Date();
-
+            
             String strDate = String.valueOf(date.getYear()) + String.valueOf(date.getDay()) + String.valueOf(date.getMonth());
             // create workbook
             WritableWorkbook workbook = Workbook.createWorkbook(new File(servletContext.getRealPath("AllStudentsReport" + strDate + ".xls")));
@@ -155,10 +190,10 @@ public class ReportController {
             WritableFont font13 = new WritableFont(WritableFont.ARIAL, 13);
             WritableFont font10 = new WritableFont(WritableFont.ARIAL, 10);
             WritableCellFormat format = new WritableCellFormat(font13);
-            
+
 
             Label label;
-            String headers[] = {"Фамилия", "Имя", "Отчество", "Почтовый адрес", "Номер телефона", "Университет","Кафедра", "Факультет", "Курс"};
+            String headers[] = {"Фамилия", "Имя", "Отчество", "Почтовый адрес", "Номер телефона", "Университет", "Кафедра", "Факультет", "Курс"};
 
             format.setBackground(jxl.format.Colour.RED);
             for (int i = 0; i < headers.length; i++) {
@@ -198,14 +233,27 @@ public class ReportController {
             response.setHeader("Content-Disposition", "attachment; filename=\"AllStudentsReport" + strDate + ".xls\"");
             //send file in responce stream
             FileCopyUtils.copy(FileCopyUtils.copyToByteArray(new File(servletContext.getRealPath("AllStudentsReport" + strDate + ".xls"))), response.getOutputStream());
-            
+
             //delete tempfile from server
             File file = new File(servletContext.getRealPath("AllStudentsReport" + strDate + ".xls"));
             file.delete();
+            
         } catch (IOException ex) {
-            Logger.getLogger(ReportController.class.getName()).log(Level.SEVERE, null, ex);
+            ModelAndView mav = new ModelAndView("ErrorPage");
+            String text = "<div class=\"alert alert-error\">\n"
+                    + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
+                    + "  Ошибка ввода/вывода при попытке формирования списка всех студентов \n"
+                    + "</div>";
+            mav.addObject("errorText", text);
+            return mav;
         } catch (WriteException ex) {
-            Logger.getLogger(ReportController.class.getName()).log(Level.SEVERE, null, ex);
+            ModelAndView mav = new ModelAndView("ErrorPage");
+            String text = "<div class=\"alert alert-error\">\n"
+                    + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
+                    + "  Ошибка записи при попытке формирования списка всех студентов \n"
+                    + "</div>";
+            mav.addObject("errorText", text);
+            return mav;
         }
         return null;
     }
