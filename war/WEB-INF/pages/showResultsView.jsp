@@ -17,7 +17,7 @@
      <script src="resources/css/bootstrap.jsp"></script>
     <script src="resources/css/bootstrap.mini.jsp"></script>    
     
-    <%--<script src="http://bootsnipp.com/js/jquery.js"></script>--%>
+    <script src="http://bootsnipp.com/js/jquery.js"></script>
     <script src="http://bootsnipp.com/js/bootstrap.min.js"></script>
 
     <script src="http://bootsnipp.com/js/prettify.js"></script>
