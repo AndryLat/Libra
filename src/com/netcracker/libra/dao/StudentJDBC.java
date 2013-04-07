@@ -119,4 +119,13 @@ public class StudentJDBC {
            return -1;
        }
    }
+   
+   public Student getStudentByAppId(Integer id) {
+      String SQL = "select u.userId, u.FIRSTNAME, u.LASTNAME,u.EMAIL,u.PASSWORD, u.ROLEID "
+              + "from Users u join appForm af on af.userId=u.userId where af.appid = ?";
+      Student student = jdbcTemplateObject.queryForObject(SQL, 
+                        new Object[]{id}, new StudentRowMapper());
+      return student;
+   }
+
 }
