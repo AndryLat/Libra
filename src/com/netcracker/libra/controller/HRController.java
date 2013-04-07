@@ -7,7 +7,6 @@ import com.netcracker.libra.model.DateAndInterviewer;
 import com.netcracker.libra.model.DateAndInterviewerResults;
 import com.netcracker.libra.model.Department;
 import com.netcracker.libra.model.Faculty;
-import com.netcracker.libra.model.OldNewInterviewTime;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.model.University;
 import java.text.ParseException;
@@ -36,8 +35,9 @@ public class HRController {
      HrJDBC hr=new HrJDBC();
      Student s=new Student();
      
-     List <ApplicationChange> appChangeList;
+     List <ApplicationChange> appChangeList; //objects with application changes
      boolean order; //value of ascending or descending order; true when ascending
+     List <ApplicationChange> checkedList; //objects with application changes (checked only)
      
      /*
       * Display faculties of iniversity
@@ -306,6 +306,14 @@ public class HRController {
           return mv;
       }
       
+      @RequestMapping("hr/currentConfirmChanges")
+      public ModelAndView showcurrentConfirmChanges() {
+          ModelAndView mv = new ModelAndView();
+          mv.setViewName("hr/showApplicationChanges");
+          mv.addObject("list", appChangeList);
+          return mv;
+      }
+      
       /**
        * Sort in ascending or descending order the table of old and new date and time
        * by the app.form ID, first name, last name, email and field name
@@ -399,7 +407,7 @@ public class HRController {
           
           ModelAndView mv = new ModelAndView();
           mv.setViewName("hr/showApplicationChanges");
-          mv.addObject("message", "Изменение успешно отменено");
+          mv.addObject("message", "Изменение отклонено");
           mv.addObject("list", appChangeList);
           return mv;
       }
@@ -445,7 +453,7 @@ public class HRController {
           
           ModelAndView mv = new ModelAndView();
           mv.setViewName("hr/showApplicationChanges");
-          mv.addObject("message", "Изменение успешно отменено");
+          mv.addObject("message", "Изменение отклонено");
           mv.addObject("list", appChangeList);
           return mv;
       }
@@ -492,32 +500,171 @@ public class HRController {
           
           ModelAndView mv = new ModelAndView();
           mv.setViewName("hr/showApplicationChanges");
-          mv.addObject("message", "Изменение успешно отменено");
+          mv.addObject("message", "Изменение отклонено");
           mv.addObject("list", appChangeList);
           return mv;
       }
       
       /**
-       * undo or apply all marked student's changes of application fields 
+       * Display all marked changes of application fields and ask for make changes
        * @param action - name of pressed button
+       * @param checker - checked objects
        */
-      @RequestMapping("hr/deleteOrConfirmAllChanges")
-      public ModelAndView deleteOrConfirmAllChanges(@RequestParam("action") String action) {
-          
-          if(action.equals("Y")) {
-              //confirm action in datebase and arrayList
-              System.out.println("Confirm all in action");
-              
-          }
-          else if(action.equals("N")) {
-              //delete action in datebase and arrayList
-              System.out.println("Delete all in action");
-              
-          }
+      @RequestMapping("hr/checkAllMessage")
+      public ModelAndView checkAllMessage(@RequestParam("action") String action,
+                                          @RequestParam("checker[]") int [] checker) {
           
           ModelAndView mv = new ModelAndView();
+          checkedList = new ArrayList <ApplicationChange> ();
+          
+          if(checker.length == 0) {
+              mv.setViewName("hr/showApplicationChanges");
+              mv.addObject("list", appChangeList);
+          }
+          else {
+              String message = action.equals("Y") ? "Подтвердить выбранные изменения?" 
+                                                  : "Отменить выбранные изменения?";
+              
+              for(int i=0; i < checker.length; i++) {
+                                                            System.out.println("iteration is " + i);
+                  try {
+                      for(ListIterator <ApplicationChange> j = appChangeList.listIterator(); j.hasNext(); ) {
+                          ApplicationChange obj = j.next();
+                          if(obj.getObjectId() == checker[i]) {
+                              checkedList.add(obj);
+                          }
+                      }
+                  }
+                  catch (ArrayIndexOutOfBoundsException e) {
+                      //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                  }
+                  
+              }
+              mv.setViewName("hr/checkAllMessage");
+              mv.addObject("list", checkedList);
+              mv.addObject("message" , message);
+              mv.addObject("action", action);
+          }
+           return mv;
+      }
+      
+      
+      /**
+       * undo or apply all marked changes of application fields
+       */
+      @RequestMapping("hr/deleteOrConfirmFewChanges")
+      public ModelAndView deleteOrConfirmAllChanges(@RequestParam("action") String action) {
+          
+          ModelAndView mv = new ModelAndView();
+
+          boolean dynamic = false;
+          boolean interview = false;
+          boolean mainAppInfo = false;
+          
+          List <Integer> dynamicOldIds = null;
+          List <Integer> dynamicNewIds = null;
+          List <Integer> interviewOldIds = null;
+          List <Integer> interviewNewIds = null;
+          List <String> mainAppInfoColumnNames = null;
+          List <Integer> mainAppInfoOldIds = null;
+          List <Integer> mainAppInfoNewIds = null;
+          
+          for(ApplicationChange o : checkedList) {
+              int oldId = o.getOldId();
+              int newId = o.getNewId();
+              String columnName = o.getColumnName();
+              
+              switch(columnName) {
+                  case("dynamic"):
+                      dynamicOldIds = new ArrayList <Integer> ();
+                      dynamicNewIds = new ArrayList <Integer> ();
+                      dynamicOldIds.add(oldId);
+                      dynamicNewIds.add(newId);
+                      dynamic = true;
+                      break;
+                  case("interview"):
+                      interviewOldIds = new ArrayList <Integer> ();
+                      interviewNewIds = new ArrayList <Integer> ();
+                      interviewOldIds.add(oldId);
+                      interviewNewIds.add(newId);
+                      interview = true;
+                      break;
+                  default:
+                      mainAppInfoColumnNames = new ArrayList <String> ();
+                      mainAppInfoOldIds = new ArrayList <Integer> ();
+                      mainAppInfoNewIds = new ArrayList <Integer> ();
+                      mainAppInfoColumnNames.add(columnName);
+                      
+                      System.out.println(columnName);
+                      
+                      mainAppInfoOldIds.add(oldId);
+                      mainAppInfoNewIds.add(newId);
+                      mainAppInfo = true;
+                      break;
+              }
+              
+              for(ListIterator <ApplicationChange> i = appChangeList.listIterator(); i.hasNext(); ) {
+                  ApplicationChange obj = i.next();
+                  if(obj.getObjectId() == o.getObjectId()) {
+                      i.remove();
+                  }
+              }
+              
+          }
+          
+          if(action.equals("Y")) {
+              if(dynamic) {
+                  hr.deleteDynamicField(dynamicOldIds);
+                  hr.confirmDynamicField(dynamicNewIds);
+              }
+              if(interview) {
+                  hr.deleteInterview(interviewOldIds);
+                  hr.confirmInterviewTime(interviewNewIds);
+              }
+              if(mainAppInfo) {
+                  for(int i=0; i < mainAppInfoColumnNames.size(); i++) {
+                      String columnName = mainAppInfoColumnNames.get(i);
+                      int oldId = mainAppInfoOldIds.get(i);
+                      int newId = mainAppInfoNewIds.get(i);
+                      hr.confirmMainAppInfo(columnName, newId, oldId);
+                  }
+              }
+              mv.addObject("message", "Изменения сохранены");
+          }
+          else if(action.equals("N")) {
+              if(dynamic) {
+                  hr.deleteDynamicField(dynamicNewIds);
+              }
+              if(interview) {
+                  hr.deleteInterview(interviewNewIds);
+              }
+              mv.addObject("message", "Изменения отклонены");
+          }
+          
           mv.setViewName("hr/showApplicationChanges");
           mv.addObject("list", appChangeList);
+          return mv;
+      }
+      
+      /**
+       * Asking for action
+       */
+      @RequestMapping("hr/message")
+      public ModelAndView showMessage(@RequestParam("objectId") int objId, @RequestParam("action") String action) {
+          
+          ModelAndView mv = new ModelAndView();
+          
+          for(ListIterator <ApplicationChange> j = appChangeList.listIterator(); j.hasNext(); ) {
+              ApplicationChange obj = j.next();
+              if(obj.getObjectId() == objId) {
+                  mv.addObject("o", obj);
+              }
+          }
+          
+          String message = action.equals("confirm") ? "Подтвердить изменение?" : "Отклонить изменение?";
+          mv.addObject("message", message);
+          mv.setViewName("hr/message");
+          mv.addObject("action", action);
           return mv;
       }
       

@@ -13,57 +13,46 @@
 <!--<![endif]-->
 <head>
 	<jsp:include page="../resources.jsp" />
-	<link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
-	<title>Подтверждение</title>
-	<script>
+        <link rel="stylesheet" type="text/css" href="../resources/css/table.css" />
+	<title>${title}</title>
+        <script>
             function closeMessage()
             {
                 document.getElementById("alertMessage").innerHTML="";
             }
         </script>
-        <script language="JavaScript">
-            function toggle(source) {
-                checkboxes = document.getElementsByName('checker[]');
-                for(var i in checkboxes)
-                checkboxes[i].checked = source.checked;
-            }
-        </script>
-        <style>
-            table { table-layout: fixed; }
-            table th, table td { overflow: hidden; }
-        </style>
 </head>
-
 <body>
 	<div class="navmenu">
 		<jsp:include page="../navbar.jsp" />
 	</div>
-	
 	<div class="container-fluid">
 		<div class="row-fluid">
-		
 			<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			
-			<div class="span9">
+			<div class="span9" style="text-align:center">
                             
                             <table width="100%">
                                 <tr>
                                     <c:if test="${message != null}">
-                                        <td align="left" id="alertMessage">
-                                        <div class="alert alert-success" align="center">
+                                        <td align="center" id="alertMessage">
+                                        <div class="alert" align="center">
                                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
                                         ${message}
+                                        
+                                        <a class="btn btn-small" href="deleteOrConfirmFewChanges.html?action=<c:out value='${action}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
+                                        <a class="btn btn-small" href="currentConfirmChanges.html"> &nbsp; Нет &nbsp;</a>
+                                        
                                         </div>
                                         </td>
                                     </c:if>
                                 </tr>
                             </table>
+                            
                             <br>
                             
                             <table class="bordered" style="margin-left: auto; margin-right: auto;">
-                                <caption><div class="alert alert-info">Подтверждение изменений анкеты студентом</div></caption>
                                 <tr>
                                     <th><a href="sortOldNewValues.html?orderBy=APP_ID">№</a> &nbsp; ${idOrder}</th>
                                     <th><a href="sortOldNewValues.html?orderBy=FIRST_NAME">имя</a> <a href="sortOldNewValues.html?orderBy=LAST_NAME">фамилия</a> &nbsp; ${nameOrder}</th>
@@ -71,15 +60,7 @@
                                     <th><a href="sortOldNewValues.html?orderBy=FIELD_NAME">полe</a> &nbsp; ${fieldNameOrder}</th>
                                     <th>до</th>
                                     <th>после</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th>
-                                        <form action="checkAllMessage.html" method="POST">
-                                            <input type="checkbox" onClick="toggle(this)" /> All
-                                            <input type="submit" name="action" value="Y" title="Подтвердить">
-                                            <input type="submit" name="action" value="N" title="Отклонить">
-                                        
-                                    </th>
+                                    <th>delete from list</th>
                                 </tr>
                                     <c:forEach items="${list}" var="o">
                                         <tr>
@@ -89,21 +70,12 @@
                                         <td style="width: 20%">${o.getFieldName()}</td>
                                         <td style="width: 20%">${o.getOldValue()}</td>
                                         <td style="width: 20%">${o.getNewValue()}</td>
-                                        
-                                        
-                                        <td style="width: 5%"><a href="message.html?objectId=<c:out value='${o.getObjectId()}'/>&action=confirm">
-                                                    <img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="20" height="20" title="Подтвердить"/></a></td>
-                                        
-                                        <td style="width: 5%"><a href="message.html?objectId=<c:out value='${o.getObjectId()}'/>&action=cancel">
-                                                    <img  src="../resources/images/admin/glyphicons_207_remove_2.png" width="15" height="15" title="Отклонить"/></a></td>
-                                           
-                                        <td style="width: 2%"><input type="checkbox" name="checker[]" value="<c:out value='${o.getObjectId()}'/>"/></td>
-                                        
+                                        <td>delete</td>
                                         </tr>
                                     </c:forEach>
                                 </form>
                             </table>
-        
+                                    
 			</div>
 		</div>
 	</div>
