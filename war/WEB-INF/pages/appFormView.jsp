@@ -67,14 +67,19 @@
 						
 						<c:if test="${c.getTypeName()=='checkboxenum'}">
 								<c:forEach items="${c.getcT().getEmums()}" var="t">
-									<form:checkbox path="map[${c.getColumnId()}]" value="${t}" />${t}
+                                                                <label class="checkbox">
+                                                                    <form:checkbox class="checkbox" path="map[${c.getColumnId()}]" value="${t}" />${t} 
+
+                                                                </label>
 								</c:forEach>
 						</c:if>
 						
 						<c:if test="${c.getTypeName()=='radioenum'}">
 								<c:forEach items="${c.getcT().getEmums()}" var="t">
-									<form:radiobutton path="map[${c.getColumnId()}]" value="${t}" />${t}
-								</c:forEach>
+                                                                    <label class="radio">
+									<form:radiobutton class="radio" path="map[${c.getColumnId()}]" value="${t}" />${t}
+                                                                    </label>
+                                                                </c:forEach>
 						</c:if>
 
 						<c:if test="${c.getTypeName()=='integer'}">
