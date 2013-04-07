@@ -32,7 +32,7 @@
                         <div class="span8 shift55">
                             <h3 class="align-center"><strong class="title-color">Анкета кандидата</strong></h3>
                             <hr>      
-                            <form:form action="" method="POST" commandName="columnFields">
+                            <form:form  method="POST" commandName="columnFields">
 					
 					<c:forEach items="${columns}" var="c">
 					
@@ -92,7 +92,7 @@
 					</c:forEach>
 
 						<div class="controls" align="center">
-							<button  class="btn btn-large  btn-primary width100">Подтвердить</button>
+                                                    <button <c:if test="${acceslevel==1}">disabled=""</c:if> class="btn btn-large  btn-primary width100">Подтвердить</button>
 						</div>
 				</form:form>
                             

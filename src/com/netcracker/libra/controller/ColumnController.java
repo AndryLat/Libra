@@ -261,6 +261,7 @@ public class ColumnController
             List<AppFormColumns> appList=columnJDBC.getAppFormColumns(templateId);
             model.addAttribute("columns", appList);
             model.addAttribute("columnFields", columnFields);
+            model.addAttribute("acceslevel", token.getUserAccessLevel());
             return "appFormView";
         }
         model.addAttribute("link", "<a href='/Libra/'>Вернуться назад</a>");
