@@ -63,8 +63,9 @@ public class LoginController {
 			log.warn("Login failed. User not found in DB");
 		} else {
 			viewName = "redirect:welcome.html";
-			if (userData.getUserAccessLevel()==0)
+			if (userData.getUserAccessLevel()==0) {
 				userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
+			}
 			request.getSession().setAttribute("LOGGEDIN_USER", userData);
 			log.info("Login successful. UserID is " + userData.getUserId());
 		}

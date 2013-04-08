@@ -42,7 +42,7 @@
 					
 						<div class="controls">
 							<div class="controls">
-								<div class="span5">Электронная почта</div><input type="email" name="email" required>
+								<div class="span5">Электронная почта</div><form:input type="email" path="email" required="1"/>
 							</div>
 						</div>
 						<div class="controls">
@@ -64,22 +64,22 @@
 				<div class="alert alert-info"><b>Личные данные</b></div>
 					<div class="controls-group">
 						<div class="controls">
-							<div class="span5">Фамилия</div><input class="input" name="lastName" type="text" required/>
+							<div class="span5">Фамилия</div><form:input class="input" path="lastName" type="text" required="1"/>
 						</div>
 					</div>				
 					<div class="controls-group">
 						<div class="controls">
-							<div class="span5">Имя</div><input class="input" name="name" type="text" required/>
+							<div class="span5">Имя</div><form:input class="input" path="name" type="text" required="1"/>
 						</div>
 					</div>
 					<div class="controls-group">
 						<div class="controls">
-							<div class="span5">Отчество</div><input class="input" name="patronymic" type="text" required />
+							<div class="span5">Отчество</div><form:input class="input" path="patronymic" type="text" required="1" />
 						</div>
 					</div>
 					<div class="controls-group">
 						<div class="controls"> 
-							<div class="span5">Номер телефона</div><input class="input" name="phoneNumber" type="text" required />
+							<div class="span5">Номер телефона</div><form:input class="input" path="phoneNumber" type="text" required="1" />
 						</div>
 					</div>
 				</div>
@@ -107,20 +107,20 @@
 					
 					<div class="row-fluid">
 						<div class="span5">Кафедра</div>
-                			<select name="department" id="dept">
+                			<form:select path="department" id="dept" required="1">
                 				<option value="0" disabled selected>Выберите факультет</option> 
-                			</select>
+                			</form:select>
 					</div>
 					
 					<div class="controls-group">
 						<div class="controls"> 
-							<div class="span5">Курс</div><input class="input-small" name="course" type="number" min="0" max="5" required />
+							<div class="span5">Курс</div><form:input class="input-small" path="course" type="number" min="0" max="5" required="1" />
 						</div>
 					</div>
 					
 					<div class="controls-group">
 						<div class="controls"> 
-							<div class="span5">Год выпуска</div><input class="input-small" name="graduated" type="number" min="2000" max="2020" required />
+							<div class="span5">Год выпуска</div><form:input class="input-small" path="graduated" type="number" min="2000" max="2020" required="1" />
 						</div>
 					</div>
 					

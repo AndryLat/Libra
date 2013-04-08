@@ -81,10 +81,10 @@ public class AppFormJDBC {
 	public boolean isAppFormPresent(Integer userId) {
 		Integer result = 
 				jdbcTemplateObject.queryForInt(
-						"select columnid " +
+						"select count(*) " +
 						"from columnfields " +
-						"where appid=(select appid from appform where userid=?) and rownum=1",userId);
-		if (result !=null) 
+						"where appid=(select appid from appform where userid=?)",userId);
+		if (result > 0) 
 			return true;
 		else
 			return false;
@@ -94,8 +94,8 @@ public class AppFormJDBC {
 	//check for duplicate emails
 	public boolean isEmailAlreadyExist(String email) {
 		Integer result = 
-				jdbcTemplateObject.queryForInt("select userid from users where email=?", email);
-		if (result!=null)
+				jdbcTemplateObject.queryForInt("select count(*) from users where email=?", email);
+		if (result > 0)
 			return true;
 		else
 			return false;

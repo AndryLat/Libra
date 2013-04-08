@@ -33,7 +33,7 @@ import com.netcracker.libra.util.security.SessionToken;
 
 @Controller
 @RequestMapping("register")
-@SessionAttributes({"regForm", "LOGGEDIN_USER"})
+@SessionAttributes("LOGGEDIN_USER")
 public class RegController {
 	
 	Logger log = Logger.getLogger(RegController.class);
@@ -56,8 +56,10 @@ public class RegController {
 			SessionStatus status, 
 			HttpServletRequest request) throws SQLException {
 		
-		if (result.hasErrors())
+		if (result.hasErrors()) {
+			model.put("regForm", form);
 			return "signup/appform";
+		}
 		
 		else {
 			form.setUserId(RegformService.getUserId());

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class UserPreferences
 {
     public Integer UserId= new Integer(-1);
-    public int accessLevel=-1;
+    public int accessLevel=3;
     public boolean isAppformFilled=false;
     public String userEmail=null;
     /*private int UserId = -1;   

@@ -5,6 +5,8 @@ import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.service.LengthService;
 import com.netcracker.libra.util.security.Security;
+import com.netcracker.libra.util.security.SessionToken;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -12,8 +14,10 @@ import java.util.ListIterator;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -33,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("admin")
+@SessionAttributes("LOGGEDIN_USER")
 public class UsersController {
  
     List <User> employees;  // list of employees (HR, TECH, ADMIN)
@@ -52,11 +57,11 @@ public class UsersController {
      * Displays on the page all employees (HR, TECH, ADMIN)
      */
     @RequestMapping("employees")
-    public ModelAndView showAllEmployees() {
+    public ModelAndView showAllEmployees(@ModelAttribute("LOGGEDIN_USER") SessionToken token) {
         
         ModelAndView mv = new ModelAndView();
         
-        if(user.accessLevel==3) {
+        if(token.getUserAccessLevel()==3) {
             
             employees = jdbc.getAllEmployees();
             checked = "checkedAll";
