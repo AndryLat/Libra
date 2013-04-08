@@ -5,14 +5,19 @@
 package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.InterviewResultsJDBC;
+import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.InterviewResult;
 import com.netcracker.libra.model.InterviewResultsInfo;
+import com.netcracker.libra.model.Student;
+import com.netcracker.libra.util.mail.SendMailService;
 import com.netcracker.libra.util.security.SessionToken;
 import java.io.StringWriter;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -36,6 +41,7 @@ public class InterviewResultsController
   //  @Autowired
   //  UserPreferences userPreferences;
     InterviewResultsJDBC iresults=new InterviewResultsJDBC();
+    StudentJDBC studentJDBC=new StudentJDBC();
     //int appId;
     /*Integer count;
     Integer page;
@@ -252,14 +258,22 @@ public class InterviewResultsController
     
     @RequestMapping(value="sendMailToStudent", method= RequestMethod.POST)
     public ModelAndView sendMailToStudent(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
-    @RequestParam("emails[]") String[] emails)
+     @RequestParam(required=false,value="ids[]") Integer[] ids)
     {
         if(token.getUserAccessLevel()==1 || token.getUserAccessLevel()==2)
         {
             ModelAndView mav = new ModelAndView();
+            int count=ids.length;
             mav.setViewName("resultAjax");
+            for(int i=0;i<count;i++)
+            {
+                Student s= studentJDBC.getStudentByAppId(ids[i]);
+                Map map = new HashMap();
+                map.put("user",s.getLastName()+" "+s.getName());
+                SendMailService.sendMail(s.getEmail(),map,"Student_mail");
+            }
             JSONObject j = new JSONObject(); 
-            j.put("count", 11);
+            j.put("count", count);
             String jsonText = JSONValue.toJSONString(j);
             mav.addObject("json", jsonText);
             return mav; 

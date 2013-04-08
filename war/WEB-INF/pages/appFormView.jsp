@@ -32,7 +32,7 @@
                         <div class="span8 shift55">
                             <h3 class="align-center"><strong class="title-color">Анкета кандидата</strong></h3>
                             <hr>      
-                            <form:form action="" method="POST" commandName="columnFields">
+                            <form:form  method="POST" commandName="columnFields">
 					
 					<c:forEach items="${columns}" var="c">
 					
@@ -67,14 +67,19 @@
 						
 						<c:if test="${c.getTypeName()=='checkboxenum'}">
 								<c:forEach items="${c.getcT().getEmums()}" var="t">
-									<form:checkbox path="map[${c.getColumnId()}]" value="${t}" />${t}
+                                                                <label class="checkbox">
+                                                                    <form:checkbox class="checkbox" path="map[${c.getColumnId()}]" value="${t}" />${t} 
+
+                                                                </label>
 								</c:forEach>
 						</c:if>
 						
 						<c:if test="${c.getTypeName()=='radioenum'}">
 								<c:forEach items="${c.getcT().getEmums()}" var="t">
-									<form:radiobutton path="map[${c.getColumnId()}]" value="${t}" />${t}
-								</c:forEach>
+                                                                    <label class="radio">
+									<form:radiobutton class="radio" path="map[${c.getColumnId()}]" value="${t}" />${t}
+                                                                    </label>
+                                                                  </c:forEach>
 						</c:if>
 
 						<c:if test="${c.getTypeName()=='integer'}">
@@ -92,7 +97,7 @@
 					</c:forEach>
 
 						<div class="controls" align="center">
-							<button  class="btn btn-large  btn-primary width100">Подтвердить</button>
+                                                    <button <c:if test="${acceslevel==1}">disabled=""</c:if> class="btn btn-large  btn-primary width100">Подтвердить</button>
 						</div>
 				</form:form>
                             

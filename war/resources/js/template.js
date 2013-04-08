@@ -64,6 +64,7 @@ function number_control()
     
   function ajax_result(page,count,serch,order,desc)
   {
+      $("#loading").show();
       u='resultAjax.html';
       param=false;
       $("#serch_info").empty();
@@ -146,13 +147,14 @@ function number_control()
         success: function (data, textStatus) 
         { // вешаем свой обработчик на функцию success
             $("#studentTable").empty();
+            $("#loading").hide();
             $.each(data.students, function(i, val) 
             {    // обрабатываем полученные данные
                 var tr = $("<tr></tr>");
-                $("<td></td>").append("<input type=\"checkbox\" class=\"checkbox\" name=\"emails[]\" value="+val.email+">").appendTo(tr);
+                $("<td></td>").append("<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value="+val.appId+">").appendTo(tr);
                 $("<td></td>").append(val.r).appendTo(tr);         
                 $("<td></td>").append(val.appId).appendTo(tr);
-                $("<td></td>").append(val.fio).appendTo(tr);
+                $("<td></td>").append("<a href=\"displayAppForm.html?appId="+val.appId+"\">"+val.fio+"</a>").appendTo(tr);
                 $("<td></td>").append(val.email).appendTo(tr);
                 $("<td></td>").append(val.avgMark).appendTo(tr);
                 $("<td></td>").append("<a href='addResult.html?appId="+val.appId+"'>Комментарий</a>").appendTo(tr)
@@ -397,8 +399,12 @@ function number_control()
   
 function send_mail()
 {
-    checkbox=$(":checkbox[name^=emails]:checked").map(function () { return $(this).val(); }).get();
-    dat = {"emails" : checkbox};
+    $("#serch_info").empty();    
+    $("#loading").show();
+    $("#send_mail").attr("onclick","");
+    checkbox=$(":checkbox[name^=ids]:checked").map(function () { return $(this).val(); }).get();
+    
+    dat = {"ids" : checkbox};
     $.ajax({
     type: "POST",
     url: "sendMailToStudent.html",
@@ -406,8 +412,13 @@ function send_mail()
     dataType : "json",
     success: function(data,textStatus)
     {
+         $("#loading").hide();
          $("#serch_info").append("Вы отправили "+data.count+" писем");
+         $("#send_mail").attr("onclick","");
+         $(':checkbox[name^=ids]').attr('checked', false);
+         $("#send_mail").attr("onclick","send_mail()");
     }
     });
+
     return false;
 }

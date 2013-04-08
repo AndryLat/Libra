@@ -23,7 +23,7 @@
   <div class="span12">
     <div class="row span10">
       <div class="span3 thumbnail" style="width: 150px; height: 200px;">
-            <img style="width: 150px; height: 200px;" src=src="<c:out value='${path}'/>" alt="">
+            <img style="width: 150px; height: 200px;" src="<c:out value='${path}'/>" alt="">
       </div>
       <div class="span6">    
           
@@ -86,7 +86,7 @@
        
             <c:if test="${contactMap.getLevel()==1}">
                 <div class="align-center">
-                <h4><strong class="title-color">${contactMap.getName()}</strong></h4>${contactMap.getValue()}
+                <h4><strong class="title-color">${contactMap.getName()}</strong></h4>
                 </div>
             </c:if>
             <c:if test="${contactMap.getLevel()!=1}">
