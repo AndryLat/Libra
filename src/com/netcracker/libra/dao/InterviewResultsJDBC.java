@@ -204,9 +204,11 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
 					+"where i.status=1 and rHR.accessLevel=1 and (";
                                         for(int i=0;i<serchString.length-1;i++)
                                         {
-                                            SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[i]+"'))) or ";
+                                            SQL+="UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email) LIKE '%'||UPPER('"+serchString[i]+"')||'%' or ";
+                                           // SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[i]+"'))) or ";
                                         }
-                                        SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[serchString.length-1]+"'))))";						
+                                        SQL+="UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email) LIKE '%'||UPPER('"+serchString[serchString.length-1]+"')||'%') ";  
+                                       // SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[serchString.length-1]+"'))))";						
                                         SQL+="group by i.appId , i.interviewid, u.firstname,af.patronymic,u.lastName,af.appId,u.email  "
 				+") HR on HR.appId=af.AppId full "
 				+"outer join "
@@ -222,10 +224,11 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
 					+"where i.status=1 and ri.accessLevel=2 and (" ;
                                         for(int i=0;i<serchString.length-1;i++)
                                         {
-                                            SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[i]+"'))) or ";
+                                            SQL+="UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email) LIKE '%'||UPPER('"+serchString[i]+"')||'%' or ";
+                                           // SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[i]+"'))) or ";
                                         }
-                                        SQL+="regexp_like(UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email),Trim(UPPER('"+serchString[serchString.length-1]+"'))))";
-					SQL+="group by i.appId , i.interviewid, u.firstname,af.patronymic,u.lastName,af.appId,u.email   "
+                                        SQL+="UPPER(u.firstname||af.patronymic||u.lastName||af.appId||u.email) LIKE '%'||UPPER('"+serchString[serchString.length-1]+"')||'%') ";  
+                                        SQL+="group by i.appId , i.interviewid, u.firstname,af.patronymic,u.lastName,af.appId,u.email   "
 				+") Interv on Interv.appId=HR.appId "
 	+")";
                 /*"select  "

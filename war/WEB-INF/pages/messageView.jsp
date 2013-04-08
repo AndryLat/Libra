@@ -13,7 +13,7 @@
     </head>
     <body>
         
-        
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -24,12 +24,13 @@
 				<jsp:include page="sidebar.jsp" />
 			</div>
                         
-                        <div class="span8 well-template align-center">
+                        <div class="span8 well align-center">
 			<h2 class="text-info">${message}</h2> 
                         ${link} 
                         </div>
                         
 		</div>
 	</div>
+                        </div>
     </body>
 </html>

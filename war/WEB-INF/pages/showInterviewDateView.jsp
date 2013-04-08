@@ -13,12 +13,12 @@
         <title>Записаться на собеседование</title>
         <jsp:include page="resources.jsp" />
         <link href="resources/css/template.css" rel="stylesheet">	
-    
+    <link rel="stylesheet" type="text/css" href="resources/css/table-template.css" />
         <script src="http://bootsnipp.com/bundles/bootstrapper/js/bootstrap.min.js"></script>
 
     </head>
     <body>
-        
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -30,7 +30,7 @@
 			</div>
                         <div class="span8">                
                             
-                            <div class="well-template shift-div-right align-center">
+                            <div class="shift-div-right align-center">
         <c:if test="${interviewDateHr==-1}">
             <form  method="post" action="chooseDate.html">
         </c:if>
@@ -38,7 +38,7 @@
             <form  method="post" action="changeDate.html">
         </c:if>
                
-        <table  border="1" cellspacing="0" cellpadding="4">
+        <table   class="bordered width100">
             <caption> <h6>Зарегистрироваться на собеседование с HR-ом</h6></caption>
             <tr>
                 <th>Выбрать</th>
@@ -100,7 +100,7 @@
             <form  method="post" action="changeDate.html">
         </c:if>
                 
-        <table  border="1" cellspacing="0" cellpadding="4">
+        <table  class="bordered width100">
            <caption><h6>Зарегистрироваться на собеседование с техническим специалистом</h6></caption>
             
             <tr>
@@ -156,5 +156,6 @@
 	</div>
         
        </div> 
+                        </div>   
     </body>
 </html>

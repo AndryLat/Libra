@@ -12,54 +12,55 @@
 <!--[if gt IE 8]><!-->
 
 <html class="no-js">
-<!--<![endif]-->
-<head>
-	<jsp:include page="resources.jsp" />
-	<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
-        <script language="javascript" type="text/javascript" src="resources/js/jqPlot/jquery.min.js"></script>
-        <script language="javascript" type="text/javascript" src="resources/js/jqPlot/jquery.jqplot.min.js"></script>
-        <script type="text/javascript" src="resources/js/jqPlot/plugins/jqplot.pieRenderer.min.js"></script>
-        <script type="text/javascript" src="resources/js/jqPlot/plugins/jqplot.donutRenderer.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="resources/js/jqPlot/jquery.jqplot.css" />
-        <script type="text/javascript" src="../src/plugins/jqplot.barRenderer.min.js"></script>
-        <script type="text/javascript" src="../src/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-        <script type="text/javascript" src="../src/plugins/jqplot.pointLabels.min.js"></script>
-	<title>Эффективность рекламы</title>
-</head>
+    <!--<![endif]-->
+    <head>
+        <jsp:include page="resources.jsp" />
+        <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
+        <script language="javascript" type="text/javascript" src="../resources/js/jqPlot/jquery.min.js"></script>
+        <script language="javascript" type="text/javascript" src="../resources/js/jqPlot/jquery.jqplot.min.js"></script>
+        <script language="javascript"  type="text/javascript" src="../resources/js/jqPlot/plugins/jqplot.pieRenderer.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../resources/js/jqPlot/jquery.jqplot.css" />
+        
+        <title>Libra: Эффективность рекламы</title>
+    </head>
 
-<body>
-	<div class="navmenu">
-		<jsp:include page="navbar.jsp" />
-	</div>
-	
-	<div class="container-fluid">
-		<div class="row-fluid">
-		
-			<div class="sidebar">
-				<jsp:include page="sidebar.jsp" />
-			</div>
-			
-			<div class="span9">
-			<center> <div id="chartdiv" style="height:500px;width:50%; alignment-adjust: middle " ></div></center>
-    <script language="javascript" type="text/javascript">
-            var data = [${data}];
-            var plot1 = jQuery.jqplot ('chartdiv', [data],
-            {
-                title:'Эффективность рекламы',
-                seriesDefaults: {
-                    renderer: jQuery.jqplot.PieRenderer,
-                    rendererOptions: {
-                        seriesColors: [ "#3b00ff", "#ff00ff", "#00ff7f", "#7fffd4"],
-                        showDataLabels: true
-                    }
-                },
-                legend: { show:true, location: 'e' }
-            }
-        );
-            
-    </script>
-			</div>
-		</div>
-	</div>
-</body>
+    <body>
+        <div class="navmenu">
+            <jsp:include page="navbar.jsp" />
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+                <div class="sidebar">
+                    <jsp:include page="sidebar.jsp" />
+                </div>
+
+                <div class="span9">
+                    <center><div id="chartdiv" style="height:500px;width:50%; alignment-adjust: middle " ></div></center>
+
+                    <div class="alert alert-info">
+                        <strong>Описание</strong><br> Данный отчет иллюстрирует эффективность рекламы, с помощью которой собеседуемые узнали о данном сайте.
+                    </div>
+
+                    <script language="javascript" type="text/javascript">
+                        var data = [${data}];
+                        var plot1 = jQuery.jqplot('chartdiv', [data],
+                        {
+                            title: 'Эффективность рекламы',
+                            seriesDefaults: {
+                            renderer: jQuery.jqplot.PieRenderer,
+                            rendererOptions: {
+                                seriesColors: ["#3b00ff", "#ff00ff", "#00ff7f", "#7fffd4"],
+                                showDataLabels: true
+                                }
+                            },
+                        legend: {show: true, location: 'e'}
+                        }
+                        );
+                    </script>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

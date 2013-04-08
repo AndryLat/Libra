@@ -47,28 +47,6 @@ function submitDelete(dAction,dSelector)
     form.submit();*/
     return false;
 }
-/*
-function checkAll(obj) 
-{
-  'use strict';
-  // Получаем NodeList дочерних элементов input формы: 
-  var items = obj.form.getElementsByTagName("input"), 
-      len, i;
-  // Здесь, увы цикл по элементам формы:
-  for (i = 0, len = items.length; i < len; i += 1) {
-    // Если текущий элемент является чекбоксом...
-    if (items.item(i).type && items.item(i).type === "checkbox") {
-      // Дальше логика простая: если checkbox "Выбрать всё" - отмечен            
-      if (obj.checked) {
-        // Отмечаем все чекбоксы...
-        items.item(i).checked = true;
-      } else {
-        // Иначе снимаем отметки со всех чекбоксов:
-        items.item(i).checked = false;
-      }       
-    }
-  }
-}*/
 
 function number_control()
 {
@@ -86,6 +64,7 @@ function number_control()
     
   function ajax_result(page,count,serch,order,desc)
   {
+      $("#loading").show();
       u='resultAjax.html';
       param=false;
       $("#serch_info").empty();
@@ -168,18 +147,21 @@ function number_control()
         success: function (data, textStatus) 
         { // вешаем свой обработчик на функцию success
             $("#studentTable").empty();
+            $("#loading").hide();
             $.each(data.students, function(i, val) 
             {    // обрабатываем полученные данные
                 var tr = $("<tr></tr>");
-                $("<td></td>").append("<input type=\"checkbox\" class=\"checkbox\" name=\"emails[]\" value="+val.email+">").appendTo(tr);
+                $("<td></td>").append("<input type=\"checkbox\" class=\"checkbox\" name=\"ids[]\" value="+val.appId+">").appendTo(tr);
                 $("<td></td>").append(val.r).appendTo(tr);         
                 $("<td></td>").append(val.appId).appendTo(tr);
-                $("<td></td>").append(val.fio).appendTo(tr);
+                $("<td></td>").append("<a href=\"displayAppForm.html?appId="+val.appId+"\">"+val.fio+"</a>").appendTo(tr);
                 $("<td></td>").append(val.email).appendTo(tr);
                 $("<td></td>").append(val.avgMark).appendTo(tr);
                 $("<td></td>").append("<a href='addResult.html?appId="+val.appId+"'>Комментарий</a>").appendTo(tr)
                 tr.appendTo("#studentTable");
             });
+            
+            //Make pages
             var pages=data.pages;
             currentpage=data.currentpage;
             count=data.count;
@@ -305,10 +287,13 @@ function number_control()
        desc=$(":hidden[name=desc]");
       cval = val.val();
       orderval=order.val();
-      descval=desc.val();
-      if(orderval=="")
+      if(desc.val()=='false')
       {
-          orderval=null;
+          descval=false;
+      }  
+      else
+      {
+          descval=true;
       }
       var orders=['appId','results','email','lastname'];
       var links = new Array(orders.length);
@@ -411,3 +396,29 @@ function number_control()
             set_serch_div(order,page,serch,!desc,link,count);
          ajax_result(page,count,serch,order,desc);   
   }
+  
+function send_mail()
+{
+    $("#serch_info").empty();    
+    $("#loading").show();
+    $("#send_mail").attr("onclick","");
+    checkbox=$(":checkbox[name^=ids]:checked").map(function () { return $(this).val(); }).get();
+    
+    dat = {"ids" : checkbox};
+    $.ajax({
+    type: "POST",
+    url: "sendMailToStudent.html",
+    data: dat,
+    dataType : "json",
+    success: function(data,textStatus)
+    {
+         $("#loading").hide();
+         $("#serch_info").append("Вы отправили "+data.count+" писем");
+         $("#send_mail").attr("onclick","");
+         $(':checkbox[name^=ids]').attr('checked', false);
+         $("#send_mail").attr("onclick","send_mail()");
+    }
+    });
+
+    return false;
+}

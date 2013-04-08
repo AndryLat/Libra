@@ -69,7 +69,7 @@
                 </select>
              </td>
              <td><input type="text" placeholder="Введите значение" name="textValue" value="${text}"></td>
-             <td><button class="btn btn-primary"><img  src="../resources/images/admin/search-icon-white-one-hi.png" width="15" height="15"/> Поиск &nbsp;</button></td>
+             <td><button class="btn btn-primary"><img  src="../resources/images/admin/search-icon-white-one-hi.png" width="12" height="12"/> Поиск &nbsp;</button></td>
         </tr>
         </div>
         </form>
@@ -78,7 +78,7 @@
         <div align="center"><c:if test="${employees.isEmpty()}"> ${noResults} </c:if></div>
         
         <c:if test="${employees.isEmpty() == false}">
-        <table class="bordered">
+        <table class="bordered" style="margin-left: auto; margin-right: auto;">
             <caption><div class="alert alert-info">Employees</div></caption>
         <tr>
             <th><a href="sortEmployees.html?orderBy=FIRST_NAME">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME">фамилия</a></th>
@@ -111,7 +111,7 @@
                     </c:if>
                     <c:if test="${id == emp.getUserId()}">
                         <form action="doneDelete.html" method="POST">
-                            <td><div class="alert alert-error" align="right">Удалить?</div><button type="submit" class="btn btn-primary btn-small">Да</button> <button type=button class="btn btn-small" onClick="parent.location='currentEmployees.html'">Нет</button></div></td>
+                            <td><div class="alert alert-error" align="center">Удалить?</div><button type="submit" class="btn btn-primary btn-small">Да</button> <button type=button class="btn btn-small" onClick="parent.location='currentEmployees.html'">Нет</button></td>
                             <input type="hidden" name="employeeId" value="${emp.getUserId()}">
                         </form>
                     </c:if>

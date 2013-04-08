@@ -12,38 +12,38 @@
 <!--[if gt IE 8]><!-->
 
 <html class="no-js">
-<!--<![endif]-->
-<head>
-	<jsp:include page="resources.jsp" />
-	
-	<title><!-- YOUR PAGE TITLE HERE --></title>
-</head>
+    <!--<![endif]-->
+    <head>
+        <jsp:include page="resources.jsp" />
 
-<body>
-	<div class="navmenu">
-		<jsp:include page="navbar.jsp" />
-	</div>
-	
-	<div class="container-fluid">
-		<div class="row-fluid">
-		
-			<div class="sidebar">
-				<jsp:include page="sidebar.jsp" />
-			</div>
-			
-			<div class="span9">
-                            <br>
-                            <br>
-                            <center> <h4>Вы можете скачать список всех студентов в формате xls </h4> </center>
-                            <br>
-                            <center><button class="btn btn-primary" type="button" onclick="getFile()">Download</button> </center>
-			</div>
-		</div>
-	</div>
-</body>
-<script>
-    function getFile() {
-        location.href = "/Libra/getExcelReport.html";
-    }
-</script>
+        <title>Libra: Список всех студентов</title>
+    </head>
+
+    <body>
+        <div class="navmenu">
+            <jsp:include page="navbar.jsp" />
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+
+                <div class="sidebar">
+                    <jsp:include page="sidebar.jsp" />
+                </div>
+
+                <div class="span9">
+                    <br>
+                    <br>
+                    <center> <h4>Вы можете скачать список всех студентов в формате xls </h4> </center>
+                    <br>
+                    <center><button class="btn btn-primary" type="button" onclick="getFile()">Download</button> </center>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+      function getFile() {
+        location.href = "/Libra/hr/getExcelReport.html";
+      }
+    </script>
 </html>

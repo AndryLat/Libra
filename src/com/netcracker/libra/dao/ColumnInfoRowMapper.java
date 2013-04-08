@@ -24,7 +24,6 @@ public class ColumnInfoRowMapper  implements RowMapper<ColumnInfo>
       columns.setTypeId(rs.getInt("TypeId"));
       columns.setTypeDescription(rs.getString("typeDescription"));
       columns.setLevel(rs.getInt("level"));
-      columns.setNameWithIndent(rs.getString("NameWithIndent"));
       return columns;
    }
 }

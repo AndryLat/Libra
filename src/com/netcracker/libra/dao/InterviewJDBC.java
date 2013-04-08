@@ -130,5 +130,39 @@ public class InterviewJDBC
                 + "where af.UserId=? and i.status=0 and r.AccessLevel=?";
         return jdbcTemplateObject.queryForInt(SQL,userId,role);
     }
-       
+    public String getTime()
+    {
+        String SQL="select to_char(SYSDATE+NVL((select distinct TIMEZONEDIFFERENCE from libraconfigs),0)/24, 'yyyy/mm/dd HH24:mi') from dual";
+        return jdbcTemplateObject.queryForObject(SQL, String.class);
+    }
+
+    public String getServerTime()
+    {
+        String SQL="select to_char(SYSDATE, 'yyyy/mm/dd HH24:mi:ss') from dual";
+        return jdbcTemplateObject.queryForObject(SQL, String.class);
+    }
+    public void updateTimeZone(int diff)
+    {
+        String SQL="MERGE INTO libraconfigs l1 "
+                    +"USING (select count(*) c from libraconfigs) l2 "
+                    +"ON (l2.c>0) "
+                    +"WHEN MATCHED THEN "
+                    +"UPDATE SET l1.TIMEZONEDIFFERENCE = ? " 
+                    +" WHEN NOT MATCHED THEN "
+                    +"INSERT (l1.TIMEZONEDIFFERENCE) "
+                    +"VALUES (?)";
+        jdbcTemplateObject.update(SQL,diff,diff);
+    }
+    
+    public String getInterviewForApp(int accessLevel,int appId)
+    {
+        String SQL="select DECODE(?,1,'Hr собеседование:','Техническое собеседование:')||TO_CHAR(id.datefinish,' dd.mm.yyyy ') ||  TO_CHAR(id.datestart,'hh24:mi')||'-'||TO_CHAR(id.datefinish,'hh24:mi') hTime "
+	+"from interview i "
+	+"join interviewdate id on id.interviewDateId=i.interviewDateId "
+	+"join interviewerList il on il.interviewDateId=id.interviewDateId "
+	+"join users u on u.UserId=il.userId "
+	+"join roles r on r.roleId=u.roleId "
+	+"where i.appId=? and i.status=1 and r.accessLevel=?";
+        return jdbcTemplateObject.queryForObject(SQL, String.class,accessLevel,appId,accessLevel);
+    }
 }

@@ -101,7 +101,7 @@ public class AdminJDBC implements AdminDAO {
                     lastName = names[1];
                 }
                 catch (ArrayIndexOutOfBoundsException e) {
-                    //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                    System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
                 }
                 String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE RoleId > 1 AND upper(firstName) LIKE upper(?) AND upper(lastName) LIKE upper(?)";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%"};
@@ -133,7 +133,7 @@ public class AdminJDBC implements AdminDAO {
                     lastName = names[1];
                 }
                 catch (ArrayIndexOutOfBoundsException e) {
-                    //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                    System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
                 }
                 String SQL = "SELECT userId, firstName, lastName, email, password, roleId FROM Users WHERE upper(firstName) LIKE upper(?) AND upper(lastName) LIKE upper(?) AND RoleId = ?";
                 Object [] params = new Object[] {"%"+firstName+"%", "%"+lastName+"%", role};
@@ -310,7 +310,7 @@ public class AdminJDBC implements AdminDAO {
                 resultEmail = jdbcTemplateObject.queryForObject(SQL, new Object[] {email, employeeId}, String.class);
             }
             catch (EmptyResultDataAccessException e) {
-                //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
             }
             finally {
                 return resultEmail.equals("") ? false : true;
@@ -328,7 +328,7 @@ public class AdminJDBC implements AdminDAO {
                 resultEmail = jdbcTemplateObject.queryForObject(SQL, new Object[] {email}, String.class);
             }
             catch (EmptyResultDataAccessException e) {
-                //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
             }
             finally {
                 return resultEmail.equals("") ? false : true;

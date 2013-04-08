@@ -46,7 +46,7 @@
            
         <c:if test="${!dateAndInterviewerList.isEmpty()}">
             
-            <table class="bordered">
+            <table class="bordered" style="margin-left: auto; margin-right: auto;">
                 <caption> <div class="alert alert-info">Собеседование №<%= i++ %>. Информация о предстоящем собеседовании </div></caption>
             <tr>
                 <th>№ Анкеты</th>
@@ -69,7 +69,7 @@
         </c:if>
             
         <c:if test="${!dateAndInterviewerResultsList.isEmpty()}">
-            <table class="bordered">
+            <table class="bordered" style="margin-left: auto; margin-right: auto;">
             <caption> <div class="alert alert-info">Собеседование №<%= i++ %>. Информация о пройденном собеседовании </div></caption>
             <tr>
                 <th>№ анкеты</th>

@@ -106,4 +106,26 @@ public class StudentJDBC {
       String SQL = "update Users set password = ? where userid = ?";
       jdbcTemplateObject.update(SQL, password,userId);
    }
+   
+   public Integer getAppIdByUserId(int userId)
+   {
+       String SQL="Select AppId from appForm where userId=?";
+       try
+       {
+        return jdbcTemplateObject.queryForInt(SQL,userId);
+       }
+       catch(Exception e)
+       {
+           return -1;
+       }
+   }
+   
+   public Student getStudentByAppId(Integer id) {
+      String SQL = "select u.userId, u.FIRSTNAME, u.LASTNAME,u.EMAIL,u.PASSWORD, u.ROLEID "
+              + "from Users u join appForm af on af.userId=u.userId where af.appid = ?";
+      Student student = jdbcTemplateObject.queryForObject(SQL, 
+                        new Object[]{id}, new StudentRowMapper());
+      return student;
+   }
+
 }

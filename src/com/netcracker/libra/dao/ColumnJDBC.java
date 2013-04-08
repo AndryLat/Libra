@@ -8,12 +8,15 @@ import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.Column;
 import com.netcracker.libra.model.ColumnForEdit;
 import com.netcracker.libra.model.ColumnInfo;
+import com.netcracker.libra.model.DisplayAF;
+import com.netcracker.libra.model.DisplayCF;
 import com.netcracker.libra.model.InfoForDelete;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,7 +46,6 @@ public class ColumnJDBC
     public List<ColumnInfo> getColumnsInfo(int templateId) 
     {
         String SQL = "select  c.ColumnId, c.Name , NVL(c.TypeId,0) TypeId, NVL(c.ParentColumn,0) ParentColumn,  "
-                +" lpad('.', 8*(level-1), '.') ||c.Name NameWithIndent,"
                 +" Decode(t.Name, 'textstring','Однострочное текстовое поле с максимальной длиной '||t.Description||' символов',"
                 +" 'areastring','Многострочный текст с максимальной длиной '||t.Description||' символов',"
                 + "'integer',regexp_replace(t.Description,'(\\d+)(;)(\\d+)','Число в диапазоне: от \\1 до \\3'),"
@@ -297,6 +299,41 @@ WHERE (t1.columnId=1 and t2.ColumnId=14) OR (t2.columnId=14 and t1.ColumnId=1);
     {
         String sql = "select Count(*) from NewColumns where columnId=?";
         return jdbcColumnObject.queryForInt(sql,id);
+    }
+    
+    public DisplayAF getAppColums(int appId)
+    {
+        String SQL1="select af.appId, u.lastName||' '||u.firstName||' '||af.patronymic fio, u.email, "
+		+" af.phoneNumber, "
+		+" af.advertisingComment advertisingComment, ad.advertisingTitle, "
+		+"af.graduated, af.course, d.departmentName, "
+		+"f.facultyName, u.universityName "
+		+"from users u join appForm af on u.userId=af.UserId "
+		+"join advertising ad on ad.advertisingId=af.advertisingId "
+		+"join department d on d.departmentId=af.departmentId "
+		+"join faculty f on f.facultyId=d.facultyId "
+		+"join university u on u.universityId=f.universityId "
+		+"where af.appId=?";
+        DisplayAF af=jdbcColumnObject.queryForObject(SQL1, new DisplayAFRowMapper(), appId);
+        String SQL="select col.name, ' : '||cf.value value, col.l "
+			+"from ("
+					+"select  c.columnId, c.name, "  
+					  +"rownum r , level l "
+						+"from newColumns c "
+						+"where c.templateId= "
+						+"("
+							+"select templateId "
+							+"from appForm "
+							+"where appId=? " 
+						+") "
+						+"START WITH  c.parentColumn is null " 	
+						+"CONNECT BY  prior  c.columnId =  c.ParentColumn  "
+						+"order siblings by c.OrderId ASC "
+				+") col "
+				+"left join columnFields cf on ( cf.columnId=col.columnId and cf.status=1 and cf.appId=? )  "
+				+"order by col.r ";
+         af.setCf(jdbcColumnObject.query(SQL,new DisplayCFRowMapper(),appId,appId));
+         return af;                
     }
     
 }
