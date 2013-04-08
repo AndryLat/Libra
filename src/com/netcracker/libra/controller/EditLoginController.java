@@ -46,10 +46,10 @@ public class EditLoginController
 		if (token.getUserAccessLevel() != -1) 
                 {
 			ModelAndView mav = new ModelAndView();
-			String er = "";
-			if (password1.length() >= 6)
+			String er = "";                      
+			if (password1.length() <= 5)
 				er += "<p>Длина пароля должна быть больше 6 символов</p>";
-			if (password1.length() >= 6)
+			if (password1.length() > 20)
 				er += "<p>Длина пароля должна быть меньше 20 символов</p>";
 			if (password1.equals(password2)
 					&& (er.equals(""))
