@@ -1,10 +1,9 @@
 
 package com.netcracker.libra.util.pdf;
 
-import javax.servlet.ServletContext;
-import org.springframework.stereotype.Service;
 
-/*import java.awt.Dimension;
+
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.zefer.pd4ml.PD4Constants;
-import org.zefer.pd4ml.PD4ML;*/
+import org.zefer.pd4ml.PD4ML;
 
 /**
  *
@@ -37,7 +36,7 @@ public class PDFCreator {
         this.servletContext = servletContext;
     }
 
-   /* protected Dimension format = PD4Constants.A4;
+    protected Dimension format = PD4Constants.A4;
     protected boolean landscapeValue = false;
     protected int topValue = 10;
     protected int leftValue = 10;
@@ -48,7 +47,7 @@ public class PDFCreator {
     protected int proxyPort = 0;
     protected int userSpaceWidth = 780;
 
-    public void runConverter(String urlstring, File output, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void runConverter(String urlstring, File output) throws IOException {
 
 
         if (urlstring.length() > 0) {
@@ -65,9 +64,6 @@ public class PDFCreator {
             }
 
             PD4ML pd4ml = new PD4ML();
-            pd4ml.useHttpRequest(request, response);
-            pd4ml.setSessionID(request.getSession().getId());
-            pd4ml.useServletContext(servletContext);
 
             try {
                 pd4ml.setPageSize(landscapeValue ? pd4ml.changePageOrientation(format) : format);
@@ -90,5 +86,5 @@ public class PDFCreator {
             pd4ml.setDefaultTTFs("Times New Roman", "Arial", "Courier New");
             pd4ml.render(urlstring, fos);
         }
-    }*/
+    }
 }
