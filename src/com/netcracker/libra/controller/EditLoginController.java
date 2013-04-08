@@ -66,7 +66,7 @@ public class EditLoginController
                         }
 			mav.addObject("link",
 					"<a href='editLogin.html'>Вернуться назад</a>");
-			mav.addObject("message", "Произошла ошибка");
+			mav.addObject("message", er);
 			mav.addObject("title", "Ошибка");
 			mav.setViewName("messageView");
 			return mav;
