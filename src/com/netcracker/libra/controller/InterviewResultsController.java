@@ -269,7 +269,7 @@ public class InterviewResultsController
             {
                 Student s= studentJDBC.getStudentByAppId(ids[i]);
                 Map map = new HashMap();
-                map.put("user",s.getLastName()+" "+s.getName()+" "+s.getPatronymic());
+                map.put("user",s.getLastName()+" "+s.getName());
                 SendMailService.sendMail(s.getEmail(),map,"Student_mail");
             }
             JSONObject j = new JSONObject(); 
