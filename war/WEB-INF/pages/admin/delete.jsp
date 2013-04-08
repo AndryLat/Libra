@@ -111,7 +111,7 @@
                     </c:if>
                     <c:if test="${id == emp.getUserId()}">
                         <form action="doneDelete.html" method="POST">
-                            <td><div class="alert alert-error" align="right">Удалить?</div><button type="submit" class="btn btn-primary btn-small">Да</button> <button type=button class="btn btn-small" onClick="parent.location='currentEmployees.html'">Нет</button></div></td>
+                            <td><div class="alert alert-error" align="center">Удалить?</div><button type="submit" class="btn btn-primary btn-small">Да</button> <button type=button class="btn btn-small" onClick="parent.location='currentEmployees.html'">Нет</button></td>
                             <input type="hidden" name="employeeId" value="${emp.getUserId()}">
                         </form>
                     </c:if>

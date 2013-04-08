@@ -3,12 +3,15 @@ package com.netcracker.libra.controller;
 import com.netcracker.libra.dao.AdminJDBC;
 import com.netcracker.libra.model.User;
 import com.netcracker.libra.service.LengthService;
+import com.netcracker.libra.util.mail.SendMailService;
 import com.netcracker.libra.util.security.Security;
 import com.netcracker.libra.util.security.SessionToken;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Random;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,10 +28,10 @@ import org.springframework.web.servlet.ModelAndView;
  *   in ascending or descending order
  * - filtering by a job title
  * - searching by a full name, first name, last name, email
- * - addition employee
- * - editing employee
- * - removes employee
- * - changes employee's password
+ * - addition user
+ * - editing user
+ * - removes user
+ * - changes user's password
  * 
  * @author Alexander Lebed
  */
@@ -39,8 +42,8 @@ public class UsersController {
  
     List <User> employees;  // list of employees (HR, TECH, ADMIN)
     String noResults;       //value in no results case
-    String checked;         //selected value in the filter by employee's job title
-    String jobTitle;        //job title of employee
+    String checked;         //selected value in the filter by user's job title
+    String jobTitle;        //job title of user
     String selected;        //selected value in the sorting by first name/last name/email etc.
     String text;            //value in the text field
     boolean order;          //value of ascending or descending order; true when ascending
@@ -110,7 +113,7 @@ public class UsersController {
      * Displays on the page employees by results of sorting/filtering/searching
      * or throws an appropriate message when no employees
      * and saves chosen values
-     * @param role - job title of employee (0 - all employees, 2 - HR, 3 - Tech, 4 - Admin)
+     * @param role - job title of user (0 - all employees, 2 - HR, 3 - Tech, 4 - Admin)
      * @param textValue the value entered in the text field
      * @param byWhat - the value of sorting (by first name/email etc.)
      */
@@ -141,7 +144,6 @@ public class UsersController {
                         jobTitle = "Администратор";
                         break;
             }
-        
             mv.addObject(checked, "checked");
             mv.addObject("text", text);
         
@@ -307,7 +309,7 @@ public class UsersController {
     
     
     /**
-     * Displays the page for edit the data of certain employee by his or her ID
+     * Displays the page for edit the data of certain user by his or her ID
      */
     @RequestMapping("editEmployee")
     public ModelAndView showEditEmployeeView(@ModelAttribute("LOGGEDIN_USER") SessionToken token, 
@@ -337,7 +339,7 @@ public class UsersController {
     }
     
     /**
-     * Changes the employee's data by his or her ID 
+     * Changes the user's data by his or her ID 
      * and displays the statement of changes
      */
     @RequestMapping("doneEdit")
@@ -394,9 +396,50 @@ public class UsersController {
                 return mv;
             }
             else {
+                User user = jdbc.getEmployee(employeeId);
+                String lastEmail = user.getEmail();
+                int lastRoleId = user.getRoleId();
+                
                 jdbc.updateEmployee(employeeId, firstName, lastName, email, roleId);
+                
+                if(!lastEmail.equals(email)) {
+                    //send notification to user about the changing his password
+                    Map model = new HashMap(); 
+                    model.put("user", firstName); 
+                    model.put("email", email); 
+                    SendMailService.sendMail(lastEmail, model, "Изменение логина");
+                }
+                
+                if(lastRoleId != roleId) {
+                    String lastRoleName = "";
+                    String newRoleName = "";
+                    
+                    switch(roleId) {
+                        case 2 : newRoleName = "HR";
+                                 break;
+                        case 3 : newRoleName = "Технический интервьюер";
+                                 break;
+                        case 4 : newRoleName = "Администратор сайта";
+                                 break;
+                    }
+                    
+                    switch(lastRoleId) {
+                        case 2 : lastRoleName = "HR";
+                                 break;
+                        case 3 : lastRoleName = "Технический интервьюер";
+                                 break;
+                        case 4 : lastRoleName = "Администратор сайта";
+                                 break;
+                    }
+                    
+                    Map model = new HashMap();
+                    model.put("firstName", firstName);
+                    model.put("lastRoleName", lastRoleName);
+                    model.put("newRoleName", newRoleName);
+                    SendMailService.sendMail(lastEmail, model, "Изменение статуса");
+                }
 
-                //update the employee's data in list
+                //update the user's data in list
                 for (User emp : employees) {
                     if (emp.getUserId() == employeeId) {
                         emp.setFirstName(firstName);
@@ -429,7 +472,7 @@ public class UsersController {
     }
     
     /**
-     * Displays the page with changing the password of employee
+     * Displays the page with changing the password of user
      */
     @RequestMapping("resetEmployeePassword")
     public ModelAndView showResetEmployeePassword (@ModelAttribute("LOGGEDIN_USER") SessionToken token, 
@@ -456,7 +499,7 @@ public class UsersController {
     }
     
     /**
-     * Reset the password of employee, goes to the page with employees
+     * Reset the password of user, goes to the page with employees
      * and displays the message of changing
      */
     @RequestMapping("doneResetEmployeePassword")
@@ -468,8 +511,18 @@ public class UsersController {
             int randomNumber =  100000 + generator.nextInt(900000);
             String randomString = String.valueOf(randomNumber);
             String randomHashedPassword = Security.getMD5hash(randomString);
-
+            
             jdbc.changePassword(randomHashedPassword, employeeId);
+            
+            User user = jdbc.getEmployee(employeeId);
+            String firstName = user.getFirstName();
+            String email = user.getEmail();
+            
+            //send notification to user about the changing his password
+            Map model = new HashMap(); 
+            model.put("user", firstName); 
+            model.put("password", randomString); 
+            SendMailService.sendMail(email, model, "Сброс пароля");
 
             ModelAndView mv = new ModelAndView();
             mv.setViewName("admin/employees");
@@ -524,8 +577,8 @@ public class UsersController {
                                           @RequestParam("repeatNewPassword") String repeatNewPassword) {
         if(token.getUserAccessLevel()==3) {
             ModelAndView mv = new ModelAndView();
-            User employee = jdbc.getEmployee(employeeId);
-            String employeePassword = employee.getPassword();
+            User user = jdbc.getEmployee(employeeId);
+            String employeePassword = user.getPassword();
 
             String errorMessage = "";
             String currentPasswordMark = "";
@@ -554,8 +607,17 @@ public class UsersController {
             }
 
             if(errorMessage.equals("")) {
-                newPassword = Security.getMD5hash(newPassword);
-                jdbc.changePassword(newPassword, employeeId);
+                String newHashedPassword = Security.getMD5hash(newPassword);
+                jdbc.changePassword(newHashedPassword, employeeId);
+                
+                String firstName = user.getFirstName();
+                String email = user.getEmail();
+                
+                //send notification to user about the changing his password
+                Map model = new HashMap(); 
+                model.put("user", firstName); 
+                model.put("password", newPassword); 
+                SendMailService.sendMail(email, model, "Изменение пароля");
 
                 mv.setViewName("admin/employees");
                 mv.addObject(checked, "checked");
@@ -613,7 +675,7 @@ public class UsersController {
     }
     
     /**
-     * Add a new employee and displays the statement of changes
+     * Add a new user and displays the statement of changes
      */
     @RequestMapping("doneAdd")
     public ModelAndView addEmployee (@ModelAttribute("LOGGEDIN_USER") SessionToken token,
@@ -629,13 +691,17 @@ public class UsersController {
             String hrSelected = "";
             String techSelected = "";
             String adminSelected = "";
+            String roleName = "";
 
             switch(roleId) {
                 case 2: hrSelected = "selected";
+                        roleName = "HR";
                         break;
                 case 3: techSelected = "selected";
+                        roleName = "Технический интервьюер";
                         break;
                 case 4: adminSelected = "selected";
+                        roleName = "Администратор сайта";
                         break;
             }
 
@@ -700,6 +766,14 @@ public class UsersController {
 
                 if(employee != null) {
                     employees.add(employee);
+                    //send notification to user about the changing his password
+                    Map model = new HashMap(); 
+                    model.put("email", email);
+                    model.put("password", password);
+                    model.put("roleName", roleName);
+                    model.put("firstName", firstName); 
+                    model.put("lastName", lastName);
+                    SendMailService.sendMail(email, model, "Добавление сотрудника");
                 }
 
                 mv.setViewName("admin/employees");
@@ -725,7 +799,7 @@ public class UsersController {
     }
     
     /**
-     * Displays the page with confirmation about deleting the employee (Y/N)
+     * Displays the page with confirmation about deleting the user (Y/N)
      */
     @RequestMapping("deleteEmployee")
     public ModelAndView showDeleteEmployeeView(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
@@ -753,7 +827,7 @@ public class UsersController {
     }
     
     /**
-     * Deleting of employee from all database tables
+     * Deleting of user from all database tables
      * and displays the statement of changes
      */
     @RequestMapping("doneDelete")
@@ -761,10 +835,20 @@ public class UsersController {
                                         @RequestParam("employeeId") int employeeId) {
         if(token.getUserAccessLevel()==3) {
             ModelAndView mv = new ModelAndView();
-            //deleting of employee from all database tabels
+            
+            User user = jdbc.getEmployee(employeeId);
+            String firstName = user.getFirstName();
+            String email = user.getEmail();
+            
+            //send notification to user about the changing his password
+            Map model = new HashMap(); 
+            model.put("user", firstName);
+            SendMailService.sendMail(email, model, "Удаление сотрудника");
+            
+            //deleting of user from all database tabels
             jdbc.deleteEmployee(employeeId);
 
-            //delete employee from list
+            //delete user from list
             for(ListIterator <User> i = employees.listIterator(); i.hasNext(); ) {
                 User emp = i.next();
                 if(emp.getUserId() == employeeId) {

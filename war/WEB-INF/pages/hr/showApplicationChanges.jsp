@@ -85,19 +85,19 @@
                                         <tr>
                                         <td style="width: 3%">${o.getAppId()}</td>
                                         <td style="width: 10%">${o.getFirstName()} ${o.getLastName()}</td>
-                                        <td style="width: 15%">${o.getEmail()}</td>
-                                        <td style="width: 20%">${o.getFieldName()}</td>
+                                        <td>${o.getEmail()}</td>
+                                        <td style="width: 15%">${o.getFieldName()}</td>
                                         <td style="width: 20%">${o.getOldValue()}</td>
                                         <td style="width: 20%">${o.getNewValue()}</td>
                                         
                                         
-                                        <td style="width: 5%"><a href="message.html?objectId=<c:out value='${o.getObjectId()}'/>&action=confirm">
+                                        <td style="width: 10%"><a href="message.html?objectId=<c:out value='${o.getObjectId()}'/>&action=confirm">
                                                     <img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="20" height="20" title="Подтвердить"/></a></td>
                                         
-                                        <td style="width: 5%"><a href="message.html?objectId=<c:out value='${o.getObjectId()}'/>&action=cancel">
+                                        <td style="width: 10%"><a href="message.html?objectId=<c:out value='${o.getObjectId()}'/>&action=cancel">
                                                     <img  src="../resources/images/admin/glyphicons_207_remove_2.png" width="15" height="15" title="Отклонить"/></a></td>
                                            
-                                        <td style="width: 2%"><input type="checkbox" name="checker[]" value="<c:out value='${o.getObjectId()}'/>"/></td>
+                                        <td><input type="checkbox" name="checker[]" value="<c:out value='${o.getObjectId()}'/>"/></td>
                                         
                                         </tr>
                                     </c:forEach>

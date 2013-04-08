@@ -39,7 +39,7 @@
                                         <td align="center" id="alertMessage">
                                         <div class="alert" align="center">
                                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
-                                        ${message}
+                                        ${message} &nbsp;&nbsp;
                                         
                                         <a class="btn btn-small" href="deleteOrConfirmFewChanges.html?action=<c:out value='${action}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
                                         <a class="btn btn-small" href="currentConfirmChanges.html"> &nbsp; Нет &nbsp;</a>
@@ -71,7 +71,7 @@
                                         <td style="width: 20%">${o.getOldValue()}</td>
                                         <td style="width: 20%">${o.getNewValue()}</td>
                                         <td style="width: 5%"><a href="deleteFromAppChangesList.html.html?objectId=<c:out value='${o.getObjectId()}'/>&action=<c:out value='${action}'/>">
-                                                    <img  src="../resources/images/admin/glyphicons_199_ban.png" width="15" height="15" title="Удалить из списка"/></a></td>
+                                                    <img  src="../resources/images/admin/glyphicons_199_ban.png" width="17" height="17" title="Удалить из списка"/></a></td>
                                         </tr>
                                     </c:forEach>
                                 </form>
