@@ -80,5 +80,4 @@ public class LoginController {
 		model.addAttribute("logoutMessage", "Вы вышли из системы");
 		return "forward:/index.html";
 	}
-
 }
