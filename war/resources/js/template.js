@@ -399,12 +399,15 @@ function number_control()
   
 function send_mail()
 {
+checkbox=$(":checkbox[name^=ids]:checked").map(function () { return $(this).val(); }).get();
+    if(checkbox.length==0)
+    return;
     $("#serch_info").empty();    
     $("#loading").show();
     $("#send_mail").attr("onclick","");
-    checkbox=$(":checkbox[name^=ids]:checked").map(function () { return $(this).val(); }).get();
-    
+        
     dat = {"ids" : checkbox};
+    
     $.ajax({
     type: "POST",
     url: "sendMailToStudent.html",
