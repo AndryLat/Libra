@@ -133,6 +133,9 @@
           <td></td>
       </tr>
   </table>     
+             
+             <br>
+             <center><button class="btn btn-success" onclick="location.href='/Libra/getPDFFile.html?appId=${columnFields.getAppId()}';">Скачать анкету (.PDF)</button></center>
                         </div>
 		</div>
 	</div>
