@@ -64,7 +64,7 @@
                                 
                                 <div class="control-group">
                                     <div class="controls">
-                                        <button class="btn btn-success" type="submit"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15"/> Сменить пароль </button>
+                                        <button class="btn btn-primary" type="submit"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15"/> Изменить</button>
                                         <button type=button class="btn" onClick="parent.location='currentEmployees.html'">Отмена</button>
                                     </div>
                                 </div>

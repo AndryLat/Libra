@@ -39,7 +39,42 @@
                                         <td align="center" id="alertMessage">
                                         <div class="alert" align="center">
                                         <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
-                                        ${message}
+                                        ${message} &nbsp;&nbsp;
+                                        <!-- Confirm button -->
+                                        <c:if test="${action.equals('confirm')}">
+                                        <c:choose>
+                                        <c:when test="${o.getColumnName().equals('dynamic')}">
+                                            <a class="btn btn-small" href="doneConfirmDynamicField.html?columnName=<c:out value='${o.getColumnName()}'/>&oldId=<c:out value='${o.getOldId()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
+                                        </c:when>
+
+                                        <c:when test="${o.getColumnName().equals('interview')}">
+                                            <a class="btn btn-small" href="doneConfirmInterviewTime.html?oldId=<c:out value='${o.getOldId()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <a class="btn btn-small" href="doneConfirmMainAppInfo.html?oldId=<c:out value='${o.getOldId()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>&columnName=<c:out value='${o.getColumnName()}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
+                                        </c:otherwise>
+                                        </c:choose>
+                                        </c:if>
+
+                                        <!-- Cancel button -->
+                                        <c:if test="${action.equals('cancel')}">
+                                        <c:choose>
+                                        <c:when test="${o.getColumnName().equals('dynamic')}">
+                                            <a class="btn btn-small" href="cancelConfirmDynamicField.html?columnName=<c:out value='${o.getColumnName()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
+                                        </c:when>
+
+                                        <c:when test="${o.getColumnName().equals('interview')}">
+                                            <a class="btn btn-small" href="cancelConfirmInterviewTime.html?columnName=<c:out value='${o.getColumnName()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <a class="btn btn-small" href="cancelConfirmMainAppInfo.html?columnName=<c:out value='${o.getColumnName()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/glyphicons_206_ok_2.png" width="15" height="15" title="Подтвердить"/> Да</a>
+                                        </c:otherwise>
+                                        </c:choose>
+                                        </c:if>
+
+                                        <a class="btn btn-small" href="currentConfirmChanges.html"> &nbsp; Нет &nbsp;</a>
                                         </div>
                                         </td>
                                     </c:if>
@@ -67,41 +102,7 @@
                             </table>
                             <br>
                             
-                            <!-- Confirm button -->
-                            <c:if test="${action.equals('confirm')}">
-                            <c:choose>
-                            <c:when test="${o.getColumnName().equals('dynamic')}">
-                                <a class="btn btn-primary" href="doneConfirmDynamicField.html?columnName=<c:out value='${o.getColumnName()}'/>&oldId=<c:out value='${o.getOldId()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15" title="Подтвердить"/> Да</a>
-                            </c:when>
                             
-                            <c:when test="${o.getColumnName().equals('interview')}">
-                                <a class="btn btn-primary" href="doneConfirmInterviewTime.html?oldId=<c:out value='${o.getOldId()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15" title="Подтвердить"/> Да</a>
-                            </c:when>
-                                
-                            <c:otherwise>
-                                <a class="btn btn-primary" href="doneConfirmMainAppInfo.html?oldId=<c:out value='${o.getOldId()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>&columnName=<c:out value='${o.getColumnName()}'/>"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15" title="Подтвердить"/> Да</a>
-                            </c:otherwise>
-                            </c:choose>
-                            </c:if>
-                            
-                            <!-- Cancel button -->
-                            <c:if test="${action.equals('cancel')}">
-                            <c:choose>
-                            <c:when test="${o.getColumnName().equals('dynamic')}">
-                                <a class="btn btn-primary" href="cancelConfirmDynamicField.html?columnName=<c:out value='${o.getColumnName()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15" title="Подтвердить"/> Да</a>
-                            </c:when>
-                            
-                            <c:when test="${o.getColumnName().equals('interview')}">
-                                <a class="btn btn-primary" href="cancelConfirmInterviewTime.html?columnName=<c:out value='${o.getColumnName()}'/>&newId=<c:out value='${o.getNewId()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15" title="Подтвердить"/> Да</a>
-                            </c:when>
-                                
-                            <c:otherwise>
-                                <a class="btn btn-primary" href="cancelConfirmMainAppInfo.html?columnName=<c:out value='${o.getColumnName()}'/>&objectId=<c:out value='${o.getObjectId()}'/>"><img  src="../resources/images/admin/symbol_check.gif" width="15" height="15" title="Подтвердить"/> Да</a>
-                            </c:otherwise>
-                            </c:choose>
-                            </c:if>
-                                
-                            <a class="btn" href="currentConfirmChanges.html"> &nbsp; Нет &nbsp;</a>
                             
                             
                             
