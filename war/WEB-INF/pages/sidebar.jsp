@@ -19,7 +19,7 @@
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==1}">
 			<li class="nav-header">Студенты</li>
 				<li><a href="/Libra/hr/showStudentbyIdView.html">Поиск студентов</a></li>
-				<li><a href="hr/confirmChanges.html">Подтвердить изменения анкет и время интервью</a></li>
+				<li><a href="/Libra/hr/confirmChanges.html">Подтвердить изменения анкет и время интервью</a></li>
 			<li class="nav-header">Собеседования</li>
 				<li><a href="/Libra/hr/interviewDate.html">Расписание собеседований</a></li>
 				<li><a href="/Libra/showResults.html">Результаты</a></li>

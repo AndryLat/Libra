@@ -708,13 +708,13 @@ public class HRController {
       @RequestMapping("checkAllMessage")
       public ModelAndView checkAllMessage(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
                                           @RequestParam("action") String action,
-                                          @RequestParam("checker[]") int [] checker) {
+                                          @RequestParam(value = "checker[]", required = false) int [] checker) {
           if(token.getUserAccessLevel()==1) {
               
             ModelAndView mv = new ModelAndView();
             checkedList = new ArrayList <ApplicationChange> ();
 
-            if(checker.length == 0) {
+            if(checker == null) {
                 mv.setViewName("hr/showApplicationChanges");
                 mv.addObject("list", appChangeList);
             }
@@ -732,7 +732,7 @@ public class HRController {
                         }
                     }
                     catch (ArrayIndexOutOfBoundsException e) {
-                        //System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
+                        System.err.println("method: " + Thread.currentThread().getStackTrace()[1].getMethodName() + "\nexception: " + e.toString());
                     }
 
                 }
