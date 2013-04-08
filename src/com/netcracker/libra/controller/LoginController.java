@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.netcracker.libra.service.LoginService;
 import com.netcracker.libra.service.RegformService;
-import com.netcracker.libra.util.security.Security;
 import com.netcracker.libra.util.security.SessionToken;
 
-import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.dao.UserPreferences;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
@@ -44,31 +43,34 @@ public class LoginController {
 	 * storage and puts it into current session as @ModelAttribute
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(@RequestParam("email") String email, 
+	public ModelAndView login (@RequestParam("email") String email, 
 			@RequestParam("password") String password,
 			SessionStatus status, 
-			HttpServletRequest request) throws SQLException {
+			HttpServletRequest request) {
 
 		String viewName = "login/login";
 		ModelAndView mav = new ModelAndView(viewName);
-		SessionToken userData;
-
-		userData = LoginService.login(email, password);
-
+		SessionToken userData = null;
+		
+		try {
+			userData = LoginService.login(email, password);
+		}
+		catch (EmptyResultDataAccessException e) {
+			mav.getModel().put("invalidCredentialsMessage", "Проверьте правильность вводимых значений");
+			log.warn("Login failed. User not found in DB");
+			return mav;
+		}
+		
 		status.setComplete();
 
-		if (userData == null) {
-			mav.getModel().put("loginFailedError",
-					"Проверьте правильность вводимых значений");
-			log.warn("Login failed. User not found in DB");
-		} else {
-			viewName = "redirect:welcome.html";
-			if (userData.getUserAccessLevel()==0) {
-				userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
-			}
-			request.getSession().setAttribute("LOGGEDIN_USER", userData);
-			log.info("Login successful. UserID is " + userData.getUserId());
+		viewName = "redirect:welcome.html";
+		
+		if (userData.getUserAccessLevel()==0) {
+			userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
 		}
+		
+		request.getSession().setAttribute("LOGGEDIN_USER", userData);
+		log.info("Login successful. UserID is " + userData.getUserId());
 		mav.setViewName(viewName);
 		return mav;
 	}
