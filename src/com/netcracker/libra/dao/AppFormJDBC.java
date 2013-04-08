@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.netcracker.libra.model.RegisterForm;
 
@@ -61,9 +62,9 @@ public class AppFormJDBC {
 	}
 	
 	//insert user's appform answers
-	public void fillAppForm(RegisterForm form, Integer userId) throws SQLException {
+	@Transactional
+	public void fillAppForm(RegisterForm form, Integer userId) {
 		Integer appId = jdbcTemplateObject.queryForInt("select appid from appform where userid=?", userId);
-		System.out.println(appId);
 		if (appId != null)
 			for (String x : form.getMap().keySet()) {
 				jdbcTemplateObject.update("insert into COLUMNFIELDS (columnid, appid, value, status) values (?,?,?,1)", x, appId, form.getMap().get(x));

@@ -59,55 +59,7 @@
 
 						</div>
 
-						<!--  <div class="alert alert-info"><b>Владение языками программированния</b></div>
-						<div class="span8">
-							<div class="row-fluid">
-								<label class="span6">Java</label>
-								<input type="number" min="0" max="5" class="span2" name="languagesGrades[1${languagesGrades.value}]">
-							</div>
-							<div class="row-fluid">
-								<label class="span6">C++</label>
-								<input type="number" min="0" max="5" class="span2"  name="languagesGrades[2${languagesGrades.value}]">
-							</div>
-							
-							<div class="row-fluid">
-								<div class="span6">
-									<form:select class="input-small" path="${id}">
-										<option value="" disabled selected>Другой...</option>
-											<c:forEach items="${languages}" var="l">
-												<option value="${l.key}">${l.value}</option>
-											</c:forEach>
-										<option value="0">(пусто)</option>
-									</form:select>
-								</div>
-								<input value="0" name="grade" type="number" min="0" max="5" class="span2">
-							</div>
-							<div class="row-fluid">
-								<div class="span6">
-									<form:select class="input-small" path="id2">
-										<option value="" disabled selected>Другой...</option>
-											<c:forEach items="${languages}" var="l">
-												<option value="${l.key}">${l.value}</option>
-											</c:forEach>
-										<option value="0">(пусто)</option>
-									</form:select>
-								</div>
-								<input value="0" name="grade2" type="number" min="0" max="5" class="span2">
-							</div>
-							<div class="row-fluid">
-								<div class="span6">
-									<form:select class="input-small" path="id3">
-										<option value="" disabled selected>Другой...</option>
-											<c:forEach items="${languages}" var="l">
-												<option value="${l.key}">${l.value}</option>
-											</c:forEach>
-										<option value="0">(пусто)</option>
-									</form:select>
-								</div>
-								<input value="0" name="grade3" type="number" min="0" max="5" class="span2">
-							</div>
-				</div>
-				-->
+						
 					<div class="row-fluid">
 						<c:forEach items="${columns}" var="c">
 

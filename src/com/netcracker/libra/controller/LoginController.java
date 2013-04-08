@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.netcracker.libra.service.LoginService;
 import com.netcracker.libra.service.RegformService;
-import com.netcracker.libra.util.security.Security;
 import com.netcracker.libra.util.security.SessionToken;
 
-import com.netcracker.libra.dao.StudentJDBC;
 import com.netcracker.libra.dao.UserPreferences;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
@@ -44,31 +43,34 @@ public class LoginController {
 	 * storage and puts it into current session as @ModelAttribute
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(@RequestParam("email") String email, 
+	public ModelAndView login (@RequestParam("email") String email, 
 			@RequestParam("password") String password,
 			SessionStatus status, 
-			HttpServletRequest request) throws SQLException {
+			HttpServletRequest request) {
 
 		String viewName = "login/login";
 		ModelAndView mav = new ModelAndView(viewName);
-		SessionToken userData;
-
-		userData = LoginService.login(email, password);
-
+		SessionToken userData = null;
+		
+		try {
+			userData = LoginService.login(email, password);
+		}
+		catch (EmptyResultDataAccessException e) {
+			mav.getModel().put("invalidCredentialsMessage", "Проверьте правильность вводимых значений");
+			log.warn("Login failed. User not found in DB");
+			return mav;
+		}
+		
 		status.setComplete();
 
-		if (userData == null) {
-			mav.getModel().put("loginFailedError",
-					"Проверьте правильность вводимых значений");
-			log.warn("Login failed. User not found in DB");
-		} else {
-			viewName = "redirect:welcome.html";
-			if (userData.getUserAccessLevel()==0) {
-				userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
-			}
-			request.getSession().setAttribute("LOGGEDIN_USER", userData);
-			log.info("Login successful. UserID is " + userData.getUserId());
+		viewName = "redirect:welcome.html";
+		
+		if (userData.getUserAccessLevel()==0) {
+			userData.setAppFormFlag(RegformService.isAppFormPresent(userData.getUserId()));
 		}
+		
+		request.getSession().setAttribute("LOGGEDIN_USER", userData);
+		log.info("Login successful. UserID is " + userData.getUserId());
 		mav.setViewName(viewName);
 		return mav;
 	}
@@ -79,47 +81,4 @@ public class LoginController {
 		return "forward:/index.html";
 	}
 
-	@RequestMapping(value = "editLogin")
-	public ModelAndView editLogin() {
-		if (userPreferences.accessLevel != -1) {
-			return new ModelAndView("login/editLoginView");
-		}
-		return new ModelAndView("redirect:/");
-	}
-
-	// editLoginSubmit
-
-	@RequestMapping(value = "editLoginSubmit", method = RequestMethod.POST)
-	public ModelAndView editLoginSubmit(
-			@RequestParam("AldPassword") String aldPassword,
-			@RequestParam("password1") String password1,
-			@RequestParam("password2") String password2) {
-		if (userPreferences.accessLevel != -1) {
-			ModelAndView mav = new ModelAndView();
-			String er = "";
-			if (password1.length() >= 6)
-				er += "<p>Длина пароля должна быть больше 6 символов</p>";
-			if (password1.length() >= 6)
-				er += "<p>Длина пароля должна быть меньше 20 символов</p>";
-			if (password1.equals(password2)
-					&& (er.equals(""))
-					&& (StudentJDBC.exists(userPreferences.UserId,
-							Security.getMD5hash(aldPassword)) > 0)) {
-				StudentJDBC.updatePassword(userPreferences.UserId,
-						Security.getMD5hash(password1));
-				mav.addObject("link", "<a href='/Libra/'>Вернуться назад</a>");
-				mav.addObject("message", "Пароль успешно изменен!");
-				mav.addObject("title", "Успех");
-				mav.setViewName("messageView");
-				return mav;
-			}
-			mav.addObject("link",
-					"<a href='editLogin.html'>Вернуться назад</a>");
-			mav.addObject("message", "Произошла ошибка");
-			mav.addObject("title", "Ошибка");
-			mav.setViewName("messageView");
-			return mav;
-		}
-		return new ModelAndView("redirect:/");
-	}
 }

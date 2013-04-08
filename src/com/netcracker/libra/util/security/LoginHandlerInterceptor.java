@@ -29,8 +29,8 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter {
 				!uri.endsWith("register.html")) {
 			SessionToken userData = (SessionToken) request.getSession().getAttribute("LOGGEDIN_USER");
 			if (userData == null) {
-				request.getSession().setAttribute("accessDeniedMessage", "Недостаточно прав для доступа к запрашиваемой странице");
-				response.sendRedirect("/Libra/login.html");
+				//request.getSession().setAttribute("accessDeniedMessage", "Недостаточно прав для доступа к запрашиваемой странице");
+				response.sendRedirect("/Libra/index.html");
 				return false;
 			}
 		}

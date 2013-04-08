@@ -33,7 +33,7 @@ import com.netcracker.libra.util.security.SessionToken;
 
 @Controller
 @RequestMapping("register")
-@SessionAttributes("LOGGEDIN_USER")
+@SessionAttributes({"LOGGEDIN_USER", "regForm"})
 public class RegController {
 	
 	Logger log = Logger.getLogger(RegController.class);
@@ -82,7 +82,7 @@ public class RegController {
 		if (!RegformService.isAppFormPresent(token.getUserId())) {
 			model.addAttribute("columns", RegformService.getActiveTemplate());
 			model.put("regForm", form);
-			return "signup/showAppForm";
+			return "appFormView";
 			}
 		else
 			token.setAppFormFlag(true);
@@ -91,14 +91,15 @@ public class RegController {
 	}
 	
 	@RequestMapping(value = "/signup", method=RequestMethod.POST)
-	public String validateForm(@ModelAttribute("regForm")RegisterForm form, 
+	public String validateForm(@ModelAttribute("regForm") 
+			RegisterForm form, 
 			BindingResult result, 
 			MultipartFile photo,
 			@ModelAttribute("LOGGEDIN_USER") SessionToken token,
 			ModelMap model) {
 
 		if (result.hasErrors()) {
-			return "redirect:/signup.html";
+			return "redirect:/register/signup.html";
 			
 		} else {	
 			if (!photo.isEmpty()) {
@@ -119,7 +120,7 @@ public class RegController {
 			form.setGeneratedCode(ConfirmationCodeGenerator.generateCode());
 			form.setTemplateId(RegformService.getActiveTemplateId());
 			MailService.sendConfirmRegistrationMessage(token.getUserEmail(), token.getUserId().toString(), form.getGeneratedCode());
-			log.info("Confirmation code for userID "+token.getUserId()+"is " + form.getGeneratedCode());
+			log.info("Confirmation code for userID "+token.getUserId()+" is " + form.getGeneratedCode());
 			log.info("Email send to " + token.getUserEmail());
 			model.put("regForm", form);
 			return "signup/review";
@@ -130,11 +131,14 @@ public class RegController {
 	public String verifyCode(@ModelAttribute("regForm") RegisterForm form, ModelMap model, 
 			@ModelAttribute("LOGGEDIN_USER") SessionToken token) throws SQLException {
 		
+		log.info("Entered code is "+form.getEnteredCode());
+		log.info("Entered code is "+form.getGeneratedCode());
+		
 		if (form.getEnteredCode().equals(form.getGeneratedCode())) {
 			log.info("Inserting application form answers...");
 			RegformService.insertAppformAnswers(form, token.getUserId());
 			log.info("Done.");
-			return "signup/success";
+			return "signup/welcome";
 		}
 
 		else {
