@@ -48,7 +48,7 @@
 <div class="modal hide" id="myModal">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Ввести вручную разницу</h3>
+    <h3>На сколько время сервера опережает реальное</h3>
   </div>
   <div class="modal-body">
     <form method="post" action='editTimeZoneDiff.html' name="login_form">
