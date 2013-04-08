@@ -156,7 +156,7 @@ public class InterviewJDBC
     
     public String getInterviewForApp(int accessLevel,int appId)
     {
-        String SQL="select DECODE(?,1,'Hr собеседование:','Техническое собеседование:')||TO_CHAR(id.datefinish,' dd.mm.yyyy ') ||  TO_CHAR(id.datestart,'hh24:mi')||'-'||TO_CHAR(id.datefinish,'hh24:mi') hTime "
+        String SQL="select DISTINCT DECODE(?,1,'Hr собеседование:','Техническое собеседование:')||TO_CHAR(id.datefinish,' dd.mm.yyyy ') ||  TO_CHAR(id.datestart,'hh24:mi')||'-'||TO_CHAR(id.datefinish,'hh24:mi') hTime "
 	+"from interview i "
 	+"join interviewdate id on id.interviewDateId=i.interviewDateId "
 	+"join interviewerList il on il.interviewDateId=id.interviewDateId "
