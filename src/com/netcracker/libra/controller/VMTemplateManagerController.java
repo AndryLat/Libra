@@ -32,9 +32,7 @@ public class VMTemplateManagerController {
      * @return 
      */
     @RequestMapping(value = "/VMTemplateManagerDelete", method = RequestMethod.POST)
-    public  ModelAndView deleteVMTemplate(@ModelAttribute("VMTemplate") VMTemplateDelete template){
-        ModelAndView mav = new ModelAndView("VMTemplateManager", "command", new VMTemplateDelete());
-        mav.addObject("templates", VMTemplateJDBC.getVMTemplateData());
+    public  ModelAndView deleteVMTemplate(@ModelAttribute("VMTemplate") VMTemplateDelete template){       
         String text;
         boolean isOK = false;
         if (!template.getName().equals("")) {
@@ -42,6 +40,8 @@ public class VMTemplateManagerController {
                 isOK = true;
             }
         }
+        ModelAndView mav = new ModelAndView("VMTemplateManager", "command", new VMTemplateDelete());
+        mav.addObject("templates", VMTemplateJDBC.getVMTemplateData());        
         if (isOK) {
             text = "<div class=\"alert alert-success\">\n"
                     + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
