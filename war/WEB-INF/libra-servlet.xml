@@ -56,10 +56,10 @@
 	</bean>
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
+		<property name="host" value="email-smtp.us-east-1.amazonaws.com" />
 		<property name="port" value="587" />
-		<property name="username" value="mailtester.neon" />
-		<property name="password" value="aqweds1331" />
+		<property name="username" value="AKIAJ7M5ZNPRSEYWPELA" />
+		<property name="password" value="AktNKaQTWwK7/485cTCQkO7hr0uSU86Ep+fmZLztTBBE" />
 		<property name="javaMailProperties">
 			<props>
 				<!-- Use SMTP transport protocol -->
@@ -69,7 +69,7 @@
 				<!-- Use TLS to encrypt communication with SMTP server -->
 				<prop key="mail.smtp.starttls.enable">true</prop>
 				<prop key="mail.debug">true</prop>
-				<prop key="mail.smtp.from">mailtester.neon@gmail.com</prop>
+				<prop key="mail.smtp.from">mail.tester@libra.aws.com</prop>
 				<prop key="mail.mime.charset">UTF-8</prop>
 			</props>
 		</property>
