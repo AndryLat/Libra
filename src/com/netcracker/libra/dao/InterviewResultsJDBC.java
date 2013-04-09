@@ -187,7 +187,7 @@ public class InterviewResultsJDBC  implements InterviewResultsDAO
         String SQL = 
                 "select  appId, round(avgMark,3) avgMark, fio, r, email "
         +"from "
-	+"(select u.firstname||' '||u.lastName||' '||af.patronymic fio, "
+	+"(select u.lastName||' '||u.firstname||' '||af.patronymic fio, "
 			+"u.email, af.appId, nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) avgMark  ,    "
 			+"ROW_NUMBER()   OVER ( ORDER BY nvl(Interv.avgMark,0)+ nvl(HR.avgMark,0) desc) r  "
 			+"from users u join appForm af on af.UserId=u.UserId "

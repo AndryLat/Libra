@@ -47,6 +47,8 @@
 		</c:if>
 
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==2}">
+                    <li class="nav-header">Собеседования</li>
+				<li><a href="/Libra/showResults.html">Результаты</a></li>
 		</c:if>
 
 		<c:if test="${LOGGEDIN_USER.userAccessLevel==3}">

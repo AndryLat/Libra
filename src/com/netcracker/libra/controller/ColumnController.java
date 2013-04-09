@@ -16,23 +16,20 @@ import com.netcracker.libra.dao.TypeJDBC;
 import com.netcracker.libra.model.AppFormColumns;
 import com.netcracker.libra.model.ColumnFieldsModel;
 import com.netcracker.libra.model.DisplayAF;
-import com.netcracker.libra.model.DisplayCF;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.service.TemplateService;
 import com.netcracker.libra.util.security.SessionToken;
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.ModelAndView;
 /**
  *
  * @author Sashenka
  */
 @Controller
-@SessionAttributes({"regForm", "LOGGEDIN_USER"})
+@SessionAttributes("LOGGEDIN_USER")
 public class ColumnController
 {
     
