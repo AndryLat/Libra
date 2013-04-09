@@ -137,6 +137,8 @@ public class RegController {
 		if (form.getEnteredCode().equals(form.getGeneratedCode())) {
 			log.info("Inserting application form answers...");
 			RegformService.insertAppformAnswers(form, token.getUserId());
+			token.setAppFormFlag(true);
+			model.addAttribute("appformFilledMessage", "Вы успешно заполнили анкету");
 			log.info("Done.");
 			return "signup/welcome";
 		}
