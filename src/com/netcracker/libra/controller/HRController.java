@@ -50,83 +50,39 @@ public class HRController {
      boolean order; //value of ascending or descending order; true when ascending
      List <ApplicationChange> checkedList; //objects with application changes (checked only)
      
-     /*
+    /*
       * Display faculties of iniversity
       */
     @RequestMapping(value="faculty", method= RequestMethod.POST)
-     public ModelAndView myTest(@ModelAttribute("LOGGEDIN_USER") SessionToken token, 
-                                @RequestParam("universityId") int universityId){
-        if(token.getUserAccessLevel()==1) {
+     public ModelAndView myTest(@RequestParam("universityId") int universityId){
             List<Faculty> fact=hr.getAllFaculties(universityId);
             return new ModelAndView("hr/faculty","fact",fact);
         }
-        else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("hr/errorMessage");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как HR");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
-        }
-     }
-    
     /*
      * Display all universitties
      */
     @RequestMapping(value="university")
-     public ModelAndView myUn(@ModelAttribute("LOGGEDIN_USER") SessionToken token){
-        if(token.getUserAccessLevel()==1) {
-            List<University> univers=hr.getAllUniversity();
-            return new ModelAndView("hr/university","univers",univers);
+     public ModelAndView myUn(){
+        List<University> univers=hr.getAllUniversity();
+        return new ModelAndView("hr/university","univers",univers);
         }
-        else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("hr/errorMessage");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как HR");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
-        }
-     }
     
     @Deprecated
-    @RequestMapping(value="testNav")
-    public ModelAndView myTestNav(@ModelAttribute("LOGGEDIN_USER") SessionToken token){
-        if(token.getUserAccessLevel()==1) {
-            List<Student> std= hr.listStudents();
-            ModelAndView mav= new ModelAndView();
-            mav.addObject("Model", std);
-            return mav;
-        }
-        else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("hr/errorMessage");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как HR");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
-        }
+    @RequestMapping(value="/hr/testNav")
+    public ModelAndView myTestNav(){
+        List<Student> std= hr.listStudents();
+        ModelAndView mav= new ModelAndView();
+        mav.addObject("Model", std);
+        return mav;
     }
-    
     /*
      * Display departments of faculty
      */
     @RequestMapping(value="department", method= RequestMethod.POST)
-     public ModelAndView myDept(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
-                                @RequestParam("facultyId") int facultyId){
-        if(token.getUserAccessLevel()==1) {
+     public ModelAndView myDept(@RequestParam("facultyId") int facultyId){
             List<Department> departments=hr.getAllDepartments("f.facultyId", facultyId);
             return new ModelAndView("hr/department","dept",departments);
         }
-        else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("hr/errorMessage");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как HR");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
-        }  
-     }
     
     /*
      * Display all students
@@ -158,127 +114,127 @@ public class HRController {
      */
       @RequestMapping(value="showStudentbyIdView", method= RequestMethod.POST)
       public ModelAndView showStudentByIdView(@ModelAttribute("LOGGEDIN_USER") SessionToken token,
-              @RequestParam("filter") int filter,
+          @RequestParam("filter") int filter,
           org.springframework.web.context.request.WebRequest webRequest){ 
           if(token.getUserAccessLevel()==1) {
               ModelAndView mav = new ModelAndView();
-            String textBox=webRequest.getParameter("textBox");
-            String univerId=webRequest.getParameter("univ");
-            String facultyId=webRequest.getParameter("fact");
-            String departmentId=webRequest.getParameter("dept");
-            mav.setViewName("hr/showStudentbyIdView");
-            mav.addObject("textBox", textBox);
-            mav.addObject("filterInt", filter);
-            List<Student> std=null;
-            if ((filter==1) && (univerId.equals("0"))){
-                std=hr.listStudents();
-                mav.addObject("Model",std);
-                return mav;
-            }
-            if (textBox.equals("") && (filter!=1) && (univerId.equals("0"))){
-                mav.addObject("errorMessage", "Введите значение для поиска");
-                std=hr.listStudents();
-                mav.addObject("Model",std);
-                return mav;
-            }
-            if (!textBox.equals("") && (filter!=1) && (!univerId.equals("0"))){
-              String education="department";
-              int eduValue=0;
-              if (facultyId.equals("0")){
-                  education="university";
-                  eduValue=Integer.parseInt(univerId);
-                      mav.addObject("selectedUniv",univerId);
-              }
-              else {
-                  if(departmentId.equals("0")){
-                      education="faculty";
-                      eduValue=Integer.parseInt(facultyId);
-                      mav.addObject("selectedFact",facultyId);
-                      mav.addObject("selectedUniv",univerId);
+                String textBox=webRequest.getParameter("textBox");
+                String univerId=webRequest.getParameter("univ");
+                String facultyId=webRequest.getParameter("fact");
+                String departmentId=webRequest.getParameter("dept");
+                mav.setViewName("hr/showStudentbyIdView");
+                mav.addObject("textBox", textBox);
+                mav.addObject("filterInt", filter);
+                List<Student> std=null;
+                if ((filter==1) && (univerId.equals("0"))){
+                    std=hr.listStudents();
+                    mav.addObject("Model",std);
+                    return mav;
+                }
+                if (textBox.equals("") && (filter!=1) && (univerId.equals("0"))){
+                    mav.addObject("errorMessage", "Введите значение для поиска");
+                    std=hr.listStudents();
+                    mav.addObject("Model",std);
+                    return mav;
+                }
+                if (!textBox.equals("") && (filter!=1) && (!univerId.equals("0"))){
+                  String education="department";
+                  int eduValue=0;
+                  if (facultyId.equals("0")){
+                      education="university";
+                      eduValue=Integer.parseInt(univerId);
+                          mav.addObject("selectedUniv",univerId);
                   }
                   else {
-                      eduValue=Integer.parseInt(departmentId);
-                      mav.addObject("selectedDept",departmentId);
-                      mav.addObject("selectedFact",facultyId);
-                      mav.addObject("selectedUniv",univerId);
-                  }
-              }
-              if (filter==2){
-                  try{
-                      int i=Integer.parseInt(textBox);
-                      std=hr.getStudent(education, eduValue, i);
-                      }
-                  catch(Exception ex){
-                      mav.addObject("errorMessage","Введенные данные некорректны!");
-                      }
-              }
-              if (filter==3){
-                     std =hr.getStudentsByFirstName(education, eduValue,textBox);
-                      }
-              if (filter==4){
-                     std =hr.getStudentsByLastName(education, eduValue,textBox);
-                      }
-              if (filter==5){
-                     std =hr.getStudentsByEmail(education, eduValue,textBox);
-                      }
-              if (filter == 6){
-                  std = hr.getStudentsByAllFields(education, eduValue,textBox);
-              }
-            }
-            if ((textBox.equals("") && (!univerId.equals("0")))|| ((filter==1) && (!univerId.equals("")))){
-                if (facultyId.equals("0")){
-                    int universityId=Integer.parseInt(univerId);
-                    std=hr.getStudentByUniversity(universityId);
-                    mav.addObject("selectedUniv",universityId);
-                }
-                    else{    
-                      if (departmentId.equals("0")){
-                          int facultId=Integer.parseInt(facultyId);
-                          std=hr.getStudentByFaculty(facultId);
-                          mav.addObject("selectedFact",facultId);
+                      if(departmentId.equals("0")){
+                          education="faculty";
+                          eduValue=Integer.parseInt(facultyId);
+                          mav.addObject("selectedFact",facultyId);
                           mav.addObject("selectedUniv",univerId);
                       }
                       else {
-                      int departId=Integer.parseInt(departmentId);
-                      std=hr.getStudentByDepartment(departId);
-                      mav.addObject("selectedDept",departId);
-                      mav.addObject("selectedFact",facultyId);
-                      mav.addObject("selectedUniv",univerId);
+                          eduValue=Integer.parseInt(departmentId);
+                          mav.addObject("selectedDept",departmentId);
+                          mav.addObject("selectedFact",facultyId);
+                          mav.addObject("selectedUniv",univerId);
                       }
                   }
-               }
-              if (!textBox.equals("") && (filter!=1) && (univerId.equals("0"))){
-              try{
-              if (filter==1){
-                      std=hr.listStudents();              
+                  if (filter==2){
+                      try{
+                          int i=Integer.parseInt(textBox);
+                          std=hr.getStudent(education, eduValue, i);
+                          }
+                      catch(Exception ex){
+                          mav.addObject("errorMessage","Введенные данные некорректны!");
+                          }
+                  }
+                  if (filter==3){
+                         std =hr.getStudentsByFirstName(education, eduValue,textBox);
+                          }
+                  if (filter==4){
+                         std =hr.getStudentsByLastName(education, eduValue,textBox);
+                          }
+                  if (filter==5){
+                         std =hr.getStudentsByEmail(education, eduValue,textBox);
+                          }
+                  if (filter == 6){
+                      std = hr.getStudentsByAllFields(education, eduValue,textBox);
+                  }
+                }
+                if ((textBox.equals("") && (!univerId.equals("0")))|| ((filter==1) && (!univerId.equals("")))){
+                    if (facultyId.equals("0")){
+                        int universityId=Integer.parseInt(univerId);
+                        std=hr.getStudentByUniversity(universityId);
+                        mav.addObject("selectedUniv",universityId);
+                    }
+                        else{    
+                          if (departmentId.equals("0")){
+                              int facultId=Integer.parseInt(facultyId);
+                              std=hr.getStudentByFaculty(facultId);
+                              mav.addObject("selectedFact",facultId);
+                              mav.addObject("selectedUniv",univerId);
+                          }
+                          else {
+                          int departId=Integer.parseInt(departmentId);
+                          std=hr.getStudentByDepartment(departId);
+                          mav.addObject("selectedDept",departId);
+                          mav.addObject("selectedFact",facultyId);
+                          mav.addObject("selectedUniv",univerId);
+                          }
                       }
-              if (filter==2){
-                      int i=Integer.parseInt(textBox);
-                      std=hr.getStudent(i);
-                      } 
-              if (filter==3){
-                     std =hr.getStudentsByFirstName(textBox);
-                      }
-              if (filter==4){
-                     std =hr.getStudentsByLastName(textBox);
-                      }
-              if (filter==5){
-                     std =hr.getStudentsByEmail(textBox);
-                      }
-              if (filter==6){
-                  std = hr.getStudentsByAllFields(textBox);
-              }
+                   }
+                  if (!textBox.equals("") && (filter!=1) && (univerId.equals("0"))){
+                  try{
+                  if (filter==1){
+                          std=hr.listStudents();              
+                          }
+                  if (filter==2){
+                          int i=Integer.parseInt(textBox);
+                          std=hr.getStudent(i);
+                          } 
+                  if (filter==3){
+                         std =hr.getStudentsByFirstName(textBox);
+                          }
+                  if (filter==4){
+                         std =hr.getStudentsByLastName(textBox);
+                          }
+                  if (filter==5){
+                         std =hr.getStudentsByEmail(textBox);
+                          }
+                  if (filter==6){
+                      std = hr.getStudentsByAllFields(textBox);
+                  }
 
-            } 
+                } 
 
-            catch(Exception ex){
-              mav.addObject("errorMessage","Введенные данные некорректны!");   
-              }
-            }
-            mav.addObject("Model",std);
-            if (std.isEmpty())
-                mav.addObject("errorMessage", "Студенты не найдены!");
-            return mav;
+                catch(Exception ex){
+                  mav.addObject("errorMessage","Введенные данные некорректны!");   
+                  }
+                }
+                mav.addObject("Model",std);
+                if (std.isEmpty())
+                    mav.addObject("errorMessage", "Студенты не найдены!");
+                return mav;
           }
           else {
             ModelAndView mv = new ModelAndView();

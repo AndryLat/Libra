@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
  *
  * @author Yuliya
  */
+@Deprecated
 @Controller
 public class LanguageController {
     HrJDBC hr = new HrJDBC();

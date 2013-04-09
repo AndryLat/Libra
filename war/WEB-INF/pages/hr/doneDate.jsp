@@ -4,11 +4,11 @@
     Author     : Yuliya
 --%>
 
-<%@page contentType="text/html" pageEncoding="windows-1251"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> ![endif]-->
 <!--[if gt IE 8]><!-->
 <html class="no-js">
 <!--<![endif]-->
@@ -30,8 +30,8 @@
 			</div>
 			<div class="span9">
 				<div class="hero-unit">
-        <h2>Дата успешно изменена</h2>
-        <input value="Назад" onclick="location.href='interviewDate.html'" type="button"/>
+        <h2>Р”Р°С‚Р° СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅР°</h2>
+        <input value="РќР°Р·Р°Рґ" onclick="location.href='interviewDate.html'" type="button"/>
                                 </div>
                         </div>
                 </div>
