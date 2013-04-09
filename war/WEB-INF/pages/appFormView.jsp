@@ -81,15 +81,15 @@
 								<c:set var="curLevel" value="${c.getLevel()}" />
 								<li><p class="p-apForm">${c.getName()}</p> <c:if
 										test="${c.getTypeName()=='areastring'}">
-										<textarea class="width100" name="map[${c.getColumnId()}]"></textarea>
+										<textarea class="width100" name="map[${c.getColumnId()}]" required></textarea>
 
 									</c:if> <c:if test="${c.getTypeName()=='textstring'}">
 										<input class="width100" name="map[${c.getColumnId()}]"
-											type="text" />
+											type="text" required />
 									</c:if> <c:if test="${c.getTypeName()=='selectenum'}">
 
 										<form:select class="select-min-width"
-											path="map[${c.getColumnId()}]">
+											path="map[${c.getColumnId()}]" required="1">
 											<c:forEach items="${c.getcT().getEmums()}" var="t">
 												<form:option value="${t}">${t}</form:option>
 											</c:forEach>
@@ -98,20 +98,20 @@
 										<c:forEach items="${c.getcT().getEmums()}" var="t">
 											<label class="checkbox"> <form:checkbox
 													class="checkbox" path="map[${c.getColumnId()}]"
-													value="${t}" />${t}
+													value="${t}"/>${t}
 
 											</label>
 										</c:forEach>
 									</c:if> <c:if test="${c.getTypeName()=='radioenum'}">
 										<c:forEach items="${c.getcT().getEmums()}" var="t">
 											<label class="radio"> <form:radiobutton class="radio"
-													path="map[${c.getColumnId()}]" value="${t}" />${t}
+													path="map[${c.getColumnId()}]" value="${t}" required="1" />${t}
 											</label>
 										</c:forEach>
 									</c:if> <c:if test="${c.getTypeName()=='integer'}">
 										<input class="select-min-width" name="map[${c.getColumnId()}]"
 											type="number" size="30" min="${c.getcT().getMin()}"
-											max="${c.getcT().getMax()}" value="" />
+											max="${c.getcT().getMax()}" value="" required/>
 
 									</c:if></li>
 							</c:if>

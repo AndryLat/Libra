@@ -32,9 +32,7 @@ public class VMTemplateManagerController {
      * @return 
      */
     @RequestMapping(value = "/VMTemplateManagerDelete", method = RequestMethod.POST)
-    public  ModelAndView deleteVMTemplate(@ModelAttribute("VMTemplate") VMTemplateDelete template){
-        ModelAndView mav = new ModelAndView("VMTemplateManager", "command", new VMTemplateDelete());
-        mav.addObject("templates", VMTemplateJDBC.getVMTemplateData());
+    public  ModelAndView deleteVMTemplate(@ModelAttribute("VMTemplate") VMTemplateDelete template){       
         String text;
         boolean isOK = false;
         if (!template.getName().equals("")) {
@@ -53,7 +51,11 @@ public class VMTemplateManagerController {
                     + "  <strong>Error!</strong> При удалении шаблона произошли ошибки.\n"
                     + "</div>";
         }
+        
+        ModelAndView mav = new ModelAndView("VMTemplateManager", "command", new VMTemplateDelete());
+        mav.addObject("templates", VMTemplateJDBC.getVMTemplateData());        
         mav.addObject("text", text);
+        
         return mav;
     }
     

@@ -114,7 +114,7 @@
 					
 					<div class="controls-group">
 						<div class="controls"> 
-							<div class="span5">Курс</div><form:input class="input-small" path="course" type="number" min="0" max="5" required="1" />
+							<div class="span5">Курс</div><form:input class="input-small" path="course" type="number" min="0" max="6" required="1" />
 						</div>
 					</div>
 					

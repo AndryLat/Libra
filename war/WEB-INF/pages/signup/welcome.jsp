@@ -31,6 +31,10 @@
       					<legend>Добро пожаловать</legend>
     				</div>
     			<div class="span8">
+    			
+    			<c:if test="${appformFilledMessage!=null}">
+    				<div class="alert alert-success">${appformFilledMessage}</div>
+    			</c:if>
     				<c:if test="${!LOGGEDIN_USER.appFormFlag}">
     					<p>Вы прошли процесс регистрации.</p>
     					<p>Чтобы попасть на собеседование, вам будет необходимо заполнить анкету кандидата. 
