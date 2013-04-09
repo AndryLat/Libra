@@ -337,7 +337,7 @@ public class ColumnController
         }
         else
         {
-            model.addAttribute("path","http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo");
+            model.addAttribute("path","http://neoncorporation.at.ua/AAAAAAtextPhoto.gif");
         }
         try
         {
