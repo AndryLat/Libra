@@ -40,8 +40,6 @@ public class VMTemplateManagerController {
                 isOK = true;
             }
         }
-        ModelAndView mav = new ModelAndView("VMTemplateManager", "command", new VMTemplateDelete());
-        mav.addObject("templates", VMTemplateJDBC.getVMTemplateData());        
         if (isOK) {
             text = "<div class=\"alert alert-success\">\n"
                     + "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>\n"
@@ -53,7 +51,11 @@ public class VMTemplateManagerController {
                     + "  <strong>Error!</strong> При удалении шаблона произошли ошибки.\n"
                     + "</div>";
         }
+        
+        ModelAndView mav = new ModelAndView("VMTemplateManager", "command", new VMTemplateDelete());
+        mav.addObject("templates", VMTemplateJDBC.getVMTemplateData());        
         mav.addObject("text", text);
+        
         return mav;
     }
     
