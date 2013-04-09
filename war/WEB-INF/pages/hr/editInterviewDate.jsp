@@ -27,6 +27,10 @@
 <link rel="stylesheet" type="text/css" href="../resources/css/tcal.css" />
 	<script type="text/javascript" src="../resources/js/tcal.js"> </script>
 <script>
+function closeMessage()
+        {
+            document.getElementById("alertMessage").innerHTML="";
+        }
     $(document).ready(function() {
         $("#type").bind("change", function(){    
         if ($("#type").val()==1) {
@@ -95,7 +99,15 @@
 			<div class="span7">
 				<div class="hero-unit">
         <h3 align="center"> Правка даты интервью </h3>
-        <form method="POST" action="doneDate.html">
+        <c:if test='${!errorMessage.equals("") && errorMessage != null}'>
+            <span id="alertMessage">
+            <div class="alert alert-error" align="center">
+                <button type="button" class="close" onclick="closeMessage()" data-dismiss="alert">&times;</button>
+                ${errorMessage}
+            </div>
+            </span>
+        </c:if>
+        <form method="GET" action="doneDate.html">
          <table border="1" class="bordered">
              <tr>
                  <td>№</td>

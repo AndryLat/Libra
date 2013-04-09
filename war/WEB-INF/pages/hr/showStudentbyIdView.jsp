@@ -12,7 +12,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js">
+<html class="no-js"> 
 <!--<![endif]-->
     <head>
          <jsp:include page="../resources.jsp" />   
@@ -85,13 +85,13 @@ function closeMessage()
              <input type="hidden" name="myUniver" id="myUniver" value="${selectedUniv}">
              <input type="hidden" name="myFact" id="myFact" value="${selectedFact}">
              <input type="hidden" name="myDept" id="myDept" value="${selectedDept}">
-             <table border="0px" class="tablesorter" style="border-color: #eee; border: 1px">
+             <table class="tablesorter,special">
             <thead>
         <tr>   
-            <td style="border:0px;padding: 5px">
+            <td >
                 Университет:
             </td>
-            <td style="border:0px">
+            <td >
                 <select onchange="getFact();"  name="univ" id="univ">
                 <option value="0"> Все </option> 
                 <c:forEach items="${univers}" var="u">
