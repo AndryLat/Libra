@@ -57,7 +57,7 @@
                         </div>
                                     <div class="span9">
                                     <center>
-           <table width="100%">
+         <table width="100%">
          <tr>
          <c:if test='${!errorMessage.equals("") && errorMessage != null}'>
                                     <span id="alertMessage">
