@@ -71,4 +71,5 @@ public class MainController {
 	public String showTechWelcomePage() {
 		return "tech/index";
 	}
+	
 }

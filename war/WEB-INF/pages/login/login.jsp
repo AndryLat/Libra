@@ -34,8 +34,8 @@
 					<div id="legend">
       					<legend class="">Войти</legend>
     				</div>
-    				<c:if test="${accessDeniedMessage!=null}">
-						<div class="row-fluid"><div class="alert alert-error span9">${accessDeniedMessage}</div></div>
+    				<c:if test="${invalidCredentialsMessage!=null}">
+						<div class="row-fluid"><div class="alert alert-error span9">${invalidCredentialsMessage}</div></div>
 					</c:if>
 					<div class="control-group">
 						<label class="control-label">Электропочта</label>

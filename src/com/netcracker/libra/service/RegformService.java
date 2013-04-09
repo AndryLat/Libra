@@ -68,11 +68,11 @@ public class RegformService {
 	@Transactional
 	public static void registerUser(RegisterForm form) {
 		jdbc.createNewUserAsStudent(form.getUserId(), form.getName(), form.getLastName(), Security.getMD5hash(form.getPassword()), form.getEmail());
-		jdbc.insertAppFormDetails(form.getAppId(), form.getUserId(), form.getPatronymic(), form.getPhoneNumber(), form.getDepartment(), 1, form.getCourse(), form.getGraduated(), 0);
+		jdbc.insertAppFormDetails(form.getAppId(), form.getUserId(), form.getPatronymic(), form.getPhoneNumber(), form.getDepartment(), 1, form.getCourse(), form.getGraduated(), 1);
 	}
 	
 	@Transactional
-	public static void insertAppformAnswers(RegisterForm form, Integer userId) throws SQLException {
+	public static void insertAppformAnswers(RegisterForm form, Integer userId) {
 		jdbc.updateTemplateIdOnFormSubmit(form.getTemplateId(), userId);
 		jdbc.fillAppForm(form, userId);
 		return;

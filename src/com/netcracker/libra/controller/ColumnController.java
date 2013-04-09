@@ -276,8 +276,11 @@ public class ColumnController
     @RequestParam("appId") int appId)  
     {
         if(token.getUserAccessLevel()==1||token.getUserAccessLevel()==2||(studentJDBC.getAppIdByUserId(token.getUserId())==appId))
-        {
-        DisplayAF map=columnJDBC.getAppColums(appId);
+        { 
+            try
+            {
+                DisplayAF map=columnJDBC.getAppColums(appId);
+            
         File file = new File("/"+appId+".png");
         if (file.exists() && file.isFile()) 
         {
@@ -285,7 +288,7 @@ public class ColumnController
         }
         else
         {
-            model.addAttribute("path","http://www.placehold.it/120x160/EFEFEF/AAAAAA&text=Photo");
+            model.addAttribute("path","http://neoncorporation.at.ua/AAAAAAtextPhoto.gif");
         }
         
         try
@@ -309,7 +312,14 @@ public class ColumnController
         model.addAttribute("columnFields", map);
         return "displayAppFormView";
         }
+            catch(Exception e)
+            {
+                return "redirect:/";
+            }
+        }
+            
         return "redirect:/";
+        
     }
     
      @RequestMapping(value="printPdf",method = RequestMethod.GET)
@@ -320,6 +330,8 @@ public class ColumnController
          if(token.getUserAccessLevel()==1||token.getUserAccessLevel()==2||(studentJDBC.getAppIdByUserId(token.getUserId())==appId))
         {
         
+            try
+            {
         DisplayAF map=columnJDBC.getAppColums(appId);
         File file = new File("/"+appId+".png");
         if (file.exists() && file.isFile()) 
@@ -349,7 +361,13 @@ public class ColumnController
         
         }
         model.addAttribute("columnFields", map);
-        return "printPdf";
+        //return "printPdf";
+        return "PDFView";
+        }
+            catch(Exception e)
+            {
+                return "redirect:/";
+            }
         }
         return "redirect:/";
     }
