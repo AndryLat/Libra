@@ -16,7 +16,7 @@
     <!--<![endif]-->
     <head>
         <jsp:include page="resources.jsp" />
-        <script type="text/javascript" src="resources/js/tiny_mce/tiny_mce.js"></script>
+        <script type="text/javascript" src="/Libra/resources/js/tiny_mce/tiny_mce.js"></script>
         <title>Libra: Конструктор шаблонов</title>
     </head>
 

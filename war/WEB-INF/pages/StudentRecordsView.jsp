@@ -47,6 +47,7 @@
                     </div>
                     
                     <script language="javascript" type="text/javascript">
+                    $(document).ready(function(){
                         var data = [${data}];
                         var plot1 = $.jqplot('chartdiv', [data], {
                             title: 'График записи студентов',
@@ -65,6 +66,7 @@
                             }
                         }
                         });
+                    });
                     </script>
                 </div>
             </div>
