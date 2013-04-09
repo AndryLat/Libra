@@ -31,55 +31,57 @@
 			<div class="sidebar">
 				<jsp:include page="sidebar.jsp" />
 			</div>
-			<c:if test="${existsComment==0}">
-                        <form class="well span8" method="POST" action="addResultSubmit.html">
-                            <input type="hidden" name="appId" value="${appId}"/>
-                            <label>Оценка:</label><input class="width96" onclick="javascript:number_control()" id="quantity" type="text" name="mark"/>
-                            </br>
-                            <label>Комментарий:</label><textarea rows="5" class="width96" name="comment" ></textarea>
-                            </br>
-                            <input type="submit" value="Добавить"/>
-                        </form>   
-                        </c:if>
+                        <div class="span8">
+                                            <c:if test="${existsComment==0}">
+                                            <form class="well span8" method="POST" action="addResultSubmit.html">
+                                                <input type="hidden" name="appId" value="${appId}"/>
+                                                <label>Оценка:</label><input class="width96" onclick="javascript:number_control()" id="quantity" type="text" name="mark"/>
+                                                </br>
+                                                <label>Комментарий:</label><textarea rows="5" class="width96" name="comment" ></textarea>
+                                                </br>
+                                                <input type="submit" value="Добавить"/>
+                                            </form>   
+                                            </c:if>
 
-        <c:forEach items="${interviewResult}" var="ir">
-            <div class="well-template span8"> 
-            <h3>${ir.getFio()}</h3>
-        <c:if test="${userId==ir.getUserId()}">
-        <form method="POST" action="updateResultSubmit.html">
-            <input type="hidden" name="appId" value="${appId}"/>
-        </c:if>
-            <p>Оценка: </p>
-                <div class="nya<c:out value='${ir.getUserId()}'/>">${ir.getMark()}</div>
-                <div class="nya<c:out value='${ir.getUserId()}'/>" style="display:none">
-                    <c:if test="${userId==ir.getUserId()}">
-                        <input type="text" class="width96" name="mark" value="<c:out value='${ir.getMark()}'/>"/>
-                    </c:if>
-                </div>
-            
-            <p>Комментарий: </p>
-                <div class="nya<c:out value='${ir.getUserId()}'/>">
-                  <%--  ${ir.getComments()}    --%> 
-                    ${fn:replace(ir.getComments(), newLine, "</br>")}
-                </div>
-                <div class="nya<c:out value='${ir.getUserId()}'/>" style="display:none">
-                    <c:if test="${userId==ir.getUserId()}">
-                        <textarea class="width96" rows="5" name="comment">${ir.getComments()}</textarea>
-                    </c:if>
-                </div>
-            
-        <c:if test="${userId==ir.getUserId()}">
-            <div style="display:none" class="nya<c:out value='${ir.getUserId()}'/>">
-                <input type="submit" value="Внести изменения"/>
-            </div>
-        </form>   
-        </c:if>
-            <c:if test="${userId==ir.getUserId()}">
-                <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${userId}'/>');">Редактировать</a> <a href="deleteResult.html?appId=<c:out value='${appId}'/>">Удалить</a>              
-            </c:if>
-            </div>    
-        </c:forEach>
+                            <c:forEach items="${interviewResult}" var="ir">
+                                <div class="well-template span8"> 
+                                <h3>${ir.getFio()}</h3>
+                            <c:if test="${userId==ir.getUserId()}">
+                            <form method="POST" action="updateResultSubmit.html">
+                                <input type="hidden" name="appId" value="${appId}"/>
+                            </c:if>
+                                <p>Оценка: </p>
+                                    <div class="nya<c:out value='${ir.getUserId()}'/>">${ir.getMark()}</div>
+                                    <div class="nya<c:out value='${ir.getUserId()}'/>" style="display:none">
+                                        <c:if test="${userId==ir.getUserId()}">
+                                            <input type="text" class="width96" name="mark" value="<c:out value='${ir.getMark()}'/>"/>
+                                        </c:if>
+                                    </div>
+
+                                <p>Комментарий: </p>
+                                    <div class="nya<c:out value='${ir.getUserId()}'/>">
+                                      <%--  ${ir.getComments()}    --%> 
+                                        ${fn:replace(ir.getComments(), newLine, "</br>")}
+                                    </div>
+                                    <div class="nya<c:out value='${ir.getUserId()}'/>" style="display:none">
+                                        <c:if test="${userId==ir.getUserId()}">
+                                            <textarea class="width96" rows="5" name="comment">${ir.getComments()}</textarea>
+                                        </c:if>
+                                    </div>
+
+                            <c:if test="${userId==ir.getUserId()}">
+                                <div style="display:none" class="nya<c:out value='${ir.getUserId()}'/>">
+                                    <input type="submit" value="Внести изменения"/>
+                                </div>
+                            </form>   
+                            </c:if>
+                                <c:if test="${userId==ir.getUserId()}">
+                                    <a href="#" onclick="javascript:toggleedit('.nya<c:out value='${userId}'/>');">Редактировать</a> <a href="deleteResult.html?appId=<c:out value='${appId}'/>">Удалить</a>              
+                                </c:if>
+                                </div>    
+                            </c:forEach>
 		</div>
+                        </div>
 	</div>
         </div>
     </body>
