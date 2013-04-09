@@ -21,6 +21,7 @@
          <script src="resources/js/template.js"></script>
     </head>
     <body>
+        <div class="mincontainer">
         <div class="navmenu">
 		<jsp:include page="navbar.jsp" />
 	</div>
@@ -80,6 +81,6 @@
         </c:forEach>
 		</div>
 	</div>
-        
+        </div>
     </body>
 </html>
