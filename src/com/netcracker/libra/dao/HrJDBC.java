@@ -947,29 +947,6 @@ public class HrJDBC implements HrDAO {
     }
     
     /**
-     * 
-     * @param columnName
-     * @param appRequestId
-     * @param id 
-     */
-//    public void confirmMainAppInfo(List <String> columnNames, List <Integer> appRequestIds, List <Integer> ids) {
-//        StringBuilder str = new StringBuilder();
-//        
-//        if(columnNames.get(0).equals("firstName")||columnNames.get(0).equals("lastName")) {
-//            str.append("UPDATE Users SET "+columnNames.get(0)+" = (SELECT "+columnNames.get(0)+" FROM AppRequest WHERE appRequestId = "+appRequestIds.get(0) +") WHERE userId = "+ids.get(0));
-//            
-//            for(int i=1; i < columnNames.size(); i++) {
-//                if(columnNames.get(i).equals("firstName")||columnNames.get(i).equals("lastName")) {
-//                    str.append("AND SET "+columnNames.get(i)+" = (SELECT "+columnNames.get(i)+" FROM AppRequest WHERE appRequestId = ?) WHERE userId = ?");
-//                }
-//            }
-//            
-//        }
-//        String SQL = str.toString();
-//        jdbcTemplateObject.update(SQL);
-//    }
-    
-    /**
      * update interview to status 1
      */
     public void confirmInterviewTime(Integer id) {

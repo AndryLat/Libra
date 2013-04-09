@@ -52,8 +52,8 @@
                 <th>№ Анкеты</th>
                 <th>Дата</th>
                 <th>Время</th>
-                <th>Имя интервьюера</th>
-                <th>Статус интервьюера</th>
+                <th>Интервьюер</th>
+                <th>Статус</th>
             </tr>
             <c:forEach items="${dateAndInterviewerList}" var="date">
                 <tr>
@@ -61,7 +61,7 @@
                     <td>${date.interviewDate}</td>
                     <td>${date.interviewTime}</td> 
                     <td>${date.interviewerName}</td>
-                    <td>${date.interviewerRole==2 ? 'HR-менеджер' : date.interviewerRole==3 ? 'Тех.интервьюер' : date.interviewerRole==4 ? "Администратор" : "Интервьюер"}</td>
+                    <td>${date.interviewerRole==2 ? 'HR-менеджер' : date.interviewerRole==3 ? 'Тех.специалист' : date.interviewerRole==4 ? "Администратор" : "Интервьюер"}</td>
                 </tr>
             </c:forEach>
             </table>
@@ -75,10 +75,10 @@
                 <th>№ анкеты</th>
                 <th>Дата</th>
                 <th>Время</th>
-                <th>Имя интервьюера</th>
-                <th>Статус интервьюера</th>
-                <th>Оценка интервьюера</th>
-                <th>Комментарий интервьюера</th>
+                <th>Интервьюер</th>
+                <th>Статус</th>
+                <th>Оценка</th>
+                <th>Комментарий</th>
             </tr>
             
             <c:forEach items="${dateAndInterviewerResultsList}" var="result">
@@ -87,7 +87,7 @@
                     <td>${result.interviewDate}</td>
                     <td>${result.interviewTime}</td>
                     <td>${result.interviewerName}</td>
-                    <td>${result.interviewerRole==2 ? 'HR-менеджер' : result.interviewerRole==3 ? 'Тех.интервьюер' : result.interviewerRole==4 ? "Администратор" : "Интервьюер"}</td>
+                    <td>${result.interviewerRole==2 ? 'HR-менеджер' : result.interviewerRole==3 ? 'Тех.специалист' : result.interviewerRole==4 ? "Администратор" : "Интервьюер"}</td>
                     <td>${result.interviewerMark}</td>
                     <td>${result.interviewerComments}</td>
                 </tr>

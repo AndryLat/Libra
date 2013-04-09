@@ -128,7 +128,7 @@ public class UsersController {
                         jobTitle = "HR-менеджер";
                         break;
                 case 3: checked = "checkedTech";
-                        jobTitle = "Тех.интервьюер";
+                        jobTitle = "Тех.специалист";
                         break;
                 case 4: checked = "checkedAdmin";
                         jobTitle = "Администратор";
@@ -390,18 +390,18 @@ public class UsersController {
                     String newRoleName = "";
                     
                     switch(roleId) {
-                        case 2 : newRoleName = "HR";
+                        case 2 : newRoleName = "HR-менеджер";
                                  break;
-                        case 3 : newRoleName = "Технический интервьюер";
+                        case 3 : newRoleName = "Технический специалист";
                                  break;
                         case 4 : newRoleName = "Администратор сайта";
                                  break;
                     }
                     
                     switch(lastRoleId) {
-                        case 2 : lastRoleName = "HR";
+                        case 2 : lastRoleName = "HR-менеджер";
                                  break;
-                        case 3 : lastRoleName = "Технический интервьюер";
+                        case 3 : lastRoleName = "Технический специалист";
                                  break;
                         case 4 : lastRoleName = "Администратор сайта";
                                  break;
@@ -640,10 +640,10 @@ public class UsersController {
 
             switch(roleId) {
                 case 2: hrSelected = "selected";
-                        roleName = "HR";
+                        roleName = "HR-менеджер";
                         break;
                 case 3: techSelected = "selected";
-                        roleName = "Технический интервьюер";
+                        roleName = "Технический специалист";
                         break;
                 case 4: adminSelected = "selected";
                         roleName = "Администратор сайта";
