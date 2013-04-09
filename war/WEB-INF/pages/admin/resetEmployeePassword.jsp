@@ -94,7 +94,7 @@
         <tr>
            <th><a href="sortEmployees.html?orderBy=FIRST_NAME">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME">фамилия</a></th>
             <th><a href="sortEmployees.html?orderBy=ID">id</a></th>
-            <th><a href="sortEmployees.html?orderBy=ROLE">должность</a></th>
+            <th><a href="sortEmployees.html?orderBy=ROLE">статус</a></th>
             <th><a href="sortEmployees.html?orderBy=EMAIL">email</a></th>
             <th>пароль</th>
             <th>редактировать</th>

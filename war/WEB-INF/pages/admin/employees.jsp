@@ -93,7 +93,7 @@
         <tr>
             <th><a href="sortEmployees.html?orderBy=FIRST_NAME">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME">фамилия</a> &nbsp; ${nameOrder}</th>
             <th><a href="sortEmployees.html?orderBy=ID">id</a> &nbsp; ${idOrder}</th>
-            <th><a href="sortEmployees.html?orderBy=ROLE">должность</a> &nbsp; ${roleOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=ROLE">статус</a> &nbsp; ${roleOrder}</th>
             <th><a href="sortEmployees.html?orderBy=EMAIL">email</a> &nbsp; ${emailOrder}</th>
             <th>пароль</th>
             <th>редактировать</th>

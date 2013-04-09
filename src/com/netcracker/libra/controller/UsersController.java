@@ -73,12 +73,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -100,12 +95,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>"); 
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -227,12 +217,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -297,12 +282,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -327,12 +307,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
         
         
@@ -460,12 +435,7 @@ public class UsersController {
             }
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
         
         
@@ -489,12 +459,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-           mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -535,12 +500,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -557,12 +517,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -642,12 +597,7 @@ public class UsersController {
             }
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
         
     }
@@ -665,12 +615,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
     }
     
@@ -787,12 +732,7 @@ public class UsersController {
             }
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
         
         
@@ -816,12 +756,7 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
         
     }
@@ -866,15 +801,23 @@ public class UsersController {
             return mv;
         }
         else {
-            ModelAndView mv = new ModelAndView();
-            mv.setViewName("admin/message");
-            mv.addObject("title", "Ошибка");
-            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
-            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
-            return mv;
+            return errorMessage();
         }
         
     }
+    
+    /**
+     * Display error message about no rights to access the information
+     */
+    public ModelAndView errorMessage() {
+        
+         ModelAndView mv = new ModelAndView();
+         mv.setViewName("admin/message");
+         mv.addObject("title", "Ошибка");
+         mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как администратор");
+         mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
+         return mv;
+     }
 
     /**
      * Comparator has been created to be passed to a method Collections.sort 
