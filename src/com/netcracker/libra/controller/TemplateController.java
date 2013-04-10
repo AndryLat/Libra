@@ -8,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.netcracker.libra.model.Template;
 import com.netcracker.libra.dao.TemplateJDBC;
 import com.netcracker.libra.dao.TypeJDBC;
-import com.netcracker.libra.dao.UserPreferences;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,6 @@ import com.netcracker.libra.service.TemplateService;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.netcracker.libra.model.InfoForDelete;
 import com.netcracker.libra.util.security.SessionToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -26,7 +24,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  * @author Sashenka
  */
 @Controller
-@SessionAttributes({"regForm", "LOGGEDIN_USER"})
+@SessionAttributes("LOGGEDIN_USER")
 public class TemplateController
 {    
     TemplateJDBC templateJDBC=new TemplateJDBC();

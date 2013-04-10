@@ -106,15 +106,16 @@ public class TemplateService
         }
         return "";
     }
-    
-    public static List<String> getEnumTypes(String description)
+  public static String checkDesc(String desc)
     {
-        String [] map=description.split(",");
-        List<String> map2=new ArrayList<String>();
-        for(int i=0;i<map.length;i++)
+        if(desc.length()>15)
         {
-            map2.add(map[i]);
+            return "<p>Должно быть меньше 1000 символов</p>";
         }
-        return map2;
+        if(desc.length()==0)
+        {
+            return "<p>Должно быть больше 0</p>";
+        }
+        return "";
     }
 }

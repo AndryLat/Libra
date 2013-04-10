@@ -20,7 +20,7 @@ import org.zefer.pd4ml.PD4Constants;
 import org.zefer.pd4ml.PD4ML;
 
 /**
- *
+ * Service convert html to PDF
  * @author MorrisDeck
  */
 @Service("PDFService")
@@ -80,9 +80,8 @@ public class PDFCreator {
             }
 
             pd4ml.setHtmlWidth(userSpaceWidth);
-            pd4ml.enableDebugInfo();
             pd4ml.overrideDocumentEncoding("UTF-8");
-            pd4ml.useTTF(servletContext.getRealPath("resources/fonts"), true);
+            pd4ml.useTTF(servletContext.getRealPath("resources\\fonts"), true);
             pd4ml.setDefaultTTFs("Times New Roman", "Arial", "Courier New");
             pd4ml.render(urlstring, fos);
         }

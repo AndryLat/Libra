@@ -55,7 +55,7 @@
                      </div>
                  </td>
              </c:if>
-             <td align="right"><a href="addEmployee.html" class="btn"><img  src="../resources/images/admin/glyphicons_006_user_add.png" width="20" height="20" title="Добавить нового сотрудника"/></a></td>
+             <td align="right"><a href="addEmployee.html" class="btn"><img  src="../resources/images/admin/glyphicons_006_user_add.png" width="20" height="20" title="Добавить сотрудника"/></a></td>
          </tr>
         </table>
         <br>
@@ -71,11 +71,11 @@
              <td>
                  <!-- dropdown "byWhat" -->
                 <select name="byWhat" style="width: 20%">
-                    <option ${selectedAll} value="ALL">показать всех</option>
-                    <option ${selectedFull} value="FULL_NAME">по имени и фамилии</option>
-                    <option ${selectedFirst} value="FIRST_NAME">по имени</option>
-                    <option ${selectedLast} value="LAST_NAME">по фамилии</option>
-                    <option ${selectedEmail} value="EMAIL">по эл.почте</option>
+                    <option ${selectedAll} value="ALL">Показать всех</option>
+                    <option ${selectedFull} value="FULL_NAME">По имени и фамилии</option>
+                    <option ${selectedFirst} value="FIRST_NAME">По имени</option>
+                    <option ${selectedLast} value="LAST_NAME">По фамилии</option>
+                    <option ${selectedEmail} value="EMAIL">По эл.почте</option>
                 </select>
              </td>
              <td><input type="text" placeholder="Введите значение" name="textValue" value="${text}"></td>
@@ -93,7 +93,7 @@
         <tr>
             <th><a href="sortEmployees.html?orderBy=FIRST_NAME">имя</a> <a href="sortEmployees.html?orderBy=LAST_NAME">фамилия</a> &nbsp; ${nameOrder}</th>
             <th><a href="sortEmployees.html?orderBy=ID">id</a> &nbsp; ${idOrder}</th>
-            <th><a href="sortEmployees.html?orderBy=ROLE">должность</a> &nbsp; ${roleOrder}</th>
+            <th><a href="sortEmployees.html?orderBy=ROLE">статус</a> &nbsp; ${roleOrder}</th>
             <th><a href="sortEmployees.html?orderBy=EMAIL">email</a> &nbsp; ${emailOrder}</th>
             <th>пароль</th>
             <th>редактировать</th>

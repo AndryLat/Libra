@@ -45,6 +45,7 @@
 
 
                     <script language="javascript" type="text/javascript">
+                    $(document).ready(function(){
                         var data = [${data}];
                         var plot1 = jQuery.jqplot('chartdiv', [data],
                             {
@@ -59,6 +60,7 @@
                                 legend: {show: true, location: 'e'}
                             }
                         );
+                    });
                     </script>
                 </div>
             </div>

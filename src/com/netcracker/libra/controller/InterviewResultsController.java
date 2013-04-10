@@ -6,14 +6,11 @@ package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.InterviewResultsJDBC;
 import com.netcracker.libra.dao.StudentJDBC;
-import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.InterviewResult;
 import com.netcracker.libra.model.InterviewResultsInfo;
 import com.netcracker.libra.model.Student;
 import com.netcracker.libra.util.mail.SendMailService;
 import com.netcracker.libra.util.security.SessionToken;
-import java.io.StringWriter;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +18,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,7 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Sashenka
  */
 @Controller
-@SessionAttributes({"regForm", "LOGGEDIN_USER"})
+@SessionAttributes("LOGGEDIN_USER")
 public class InterviewResultsController 
 {
   //  @Autowired

@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Sashenka
  */
 @Controller
-@SessionAttributes({"regForm", "LOGGEDIN_USER"})
+@SessionAttributes("LOGGEDIN_USER")
 public class EditLoginController 
 {
     

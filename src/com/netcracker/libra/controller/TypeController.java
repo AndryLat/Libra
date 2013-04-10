@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Sashenka
  */
 @Controller
-@SessionAttributes({"regForm", "LOGGEDIN_USER"})
+@SessionAttributes("LOGGEDIN_USER")
 public class TypeController 
 {
     TypeJDBC typeJDBC=new TypeJDBC();
@@ -40,6 +40,7 @@ public class TypeController
         if(token.getUserAccessLevel()==1)
         {
                 String message=TemplateService.checkType(name);
+                message+=TemplateService.checkDesc(description);
                 if(!message.equals(""))
                 {
                     return message("<a href='addType.html'>Вернуться назад</a>", message, "Ошибка");

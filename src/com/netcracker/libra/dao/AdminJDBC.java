@@ -15,32 +15,11 @@ import org.springframework.stereotype.Repository;
  * @author Alexander Lebed
  */
 @Repository
-public class AdminJDBC implements AdminDAO {
+public class AdminJDBC{
     
-        //it simplifies the use of JDBC and helps to avoid common errors
+        //it simplifies using JDBC and helps to avoid common errors
         private static JdbcTemplate jdbcTemplateObject;
-
-	@Override
-	public void create(String name, String lastName, String email,
-			String password) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void update(Integer id, String name, String lastName, String email,
-			String password) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-		
-	}
         
-	@Override
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
             jdbcTemplateObject = new JdbcTemplate(dataSource);

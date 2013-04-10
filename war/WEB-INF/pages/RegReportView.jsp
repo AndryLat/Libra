@@ -47,6 +47,7 @@
                     </div>
 
                     <script language="javascript" type="text/javascript">
+                    $(document).ready(function(){
                         var data = [${data}];
                         var plot1b = $.jqplot('chartdiv', [data], {
                             title: 'Отчет пришедших и зарегестрированных',
@@ -68,6 +69,7 @@
                                 }
                             }
                         });
+                    });
                     </script>
                 </div>
             </div>

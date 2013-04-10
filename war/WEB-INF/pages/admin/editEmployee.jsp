@@ -47,6 +47,7 @@
                                 </c:if>
                                 
                                 <div class="control-group">
+                                    <label class="control-label" for="firstName">Статус:</label>
                                     <div class="controls">
                                     <select name="roleId">
                                         <c:if test="${roleId == 2}">

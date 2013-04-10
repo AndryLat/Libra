@@ -6,11 +6,9 @@ package com.netcracker.libra.controller;
 
 import com.netcracker.libra.dao.InterviewDateJDBC;
 import com.netcracker.libra.dao.InterviewJDBC;
-import com.netcracker.libra.dao.UserPreferences;
 import com.netcracker.libra.model.InterviewDateInfo;
 import com.netcracker.libra.util.security.SessionToken;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Сашенька
  */
 @Controller
-@SessionAttributes({"regForm", "LOGGEDIN_USER"})
+@SessionAttributes("LOGGEDIN_USER")
 public class InterviewController
 {
     /**
