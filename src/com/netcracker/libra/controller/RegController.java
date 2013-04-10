@@ -106,6 +106,7 @@ public class RegController {
 				String orgName = photo.getOriginalFilename();
 				String filePath = form.getAppId() + ".png";
 				File dest = new File(filePath);
+				log.info("Absolute path for upload is "+dest.getAbsolutePath());
 
 				try { 
 					photo.transferTo(dest);

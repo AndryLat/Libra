@@ -319,6 +319,58 @@ public class ColumnController
         
     }
     
+    @RequestMapping(value="myAppForm",method = RequestMethod.GET)
+    public String displayStudentsAppForm(ModelMap model,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token)  
+    {
+        int id = studentJDBC.getAppIdByUserId(token.getUserId());
+		if(token.getUserAccessLevel()==0)
+        { 
+            try
+            {
+                DisplayAF map=columnJDBC.getAppColums(studentJDBC.getAppIdByUserId(id));
+            
+        File file = new File("/"+id+".png");
+        if (file.exists() && file.isFile()) 
+        {
+            model.addAttribute("path", "/"+id+".png");
+        }
+        else
+        {
+            model.addAttribute("path","http://neoncorporation.at.ua/AAAAAAtextPhoto.gif");
+        }
+        
+        try
+        {
+            model.addAttribute("hr",interviewJDBC.getInterviewForApp(1,id));
+        }
+        catch(Exception e)
+        {
+            model.addAttribute("hr","Не записан на hr интервью");
+        }
+        try
+        {
+             model.addAttribute("interview",interviewJDBC.getInterviewForApp(2,id));
+        }
+        catch(Exception e)
+        {
+           
+            model.addAttribute("interview","Не записан на техническое интервью");
+        
+        }
+        model.addAttribute("columnFields", map);
+        return "displayAppFormView";
+        }
+            catch(Exception e)
+            {
+                return "redirect:/";
+            }
+        }
+            
+        return "redirect:/";
+        
+    }
+    
      @RequestMapping(value="printPdf",method = RequestMethod.GET)
     public String AppFormPDF(ModelMap model,
     @ModelAttribute("LOGGEDIN_USER") SessionToken token,

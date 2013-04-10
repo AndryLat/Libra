@@ -26,6 +26,7 @@ public class LoginHandlerInterceptor extends HandlerInterceptorAdapter {
 				!uri.endsWith("faculty.html") &&
 				!uri.endsWith("department.html") &&
 				!uri.endsWith("welcome.html") &&
+				!uri.endsWith("myAppForm.html") &&
 				!uri.endsWith("register.html")) {
 			SessionToken userData = (SessionToken) request.getSession().getAttribute("LOGGEDIN_USER");
 			if (userData == null) {

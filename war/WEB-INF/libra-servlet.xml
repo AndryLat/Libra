@@ -32,14 +32,8 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- one of the properties available; the maximum file size in bytes -->
-		<property name="uploadTempDir" ref="uploadDirResource" />
+		<property name="uploadTempDir" value="#{ systemProperties['java.io.tmpdir'] }/Libra/images"/>
 		<property name="maxUploadSize" value="300000" />
-	</bean>
-
-	<bean id="uploadDirResource" class="org.springframework.core.io.FileSystemResource">
-		<constructor-arg>
-			<value>/var/lib/tomcat7/temp</value>
-		</constructor-arg>
 	</bean>
 
 	<bean id="viewResolver"
@@ -69,7 +63,7 @@
 				<!-- Use TLS to encrypt communication with SMTP server -->
 				<prop key="mail.smtp.starttls.enable">true</prop>
 				<prop key="mail.debug">true</prop>
-				<prop key="mail.smtp.from">mail.tester@libra.aws.com</prop>
+				<prop key="mail.smtp.from">disapp0int@gmail.com</prop>
 				<prop key="mail.mime.charset">UTF-8</prop>
 			</props>
 		</property>
