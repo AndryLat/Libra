@@ -68,7 +68,9 @@ public class HrJDBC implements HrDAO {
         
         @Override
         public void deleteFormById(Integer id){
-           String SQL = "delete from AppForm where appid = ?";
+           String SQL = "delete from users where userid=("
+                        + " select u.userid from users u join appForm a on a.userId=u.userId "
+                            + "where a.appid = ?)";
            jdbcTemplateObject.update(SQL, id);
         }
 
@@ -94,6 +96,33 @@ public class HrJDBC implements HrDAO {
         List <Student> students = jdbcTemplateObject.query(SQL, new Object[]{id}, new ShortStudentRowMapper());
         return students;
      }
+    /*
+     * Check if student has appForm
+     */
+    public int checkAppForm(int appId){
+        String SQL="select count(c.appId) from columnFields c "
+                    + "join appform a on a.APPID=c.appId where a.appId=?";
+        int k=jdbcTemplateObject.queryForInt(SQL,appId);
+        return k;
+    }
+    /*
+     * Check if student has/had interview
+     */
+    public int checkStudentHasInterview(int appId){
+        String SQL="select count(i.appId) from interview i "
+                    + "join appform a on a.APPID=i.appId where i.appId=?";
+        int k=jdbcTemplateObject.queryForInt(SQL,appId);
+        return k;
+    }
+    /*
+     * Check if student passed interview
+     */
+    public int checkStudentPassedInterview(int appId){
+        String SQL="select count(i.interviewId) from interviewResults i "
+                    + "join interview a on a.interviewId=i.interviewId where a.appId=?";
+        int k=jdbcTemplateObject.queryForInt(SQL,appId);
+        return k;
+    }
     /*
       * Returns right param for query if it needs to find students by education
       */

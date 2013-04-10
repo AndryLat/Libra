@@ -40,8 +40,8 @@
 		<div class="sidebar">
 				<jsp:include page="../sidebar.jsp" />
 			</div>
-			<div class="span9">
-				<div class="hero-unit" style="padding-bottom: 150px">
+<div class="span9">
+    <div class="hero-unit" style="padding-bottom: 150px">
         <div class="pull-left">
         <form name="Form" action="addUniversitiesAdded.html" method="get">
                 Университет:  <br>

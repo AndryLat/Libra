@@ -83,7 +83,80 @@ public class HRController {
             List<Department> departments=hr.getAllDepartments("f.facultyId", facultyId);
             return new ModelAndView("hr/department","dept",departments);
         }
-    
+    /**
+     * Delete student
+     * @param appId - number of appForm
+     * @return 
+     */
+    @RequestMapping(value="deletedStudent",method= RequestMethod.GET )
+    public ModelAndView deleteStudent(@RequestParam("appId") int appId,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token){
+        if(token.getUserAccessLevel()==1) {
+            ModelAndView mav = new ModelAndView();
+            hr.deleteFormById(appId);
+            List<Student> std=hr.listStudents();
+            mav.addObject("Model",std);
+            mav.setViewName("hr/showStudentbyIdView");
+            return mav;
+        }
+        else {
+            ModelAndView mv = new ModelAndView();
+            mv.setViewName("hr/errorMessage");
+            mv.addObject("title", "Ошибка");
+            mv.addObject("message","Чтобы получить доступ к следующей информации, пожалуйста, авторизируйтесь как HR");
+            mv.addObject("link","<a href='/Libra/' class=\"btn\"><img  src=\"../resources/images/admin/glyphicons_224_chevron-left.png\" width=\"7\" height=\"7\"/> Назад </a>");
+            return mv;
+        }
+        
+      }
+        
+      
+    /*
+     * Ask about deleting stidents befor delete it
+     */
+    @RequestMapping("deleteStudent")
+    public ModelAndView delStudent(@RequestParam("appId") int appId,
+    @ModelAttribute("LOGGEDIN_USER") SessionToken token){
+        if(token.getUserAccessLevel()==1) {
+            ModelAndView mav = new ModelAndView();
+            String hasForm=" не ";
+            String hasInter=" не ";
+            String passedInter=" не ";
+            List<Student> student = hr.getStudent(appId);
+            mav.addObject("Model", student);
+            int hasFormInt = hr.checkAppForm(appId);
+            int hasInterInt = hr.checkStudentHasInterview(appId);
+            int passedInterInt=hr.checkStudentPassedInterview(appId);
+            if (hasFormInt!=0){
+                hasForm="";
+                mav.addObject("hasForm", hasForm);
+            }
+            else{
+                mav.addObject("hasForm", hasForm);
+                mav.addObject("hasInter", hasInter);
+                mav.addObject("passedInter", passedInter);
+                return mav;
+                }
+            if (hasInterInt!=0){
+                hasInter="";
+                mav.addObject("hasInter", hasInter);
+            }
+            else{
+                mav.addObject("hasInter", hasInter);
+                mav.addObject("passedInter", passedInter);
+                return mav;
+            }
+            if(passedInterInt!=0){
+                passedInter="";
+                mav.addObject("passedInter", passedInter);
+            }
+            else{
+                mav.addObject("passedInter", passedInter);
+            }
+            return mav;
+        }
+        else { return new ModelAndView();}
+    }
     /*
      * Display all students
      */
