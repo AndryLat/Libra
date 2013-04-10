@@ -82,7 +82,7 @@ public class RegController {
 		if (!RegformService.isAppFormPresent(token.getUserId())) {
 			model.addAttribute("columns", RegformService.getActiveTemplate());
 			model.put("regForm", form);
-			return "appFormView";
+			return "signup/showAppForm";
 			}
 		else
 			token.setAppFormFlag(true);
