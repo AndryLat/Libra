@@ -103,7 +103,7 @@ function closeMessage()
             </thead>
             <tbody>
        <tr>
-           
+            
             <td style="border:0px;padding: 2px">
                 Факультет:
             </td>
@@ -189,19 +189,18 @@ function closeMessage()
         <caption><div class="alert alert-info">Студенты</div></caption>
         <thead>
         <tr>
-    <th><a href="">№</a></th>    
-    <th><a href="">Имя</a></th> 
-    <th><a href="">Фамилия</a></th> 
-    <th><a href="">Email</a></th>
-   
+            <th><a href="">№</a></th>    
+            <th><a href="">Имя</a></th> 
+            <th><a href="">Фамилия</a></th> 
+            <th><a href="">Email</a></th>
             <th>Анкета</th>
             <th>Интервью</th>
             <th>Удалить</th>
         </tr>
         </thead>
         <tbody>
-    <c:forEach items="${Model}" var="s">
-    <tr>
+            <c:forEach items="${Model}" var="s">
+            <tr>
             <td><input type="hidden" name="appId" value="<c:out value='${s.getAppId()}'/>"/>${s.getAppId()}</td>
             <td><input type="hidden" name="firstName" value="<c:out value='${s.getName()}'/>"/>${s.getName()}</td>
             <td><input type="hidden" name="lastName" value="<c:out value='${s.getLastName()}'/>"/>${s.getLastName()}</td>
@@ -224,9 +223,9 @@ function closeMessage()
   </tr>
     </c:forEach>
         </tbody>
-    </TABLE><br/><p><p>
+    </TABLE>
         
-       </form><br/>
+       </form>
        <center>
            
           <div id="pager" class="pager">

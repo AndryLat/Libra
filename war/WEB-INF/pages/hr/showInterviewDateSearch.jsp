@@ -12,6 +12,7 @@
    <jsp:include page="../resources.jsp" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Управление датами интервью - Поиск</title>
+    <script type="text/javascript" src="../resources/js/roll.js"></script>
     <script type="text/javascript" src="../resources/js/jquery-latest.js"></script>
     <link href="../resources/css/bootstrap.css" rel="stylesheet">
     <link href="../resources/css/bootstrap-responsive.css" rel="stylesheet">
@@ -117,72 +118,31 @@ if (($("#time4").val()) && (($("#time3").val())) && ($("#date").val())) {
             <div class="sidebar">
                             <jsp:include page="../sidebar.jsp" />
                     </div>
-
-                    <div class="span9">                     
-                        <div class="hero-unit" style="padding-bottom: 220px">
-
-    <div class="pull-left" style="width: 300px;margin: -40px;" >
-      <form name="Form" action="interviewDateAdded.html" method="get">
-        <div class="classForInters" style="text-decoration:underline; width: 250px"> Выберите интервьюеров: </div>           
-    <div id="hrDiv">
-   <c:forEach items="${Inters}" var="i"> 
-        <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/>>
-        ${i.inters}
-         <br>
-    </c:forEach>
-    </div>
-    <div style="display: none;" id="techDiv">
-    <c:forEach items="${intersTech}" var="i">
-         <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
-         ${i.inters}   <br>             
-    </c:forEach>
-    </div>          
-
-       </div>
-    <div class="pull-right" style="margin-right: 150px;margin-top: -40px">
-    Тип: 
-                 <select name="type" id="type" style="width: 115px">
-                 <option value="1" > Hr </option>
-                 <option value="2" ${typeInt == '2' ? 'selected' : ''}> Tech </option>
-                 </select> 
-             &emsp;
-                 Дата:
-                 <input type="text" id="date" name="begin" class="tcal"  style="width: 100px" />
-             <br>
-         Время начала и конца: 
-         <div class="myClass">
-            <input name="timeStart" type="text" id="time3" size="10" value="08:00" style="width: 50px"/> 
-        - 
-        <input name="end" type="text" id="time4" size="10" value="09:00" style="width: 50px"/>
-        </div>
-           Продолжительность (минуты): 
-           <input type="text" placeholder="Введите значение" name="duration" style="width: 60px" > <br>
-
-        <input type="submit" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Добавить" class="btn btn-large btn-success">    
-        </form>
-
-        <form action="showInterviewDateSearch.html" method="GET"><br />
-                            <select name="interSearch" id="interSearch">
-                                <option value="0" ${interSearchInt == '0' ? 'selected' : ''}>Все </option>
-                                <option value="1" ${interSearchInt == '1' ? 'selected' : ''}>№ даты</option>
-                                <option value="2" ${interSearchInt == '2' ? 'selected' : ''}>Дата</option>
-                                <option value="3" ${interSearchInt == '3' ? 'selected' : ''}>Интервьер</option>
-                    </select>&ensp;
-                          <div id="justText" style="width: 180px; display: inline;">
-                                <input type="text" placeholder="Введите значение" value="${textBox}" name ="textBox" style="width: 180px">
-                             </div>
-                            <div style="display: none;width: 180px;"  id="calc" >
-                                <input type="text" value="${textBox}" placeholder="Введите дату" id="date" name="textBoxCalc" class="tcal" style="width: 180px">
-                            </div>&thinsp;
-                                <input type="submit" value="Показать" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px">
-      </form>
-
-</div>
-
-                    </div>
-
-                            <div class="span9">
-
+                    
+                             <div class="span9">
+            <div class="hero-unit" style="height: 20px;" >
+           <div class="pull-left">
+           <form action="showInterviewDateSearch.html" method="GET"><br />
+                <select name="interSearch" id="interSearch">
+                    <option value="0" ${interSearchInt == '0' ? 'selected' : ''}>Все </option>
+                    <option value="1" ${interSearchInt == '1' ? 'selected' : ''}>№ даты</option>
+                    <option value="2" ${interSearchInt == '2' ? 'selected' : ''}>Дата</option>
+                    <option value="3" ${interSearchInt == '3' ? 'selected' : ''}>Интервьер</option>
+                </select>&ensp;
+              <div id="justText" style="width: 180px; display: inline;">
+                    <input type="text" placeholder="Введите значение" value="${textBox}" name ="textBox" style="width: 180px">
+                 </div>
+                <div style="display: none;width: 180px;"  id="calc" >
+                    <input type="text" value="${textBox}" placeholder="Введите дату" id="date" name="textBoxCalc" class="tcal" style="width: 180px">
+                </div>&thinsp;
+                    <input type="submit" value="Показать" class="btn btn-large btn-primary" style="width:35x;height:30px;font-size:15px; line-height: 5px">
+      </form>     
+                                
+                                
+                            </div>   
+            </div>
+                        </div>
+<div class="span9"> 
       <form method="GET" action="delInterviewDate.html">
      <c:if test="${message != null}">
                  <div align="left" id="alertMessage">
@@ -200,8 +160,9 @@ if (($("#time4").val()) && (($("#time3").val())) && ($("#date").val())) {
             </div>
             </span>
         </c:if>
+         
     <table border="1" class="tablesorter">
-              <caption><div class="alert alert-info">Расписание собеседований</div></caption>
+    <caption><div class="alert alert-info">Расписание собеседований</div></caption>
       <thead>
        <tr>
         <th><a href="#">№ даты</a></th>
@@ -245,7 +206,7 @@ if (($("#time4").val()) && (($("#time3").val())) && ($("#date").val())) {
           </tbody>
         </table>
       </form>
-      <div id="pager" class="pager">
+<div id="pager" class="pager" >
     <form><br>
             <img src="../resources/images/icons/first.png" class="first"/>
             <img src="../resources/images/icons/prev.png" class="prev"/>
@@ -259,9 +220,65 @@ if (($("#time4").val()) && (($("#time3").val())) && ($("#date").val())) {
                     <option value="40">40</option>
             </select>
     </form>
-</div>           
-                            </div>
+</div></div>
+                    
+                    <div class="span8">
+                       <br/>
+                         <center>
+             <div style="font-size: 16px" onClick="toggle('block');">Свернуть/Развернуть дополнительные опции</div>
+         </center> 
+                         <div id="block" style="display:none;"> 
+                        <div class="hero-unit" style="padding-bottom: 220px">
+
+    <div class="pull-left" style="margin: -40px;" >
+      <form name="Form" action="interviewDateAdded.html" method="get">
+        <div class="classForInters" style="text-decoration:underline; width: 250px"> Выберите интервьюеров: </div>           
+    <div id="hrDiv">
+   <c:forEach items="${Inters}" var="i"> 
+        <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/>>
+        ${i.inters}
+         <br>
+    </c:forEach>
+    </div>
+    <div style="display: none;" id="techDiv">
+    <c:forEach items="${intersTech}" var="i">
+         <input type="checkbox" name="checkInterviewers[]" id="interviewers" value=<c:out value="${i.userid}"/> >                     
+         ${i.inters}   <br>             
+    </c:forEach>
+    </div>          
+
+       </div>
+    <div class="pull-right" style="margin-right: 150px;margin-top: -40px">
+    Тип: 
+                 <select name="type" id="type" style="width: 115px">
+                 <option value="1" > Hr </option>
+                 <option value="2" ${typeInt == '2' ? 'selected' : ''}> Tech </option>
+                 </select> 
+             &emsp;
+                 Дата:
+                 <input type="text" id="date" name="begin" class="tcal"  style="width: 100px" />
+             <br>
+         Время начала и конца: 
+         <div class="myClass">
+            <input name="timeStart" type="text" id="time3" size="10" value="08:00" style="width: 50px"/> 
+        - 
+        <input name="end" type="text" id="time4" size="10" value="09:00" style="width: 50px"/>
+        </div>
+           Продолжительность (минуты): 
+           <input type="text" placeholder="Введите значение" name="duration" style="width: 60px" > <br>
+
+        <input type="submit" style="width:35x;height:30px;font-size:15px; line-height: 5px" value="Добавить" class="btn btn-large btn-success">    
+        </form>
+
+        
+
+</div>
+
                     </div>
-            </div>
+                         </div>
+                    </div>                  
+                    </div>
+    </div>
+    
 </body>
 </html>

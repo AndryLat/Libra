@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  * @author Sashenka
  */
 @Controller
-@SessionAttributes("LOGGEDIN_USER")
+@SessionAttributes({"regForm", "LOGGEDIN_USER"})
 public class ColumnController
 {
     
