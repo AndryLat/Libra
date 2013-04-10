@@ -25,6 +25,8 @@
 	<script type="text/javascript" src="../resources/js/jquery.tablesorter.pager.js"></script>
         <link rel="stylesheet" type="text/css" href="../resources/css/table_.css" />
         <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+                        <script type="text/javascript" src="../resources/js/roll.js"></script>
+
     <script>
         $(function() {
 		$("table")
